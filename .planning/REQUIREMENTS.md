@@ -102,21 +102,24 @@
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| PAGE-01, PAGE-02, ATM-04, INFRA-01, INFRA-02, INFRA-03, INFRA-06, A11Y-01, A11Y-02, SEO-01 | Phase 1 — Foundation | Pending |
-| PAGE-03, PAGE-04, DISC-01, INFRA-04, INFRA-07, SEO-02 | Phase 2 — Core Content | Pending |
-| PAGE-05, PAGE-06, PAGE-07, PAGE-08, INFRA-08 | Phase 3 — Works + Friends | Pending |
-| PAGE-09, PAGE-10, PAGE-11, DISC-02, DISC-03, INFRA-05 | Phase 4 — Community + Search | Pending |
-| ATM-01, ATM-02, ATM-03, ATM-05, ATM-06, INFRA-06 (BGM) | Phase 5 — Atmosphere | Pending |
-| Custom 404, SEO final, friend-link health-check, code coverage | Phase 6 — Polish | Pending |
+Compound requirements (INFRA-06, INFRA-08) span phases by sub-scope but the owning phase per scope is unique.
+
+| Phase | Requirements | Status |
+|-------|--------------|--------|
+| Phase 1 — Foundation | PAGE-01, PAGE-02, ATM-04, INFRA-01, INFRA-02, INFRA-03, INFRA-06 (custom domain + 404 stub), A11Y-01, A11Y-02, SEO-01 | Pending |
+| Phase 2 — Core Content | PAGE-03, PAGE-04, DISC-01, INFRA-04, INFRA-07, SEO-02 | Pending |
+| Phase 3 — Works + Friend Links | PAGE-05, PAGE-06, PAGE-07, PAGE-08, INFRA-08 (UI badge stub) | Pending |
+| Phase 4 — Community + Search | PAGE-09, PAGE-10, PAGE-11, DISC-02, DISC-03, INFRA-05 | Pending |
+| Phase 5 — Atmosphere | ATM-01, ATM-02, ATM-03, ATM-05, ATM-06, INFRA-06 (BGM portion via APlayer + MetingJS) | Pending |
+| Phase 6 — Polish | INFRA-06 (custom 404 polish + JSON-LD), INFRA-08 (GitHub Action cron implementation), TEST-01, GIT-01 | Pending |
 
 **Coverage:**
-- v1 requirements: 36 total
+- v1 requirement scopes: 36 total
 - Mapped to phases: 36
 - Unmapped: 0 ✓
+- Deferred to v2: PAGE-12 (avatar generator — embed Picrew link inline in Phase 2 article authoring instead)
 
 ---
 
 *Requirements defined: 2026-06-02*
-*Last updated: 2026-06-02 after research synthesis*
+*Last updated: 2026-06-02 after roadmap synthesis (traceability rows refined with compound-requirement sub-scope annotations; TEST-01 and GIT-01 now explicitly named in Phase 6)*
