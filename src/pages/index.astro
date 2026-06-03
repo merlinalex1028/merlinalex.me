@@ -1,19 +1,37 @@
 ---
-import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticeBar from '../components/core/NoticeBar.astro';
+import Hero from '../components/home/Hero.astro';
+import Hitokoto from '../components/home/Hitokoto.astro';
+import SiteStats from '../components/home/SiteStats.astro';
+import LatestArticles from '../components/home/LatestArticles.astro';
+import LatestMicroblog from '../components/home/LatestMicroblog.astro';
+import persona from '../data/persona.yaml';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const latestArticles = allArticles
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
+
+const allMicroblog = await getCollection('microblog');
+const latestMicroblog = allMicroblog
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 5);
+
+// Phase 1 zero-state; Phase 4 computes from rendered article bodies.
+const totalWords = 0;
+
+const description = persona?.tagline
+  ? `${persona.tagline} — merlinalex.me`
+  : 'merlinalex.me — 二次元可爱风个人站';
 ---
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>merlinalex.me — 次元入口</title>
-  </head>
-  <body>
-    <main>
-      <h1>merlinalex.me — 次元入口</h1>
-      <p>在二次元与代码之间来回穿梭的小站</p>
-      <p>（正式内容正在筹备中 ✨）</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="首页" description={description} type="website">
+  <NoticeBar />
+  <Hero />
+  <Hitokoto />
+  <SiteStats articleCount={allArticles.length} totalWords={totalWords} />
+  <LatestArticles articles={latestArticles} />
+  <LatestMicroblog posts={latestMicroblog} />
+</BaseLayout>

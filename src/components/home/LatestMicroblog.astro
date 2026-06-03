@@ -1,0 +1,102 @@
+---
+const { posts = [] } = Astro.props;
+
+function truncate(text: string, max = 100): string {
+  if (text.length <= max) return text;
+  return text.slice(0, max) + '…';
+}
+---
+
+<section class="latest-microblog">
+  <h2>最近的碎碎念</h2>
+  {posts.length === 0 ? (
+    <div class="empty-state mascot-peek">
+      <h3>暂无说说</h3>
+      <p>（等我有话想说的时候再来看看吧）</p>
+    </div>
+  ) : (
+    <ul class="microblog-list">
+      {posts.map((post: any) => (
+        <li class="microblog-item">
+          <time datetime={post.data.publishedAt.toISOString()}>
+            {post.data.publishedAt.toLocaleDateString('zh-CN')}
+          </time>
+          <p>{truncate(post.data.content, 100)}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</section>
+
+<style>
+  .latest-microblog {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: var(--space-xl, 2rem) 1rem;
+  }
+  .latest-microblog h2 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-fg);
+    margin: 0 0 var(--space-md, 1rem) 0;
+  }
+  .empty-state {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg, 20px);
+    padding: var(--space-2xl, 3rem) var(--space-md, 1rem);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mascot-peek::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--color-accent-subtle), var(--color-accent));
+    border-radius: 50%;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+  .empty-state p {
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+  .microblog-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.5rem);
+  }
+  .microblog-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md, 12px);
+    padding: var(--space-md, 1rem);
+  }
+  .microblog-item time {
+    font-size: 12px;
+    color: var(--color-fg-muted);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .microblog-item p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-fg);
+    margin: 0;
+  }
+</style>
