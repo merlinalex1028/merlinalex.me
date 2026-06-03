@@ -55,6 +55,16 @@ const encodedUrl = encodeURIComponent(url);
           navigator.clipboard.writeText(url).then(function () {
             showCopyFeedback(btn);
           });
+        } else {
+          var textarea = document.createElement('textarea');
+          textarea.value = url;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          showCopyFeedback(btn);
         }
       });
     });
