@@ -28,6 +28,8 @@ const envId = import.meta.env.TWIKOO_ENV_ID;
           twikoo.init({
             envId: envId,
             el: '#tcomment',
+            // Sticker pack loaded from static file (Bilibili default emotes)
+            OwO: '/stickers.json',
           });
           el.dataset.twikooInit = 'true';
         };
