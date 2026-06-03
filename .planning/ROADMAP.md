@@ -63,7 +63,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 02-01: Articles index + utilities + nav (PAGE-03 tag filter + chronological sort; reading-time, tag-extraction, related-posts utilities; TagChips, ArticleListItem, StickyBadge components; Nav enablement)
+- [x] 02-01: Articles index + utilities + nav (PAGE-03 tag filter + chronological sort; reading-time, tag-extraction, related-posts utilities; TagChips, ArticleListItem, StickyBadge components; Nav enablement)
 - [ ] 02-02: Article detail page + all components (PAGE-04 TOC, code highlight via Shiki, copy-code, reading time, image lightbox, prev/next, related posts, share buttons, copyright footer, top button; medium-zoom install; welcome.md enrichment)
 
 **Wave 2** *(blocked on Wave 1 completion)*
@@ -176,7 +176,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | yes |
-| 2. Core Content | 0/4 | Planned | - |
+| 2. Core Content | 1/4 | In Progress|  |
 | 3. Works + Friend Links | 0/3 | Not started | - |
 | 4. Community + Search | 0/4 | Not started | - |
 | 5. Atmosphere | 0/5 | Not started | - |

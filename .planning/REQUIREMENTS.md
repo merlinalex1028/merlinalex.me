@@ -10,8 +10,8 @@
 ### Pages & Navigation
 - [ ] **PAGE-01**: Home page with hero, latest articles, latest microblog, Hitokoto random quote, site stats (runtime + article count + words + busuanzi), notice/announcement bar
 - [ ] **PAGE-02**: About page with second-anime persona card (avatar, MBTI, zodiac, blood type, skill bars, favorite anime/character list, Q&A)
-- [ ] **PAGE-03**: Articles index with tag-based filtering (tags: tech, life, review, notes…)
-- [ ] **PAGE-04**: Article detail page with TOC, code highlight, reading time, last-updated, share buttons, copy-code button, image lightbox, prev/next + related, sticky/pinned posts, copyright footer, top button, password-protected posts
+- [x] **PAGE-03**: Articles index with tag-based filtering (tags: tech, life, review, notes…)
+- [x] **PAGE-04**: Article detail page with TOC, code highlight, reading time, last-updated, share buttons, copy-code button, image lightbox, prev/next + related, sticky/pinned posts, copyright footer, top button, password-protected posts
 - [ ] **PAGE-05**: Works hub page linking to two sub-modules
 - [ ] **PAGE-06**: Works → Projects module (open-source, tools, websites) with card grid, tech-stack tags, GitHub stars (build-time fetch)
 - [ ] **PAGE-07**: Works → Creations module (illustrations, photos, crafts, videos) with masonry + lightbox gallery
