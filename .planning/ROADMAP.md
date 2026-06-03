@@ -111,12 +111,15 @@ Plans:
 
 **Plans**: 4 plans
 **UI hint**: yes
-
 Plans:
+**Wave 1**
 
 - [ ] 04-01: Microblog feed (PAGE-09 paginated stream, image lightbox, Twikoo comments per entry, home-page 5-latest cap, >180d auto-archive grouping)
 - [ ] 04-02: Bangumi-driven lists (PAGE-10 anime / books / music; INFRA-05 Bangumi v0 `/v0/users/{username}/collections` build-time fetch → `src/data/bangumi.json` 12h TTL, prebuild refresh script, manual override file for per-episode progress)
 - [ ] 04-03: Timeline (PAGE-11 vertical alternating-side milestone layout, year grouping, image + caption + link support)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 04-04: Search + tag cloud + home widgets (DISC-02 Pagefind articles-only index with microblog filter exclude; DISC-03 tag cloud + chronological archive with 0/1-post tag hiding; Hitokoto, site-stats, notice bar widgets on Home)
 
 ### Phase 5: Atmosphere
