@@ -1,0 +1,77 @@
+---
+interface Props {
+  tags: string[];
+  selected: string | null;
+}
+
+const { tags, selected } = Astro.props;
+---
+
+<div class="tag-chips" role="navigation" aria-label="文章标签筛选">
+  <a
+    href="/articles"
+    class:list={['chip', { active: selected === null }]}
+    aria-current={selected === null ? 'page' : undefined}
+  >
+    全部
+  </a>
+  {tags.map(tag => (
+    <a
+      href={`/articles/${tag}`}
+      class:list={['chip', { active: selected === tag }]}
+      aria-current={selected === tag ? 'page' : undefined}
+    >
+      {tag}
+    </a>
+  ))}
+</div>
+
+<style>
+  .tag-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    position: sticky;
+    top: 56px;
+    z-index: 40;
+    background: var(--color-bg);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .tag-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    background: var(--color-surface);
+    color: var(--color-fg-muted);
+    border: 1px solid var(--color-border);
+    transition:
+      background var(--duration-fast, 150ms) var(--easing-default, ease),
+      color var(--duration-fast, 150ms) var(--easing-default, ease),
+      border-color var(--duration-fast, 150ms) var(--easing-default, ease);
+    flex-shrink: 0;
+  }
+
+  .chip:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .chip.active {
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+</style>
