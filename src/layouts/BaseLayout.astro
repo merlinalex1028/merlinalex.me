@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+import Header from '../components/core/Header.astro';
+import Footer from '../components/core/Footer.astro';
+import SEOMeta from '../components/seo/SEOMeta.astro';
+
+const {
+  title,
+  description = 'merlinalex.me — 二次元可爱风个人站',
+  image = '/og-default.png',
+  type = 'website',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Pre-paint theme + atmo gate (FOUC-safe, blocking, synchronous) -->
+    <script is:inline>
+      (function () {
+        try {
+          var storedTheme = localStorage.getItem('theme') || 'system';
+          var storedAtmo  = localStorage.getItem('atmo:level') || 'full';
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var effectiveTheme = storedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : storedTheme;
+          var effectiveAtmo  = reduceMotion ? 'off' : storedAtmo;
+          document.documentElement.dataset.theme = effectiveTheme;
+          document.documentElement.dataset.atmo = effectiveAtmo;
+          window.__atmo__ = {
+            level: effectiveAtmo,
+            storedLevel: storedAtmo,
+            theme: effectiveTheme,
+            storedTheme: storedTheme,
+            reducedMotion: reduceMotion,
+            set: function (patch) {
+              if (patch && patch.theme) {
+                localStorage.setItem('theme', patch.theme);
+                this.storedTheme = patch.theme;
+                var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                this.theme = patch.theme === 'system' ? (sysDark ? 'dark' : 'light') : patch.theme;
+                document.documentElement.dataset.theme = this.theme;
+              }
+              if (patch && patch.atmo) {
+                localStorage.setItem('atmo:level', patch.atmo);
+                this.storedLevel = patch.atmo;
+                this.level = this.reducedMotion ? 'off' : patch.atmo;
+                document.documentElement.dataset.atmo = this.level;
+              }
+              if (Array.isArray(this._listeners)) {
+                for (var i = 0; i < this._listeners.length; i++) {
+                  try { this._listeners[i](this); } catch (e) { /* ignore */ }
+                }
+              }
+            },
+            subscribe: function (fn) {
+              this._listeners = this._listeners || [];
+              this._listeners.push(fn);
+            },
+            _listeners: []
+          };
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+          document.documentElement.dataset.atmo = 'full';
+        }
+      })();
+    </script>
+
+    <SEOMeta
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      canonical={canonical}
+    />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">跳到主要内容</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--color-accent);
+    color: white;
+    padding: 8px 16px;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    left: 8px;
+    top: 8px;
+  }
+</style>

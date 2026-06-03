@@ -1,0 +1,51 @@
+---
+import Nav from './Nav.astro';
+import ThemeSwitcher from './ThemeSwitcher.astro';
+import IntensityBadge from './IntensityBadge.astro';
+import NoticeBar from './NoticeBar.astro';
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="/">merlinalex.me</a>
+    <Nav />
+    <div class="header-actions">
+      <ThemeSwitcher />
+      <IntensityBadge />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    height: 56px;
+    background: var(--color-bg-elevated);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .logo {
+    font-weight: 700;
+    color: var(--color-fg);
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+  .header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>

@@ -1,0 +1,26 @@
+---
+const { title, description, image, type, canonical } = Astro.props;
+const fullImage = new URL(image, Astro.site).toString();
+---
+
+<title>{title} · merlinalex.me</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={fullImage} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content="merlinalex.me" />
+<meta property="og:locale" content="zh_CN" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={fullImage} />
+
+<meta name="theme-color" content="#FF6B9D" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1A0F1A" media="(prefers-color-scheme: dark)" />
+
+<link rel="alternate" type="application/rss+xml" title="merlinalex.me" href="/feed.xml" />

@@ -1,0 +1,47 @@
+---
+// 404 placeholder UI per UI-SPEC lines 338-352
+---
+
+<section class="not-found">
+  <div class="mascot-placeholder" role="img" aria-label="迷路的吉祥物"></div>
+  <h1>咦？这里什么都没有…</h1>
+  <p>迷路了？要不然回到首页吧</p>
+  <a class="cta" href="/">回到首页</a>
+</section>
+
+<style>
+  .not-found {
+    text-align: center;
+    padding: 4rem 1rem;
+  }
+  .mascot-placeholder {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1.5rem auto;
+    background: linear-gradient(135deg, var(--color-accent-subtle), var(--color-accent));
+    border-radius: 24px;
+  }
+  .not-found h1 {
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
+  }
+  .not-found p {
+    color: var(--color-fg-muted);
+    margin: 0 0 1.5rem 0;
+  }
+  .not-found .cta {
+    display: inline-block;
+    background: var(--color-accent);
+    color: white;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background var(--duration-fast) var(--easing-default);
+  }
+  .not-found .cta:hover,
+  .not-found .cta:focus-visible {
+    background: var(--color-accent-hover);
+  }
+</style>
