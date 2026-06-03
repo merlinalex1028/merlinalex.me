@@ -3,19 +3,23 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
+  if (!context.site) {
+    return new Response('Missing site config', { status: 500 });
+  }
+
   const articles = await getCollection(
     'articles',
     ({ data }) => !data.draft
   );
 
-  const sorted = articles.sort(
+  const sorted = [...articles].sort(
     (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
   );
 
   return rss({
     title: 'merlinalex.me',
     description: '二次元可爱风个人站',
-    site: context.site!,
+    site: context.site,
     items: sorted.map(article => ({
       title: article.data.title,
       pubDate: article.data.publishedAt,

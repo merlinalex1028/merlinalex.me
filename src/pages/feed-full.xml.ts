@@ -8,37 +8,46 @@ const parser = new MarkdownIt();
 
 function toAbsoluteUrls(html: string, site: URL): string {
   return html.replace(
-    /(<img[^>]+src=["'])([^"']+)(["'])/g,
-    (match, prefix, src, suffix) => {
-      if (src.startsWith('http://') || src.startsWith('https://')) {
+    /((?:src|href)=["'])([^"']+)(["'])/g,
+    (match, prefix, url, suffix) => {
+      if (
+        url.startsWith('http://') ||
+        url.startsWith('https://') ||
+        url.startsWith('mailto:') ||
+        url.startsWith('#')
+      ) {
         return match;
       }
-      const absolute = new URL(src, site).toString();
+      const absolute = new URL(url, site).toString();
       return `${prefix}${absolute}${suffix}`;
     }
   );
 }
 
 export async function GET(context: APIContext) {
+  if (!context.site) {
+    return new Response('Missing site config', { status: 500 });
+  }
+
   const articles = await getCollection(
     'articles',
     ({ data }) => !data.draft
   );
 
-  const sorted = articles.sort(
+  const sorted = [...articles].sort(
     (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
   );
 
   return rss({
     title: 'merlinalex.me',
     description: '二次元可爱风个人站 (完整内容)',
-    site: context.site!,
+    site: context.site,
     items: sorted.map(article => {
       const rawHtml = parser.render(article.body ?? '');
       const sanitized = sanitizeHtml(rawHtml, {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
       });
-      const content = toAbsoluteUrls(sanitized, context.site!);
+      const content = toAbsoluteUrls(sanitized, context.site);
 
       return {
         title: article.data.title,
