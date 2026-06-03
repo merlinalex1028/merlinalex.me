@@ -1,0 +1,40 @@
+---
+interface Props {
+  minutes: number;
+  updatedAt?: Date;
+}
+
+const { minutes, updatedAt } = Astro.props;
+
+const formattedDate = updatedAt
+  ? updatedAt.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+---
+
+<div class="reading-meta">
+  <span>{minutes} 分钟阅读</span>
+  {formattedDate && (
+    <>
+      <span class="separator">·</span>
+      <span>最后更新于 {formattedDate}</span>
+    </>
+  )}
+</div>
+
+<style>
+  .reading-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.75rem 0;
+    font-size: 14px;
+    color: var(--color-fg-muted);
+  }
+  .separator {
+    color: var(--color-border);
+  }
+</style>

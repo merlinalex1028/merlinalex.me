@@ -5,55 +5,37 @@ import TagChips from '../../components/articles/TagChips.astro';
 import ArticleListItem from '../../components/articles/ArticleListItem.astro';
 import { extractTags } from '../../utils/tag-extraction';
 
-export async function getStaticPaths() {
-  const allArticles = await getCollection(
-    'articles',
-    ({ data }) => !data.draft
-  );
+const allArticles = await getCollection(
+  'articles',
+  ({ data }) => !data.draft
+);
 
-  const tags = extractTags(allArticles);
+const tags = extractTags(allArticles);
+const selectedTag = Astro.url.searchParams.get('tag');
 
-  // Sort: sticky first, then newest
-  const sorted = allArticles.sort((a, b) => {
-    if (a.data.sticky !== b.data.sticky) return a.data.sticky ? -1 : 1;
-    return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
-  });
+// Sort: sticky first, then newest
+const sorted = allArticles.sort((a, b) => {
+  if (a.data.sticky !== b.data.sticky) return a.data.sticky ? -1 : 1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
 
-  // Unfiltered path (all articles) — [...tag] with undefined generates /articles
-  const paths = [
-    {
-      params: { tag: undefined },
-      props: { articles: sorted, tags, selected: null as string | null },
-    },
-  ];
-
-  // One path per tag — [...tag] with 'tech' generates /articles/tech
-  for (const tag of tags) {
-    const filtered = sorted.filter(a => a.data.tags.includes(tag));
-    paths.push({
-      params: { tag },
-      props: { articles: filtered, tags, selected: tag as string | null },
-    });
-  }
-
-  return paths;
-}
-
-const { articles, tags, selected } = Astro.props;
+const filtered = selectedTag
+  ? sorted.filter(a => a.data.tags.includes(selectedTag))
+  : sorted;
 ---
 
 <BaseLayout title="文章" description="全部文章 — merlinalex.me" type="website">
   <section class="articles-page">
-    <TagChips tags={tags} selected={selected} />
+    <TagChips tags={tags} selected={selectedTag} />
 
-    {articles.length === 0 ? (
+    {filtered.length === 0 ? (
       <div class="empty-state">
         <h3>还没有文章</h3>
         <p>撰写第一篇之后会出现在这里 ✨</p>
       </div>
     ) : (
       <ul class="article-list">
-        {articles.map(article => (
+        {filtered.map(article => (
           <ArticleListItem article={article} />
         ))}
       </ul>

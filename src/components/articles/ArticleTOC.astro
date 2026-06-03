@@ -1,0 +1,212 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Only show h2 and h3
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{tocHeadings.length > 0 && (
+  <aside class="toc" aria-label="文章目录">
+    {/* Desktop sidebar */}
+    <nav class="toc-desktop">
+      <h2 class="toc-heading">目录</h2>
+      <ul class="toc-list">
+        {tocHeadings.map(h => (
+          <li class={`toc-item depth-${h.depth}`}>
+            <a href={`#${h.slug}`} class="toc-link" data-slug={h.slug}>
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {/* Mobile accordion */}
+    <details class="toc-mobile">
+      <summary class="toc-mobile-toggle">目录</summary>
+      <nav>
+        <ul class="toc-list">
+          {tocHeadings.map(h => (
+            <li class={`toc-item depth-${h.depth}`}>
+              <a href={`#${h.slug}`} class="toc-link" data-slug={h.slug}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  </aside>
+)}
+
+<script is:inline>
+  (function () {
+    function initTOC() {
+      var links = document.querySelectorAll('.toc-link');
+      if (links.length === 0) return;
+
+      // Click handler for smooth scroll
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var slug = link.getAttribute('data-slug');
+          var target = document.getElementById(slug);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // IntersectionObserver for active state
+      var headings = document.querySelectorAll('article h2, article h3');
+      if (headings.length === 0) return;
+
+      var activeSlug = null;
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              activeSlug = entry.target.id;
+              updateActiveLink(activeSlug);
+            }
+          });
+        },
+        { rootMargin: '-80px 0px -80px 0px', threshold: 0 }
+      );
+
+      headings.forEach(function (h) {
+        if (h.id) observer.observe(h);
+      });
+
+      function updateActiveLink(slug) {
+        links.forEach(function (link) {
+          if (link.getAttribute('data-slug') === slug) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    initTOC();
+    document.addEventListener('astro:after-swap', initTOC);
+  })();
+</script>
+
+<style>
+  .toc {
+    font-size: 14px;
+  }
+
+  /* Desktop: sticky sidebar */
+  .toc-desktop {
+    display: none;
+    position: sticky;
+    top: 72px;
+    width: 220px;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .toc-desktop {
+      display: block;
+    }
+    .toc-mobile {
+      display: none;
+    }
+  }
+
+  .toc-heading {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-fg-muted);
+    margin: 0 0 12px 0;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    margin: 0;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 4px 0 4px 12px;
+    border-left: 2px solid transparent;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast, 150ms) var(--easing-default, ease),
+      border-color var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .toc-link:hover {
+    color: var(--color-fg);
+  }
+
+  .toc-link.active {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .depth-3 .toc-link {
+    padding-left: 24px;
+  }
+
+  /* Mobile: collapsible accordion */
+  .toc-mobile {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .toc-mobile-toggle {
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toc-mobile-toggle::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--color-fg-muted);
+    transition: transform var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .toc-mobile[open] .toc-mobile-toggle::after {
+    transform: rotate(180deg);
+  }
+
+  .toc-mobile nav {
+    padding: 0 1rem 0.75rem;
+  }
+</style>

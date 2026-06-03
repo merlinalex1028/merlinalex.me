@@ -1,0 +1,91 @@
+---
+// Interactive copy button for code blocks. client:load ensures immediate interactivity.
+---
+
+<script is:inline>
+  (function () {
+    function initCopyButtons() {
+      document.querySelectorAll('article pre').forEach(function (pre) {
+        if (pre.querySelector('.copy-code-btn')) return;
+
+        pre.style.position = 'relative';
+
+        var btn = document.createElement('button');
+        btn.className = 'copy-code-btn';
+        btn.type = 'button';
+        btn.setAttribute('aria-label', '复制代码');
+        btn.innerHTML =
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span>复制</span>';
+
+        btn.addEventListener('click', function () {
+          var code = pre.textContent || '';
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(function () {
+              showFeedback(btn);
+            });
+          } else {
+            // Fallback for older browsers
+            var textarea = document.createElement('textarea');
+            textarea.value = code;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showFeedback(btn);
+          }
+        });
+
+        pre.appendChild(btn);
+      });
+    }
+
+    function showFeedback(btn) {
+      btn.classList.add('copied');
+      btn.querySelector('span').textContent = '已复制!';
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        btn.querySelector('span').textContent = '复制';
+      }, 2000);
+    }
+
+    initCopyButtons();
+    document.addEventListener('astro:after-swap', initCopyButtons);
+  })();
+</script>
+
+<style is:global>
+  .copy-code-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity var(--duration-fast, 150ms) var(--easing-default, ease),
+      color var(--duration-fast, 150ms) var(--easing-default, ease),
+      background var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+  pre:hover .copy-code-btn {
+    opacity: 1;
+  }
+  .copy-code-btn:hover {
+    background: var(--color-surface-muted);
+    color: var(--color-fg);
+  }
+  .copy-code-btn.copied {
+    color: var(--color-accent);
+    opacity: 1;
+  }
+</style>

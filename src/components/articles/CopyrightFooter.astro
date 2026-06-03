@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+---
+
+<footer class="copyright-footer">
+  <p>
+    本文作者: merlinalex · 本文链接: <a href={url}>{url}</a> · 转载请注明出处
+  </p>
+</footer>
+
+<style>
+  .copyright-footer {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-border);
+    margin-top: 2rem;
+  }
+  .copyright-footer p {
+    font-size: 14px;
+    color: var(--color-fg-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .copyright-footer a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  .copyright-footer a:hover {
+    color: var(--color-accent-hover);
+  }
+</style>

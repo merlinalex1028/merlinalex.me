@@ -17,7 +17,7 @@ const { tags, selected } = Astro.props;
   </a>
   {tags.map(tag => (
     <a
-      href={`/articles/${tag}`}
+      href={`/articles?tag=${encodeURIComponent(tag)}`}
       class:list={['chip', { active: selected === tag }]}
       aria-current={selected === tag ? 'page' : undefined}
     >

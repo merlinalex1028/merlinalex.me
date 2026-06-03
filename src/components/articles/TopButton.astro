@@ -1,0 +1,80 @@
+---
+// Floating scroll-to-top button. client:idle for deferred loading.
+---
+
+<button
+  type="button"
+  class="top-button"
+  aria-label="回到顶部"
+  id="top-btn"
+>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<script is:inline>
+  (function () {
+    function initTopButton() {
+      var btn = document.getElementById('top-btn');
+      if (!btn) return;
+
+      var ticking = false;
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            if (window.scrollY > window.innerHeight) {
+              btn.classList.add('visible');
+            } else {
+              btn.classList.remove('visible');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    initTopButton();
+    document.addEventListener('astro:after-swap', initTopButton);
+  })();
+</script>
+
+<style>
+  .top-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 40;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+    transition:
+      opacity var(--duration-fast, 150ms) var(--easing-default, ease),
+      background var(--duration-fast, 150ms) var(--easing-default, ease),
+      transform var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+  .top-button.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .top-button:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+  }
+</style>

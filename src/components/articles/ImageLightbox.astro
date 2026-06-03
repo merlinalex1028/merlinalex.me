@@ -1,0 +1,26 @@
+---
+// Image lightbox using medium-zoom. client:idle for deferred loading.
+---
+
+<script>
+  import mediumZoom from 'medium-zoom';
+
+  function initZoom() {
+    mediumZoom('article img', {
+      margin: 24,
+      background: 'rgba(0, 0, 0, 0.8)',
+    });
+  }
+
+  initZoom();
+  document.addEventListener('astro:after-swap', initZoom);
+</script>
+
+<style is:global>
+  article img {
+    border-radius: 8px;
+    cursor: zoom-in;
+    max-width: 100%;
+    height: auto;
+  }
+</style>

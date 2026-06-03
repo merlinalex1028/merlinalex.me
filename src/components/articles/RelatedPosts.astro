@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  articles: CollectionEntry<'articles'>[];
+}
+
+const { articles } = Astro.props;
+---
+
+{articles.length > 0 && (
+  <section class="related-posts">
+    <h2>相关文章</h2>
+    <ul class="related-grid">
+      {articles.map(article => (
+        <li class="related-card">
+          <a href={`/articles/${article.id}`}>
+            <h3>{article.data.title}</h3>
+            <time datetime={article.data.publishedAt.toISOString()}>
+              {article.data.publishedAt.toLocaleDateString('zh-CN')}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .related-posts {
+    margin-top: 3rem;
+  }
+  .related-posts h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 1rem 0;
+  }
+  .related-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .related-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .related-card a {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      border-color var(--duration-fast, 150ms) var(--easing-default, ease),
+      box-shadow var(--duration-base, 250ms) var(--easing-default, ease);
+  }
+  .related-card a:hover,
+  .related-card a:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
+  }
+  .related-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+  .related-card time {
+    font-size: 14px;
+    color: var(--color-fg-muted);
+  }
+</style>

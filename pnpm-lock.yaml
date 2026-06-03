@@ -35,6 +35,9 @@ importers:
       markdown-it:
         specifier: ^14.2.0
         version: 14.2.0
+      medium-zoom:
+        specifier: ^1.1.0
+        version: 1.1.0
       sanitize-html:
         specifier: ^2.17.4
         version: 2.17.4
@@ -1517,6 +1520,9 @@ packages:
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
+
+  medium-zoom@1.1.0:
+    resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==}
 
   micromark-core-commonmark@2.0.3:
     resolution: {integrity: sha512-RDBrHEMSxVFLg6xvnXmb1Ayr2WzLAWjeSATAoxwKYJV94TeNavgoIdA0a9ytzDSVzBy2YKFK+emCPOEibLeCrg==}
@@ -3878,6 +3884,8 @@ snapshots:
   mdn-data@2.27.1: {}
 
   mdurl@2.0.0: {}
+
+  medium-zoom@1.1.0: {}
 
   micromark-core-commonmark@2.0.3:
     dependencies:
