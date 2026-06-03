@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FriendSection from '../components/friends/FriendSection.astro';
 import { getCollection } from 'astro:content';
+import healthData from '../data/friends-health.json';
 
 const friendsCollection = await getCollection('friends');
 const allFriends = friendsCollection.map((entry) => entry.data);
@@ -48,6 +49,7 @@ for (const cat of categoryOrder) {
         <FriendSection
           title={categoryNames[cat]}
           friends={friends}
+          healthData={healthData}
         />
       );
     })}

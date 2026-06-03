@@ -61,5 +61,14 @@
     "description": "手工与设计",
     "category": "other",
     "featured": false
+  },
+  {
+    "id": "offline-blog",
+    "name": "离线博客示例",
+    "url": "https://offline-example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/99?v=4",
+    "description": "暂时无法访问的站点",
+    "category": "tech",
+    "featured": false
   }
 ]

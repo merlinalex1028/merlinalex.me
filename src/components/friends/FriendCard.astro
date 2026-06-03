@@ -1,12 +1,15 @@
 ---
+import HealthBadge from './HealthBadge.astro';
+
 interface Props {
   name: string;
   url: string;
   avatar?: string;
   description?: string;
+  isOffline?: boolean;
 }
 
-const { name, url, avatar, description } = Astro.props;
+const { name, url, avatar, description, isOffline = false } = Astro.props;
 const initial = name.charAt(0);
 ---
 
@@ -16,6 +19,7 @@ const initial = name.charAt(0);
   rel="noopener noreferrer"
   class="friend-card"
 >
+  <HealthBadge isOffline={isOffline} />
   <div class="friend-avatar">
     {avatar ? (
       <img

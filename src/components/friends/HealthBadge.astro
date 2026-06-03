@@ -1,0 +1,28 @@
+---
+interface Props {
+  isOffline: boolean;
+}
+
+const { isOffline } = Astro.props;
+---
+
+{isOffline && (
+  <span class="health-badge" aria-label="已离线">已离线</span>
+)}
+
+<style>
+  .health-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--color-fg-muted);
+    color: var(--color-bg);
+    border-radius: 9999px;
+    opacity: 0.8;
+    z-index: 10;
+    line-height: 1.4;
+  }
+</style>

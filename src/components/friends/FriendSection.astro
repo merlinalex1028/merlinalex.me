@@ -11,25 +11,37 @@ interface Friend {
   featured?: boolean;
 }
 
+interface HealthEntry {
+  status: 'online' | 'offline';
+  lastCheck: string;
+  statusCode: number;
+  responseTime: number;
+}
+
 interface Props {
   title: string;
   friends: Friend[];
+  healthData?: Record<string, HealthEntry>;
 }
 
-const { title, friends } = Astro.props;
+const { title, friends, healthData = {} } = Astro.props;
 ---
 
 <section class="friend-section">
   <h2 class="section-title">{title}</h2>
   <div class="friend-grid">
-    {friends.map((friend) => (
-      <FriendCard
-        name={friend.name}
-        url={friend.url}
-        avatar={friend.avatar}
-        description={friend.description}
-      />
-    ))}
+    {friends.map((friend) => {
+      const isOffline = healthData[friend.url]?.status === 'offline';
+      return (
+        <FriendCard
+          name={friend.name}
+          url={friend.url}
+          avatar={friend.avatar}
+          description={friend.description}
+          isOffline={isOffline}
+        />
+      );
+    })}
   </div>
 </section>
 
