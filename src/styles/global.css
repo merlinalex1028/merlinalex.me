@@ -23,6 +23,38 @@
   --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+:root[data-theme="dark"] {
+  --color-bg: #1A0F1A;
+  --color-bg-elevated: #241824;
+  --color-surface: #2D1B2D;
+  --color-surface-muted: #3A2535;
+  --color-border: #4A2F45;
+  --color-fg: #F5E8EE;
+  --color-fg-muted: #B497A8;
+  --color-accent: #FF8FB8;
+  --color-accent-hover: #FFA8C8;
+  --color-accent-subtle: #5A2D3F;
+  --color-destructive: #FF6B7A;
+  --color-destructive-hover: #FF8593;
+  --color-focus: #FF8FB8;
+}
+
+/* ATMOSPHERE INTENSITY GATE — Phase 5 contract: .atmo-petals, .atmo-cursor-trail, .atmo-live2d are hidden when data-atmo="off" */
+:root[data-atmo="off"] .atmo-petals,
+:root[data-atmo="off"] .atmo-cursor-trail,
+:root[data-atmo="off"] .atmo-live2d {
+  display: none;
+}
+
+/* A11Y-02 — global reduced-motion baseline. Per CONTEXT D-10. Phase 5 JS loops additionally gate on matchMedia. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -38,6 +70,9 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+  transition:
+    background-color var(--duration-base) var(--easing-default),
+    color var(--duration-base) var(--easing-default);
 }
 
 :focus-visible {
