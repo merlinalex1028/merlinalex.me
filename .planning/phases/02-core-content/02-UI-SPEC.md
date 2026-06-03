@@ -1,7 +1,7 @@
 ---
 phase: 2
 slug: core-content
-status: draft
+status: approved
 shadcn_initialized: false
 preset: not applicable
 created: 2026-06-03
@@ -50,12 +50,12 @@ Exceptions: 56px header height (already established in Phase 1, sticky z-50). 44
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
 | Body | 16px | 400 | 1.5 | Article prose, descriptions, general text |
-| Label | 14px | 400 | 1.4 | Excerpts, dates, metadata, tag chips, TOC items |
-| Small | 12px | 400 | 1.4 | Timestamps, reading time, copyright footer, helper text |
+| Label | 14px | 400 | 1.4 | Excerpts, dates, metadata, tag chips, TOC items, timestamps, reading time, copyright footer, helper text |
 | Heading | 24px | 600 | 1.2 | Page titles (h1), section headings |
-| Subheading | 20px | 600 | 1.3 | Article card titles, component section titles |
-| Article H2 | 20px | 600 | 1.3 | In-article h2 headings |
+| Subheading | 20px | 600 | 1.3 | Article card titles, component section titles, in-article h2 |
 | Article H3 | 16px | 600 | 1.4 | In-article h3 headings |
+
+**Font sizes:** 4 unique sizes (14, 16, 20, 24). The 12px Small role is merged into Label (14px) to maintain a clean 4-size ladder.
 
 **Font stack** (from `global.css`): `"Zen Maru Gothic", "Noto Sans SC", "PingFang SC", "Hiragino Sans", system-ui, -apple-system, sans-serif`
 
@@ -214,8 +214,8 @@ All copy in Chinese (zh-CN) to match the site's language and 二次元 audience.
 - **Hover:** `border-color: var(--color-accent)`, `box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12)` (same pattern as `LatestArticles.astro`)
 - **Title:** 16px, weight 600, line-height 1.4, `color: var(--color-fg)`
 - **Excerpt:** 14px, line-height 1.5, `color: var(--color-fg-muted)`, max 2 lines (`-webkit-line-clamp: 2`)
-- **Date:** 12px, `color: var(--color-fg-muted)`
-- **Category pill:** `display: inline-block`, `padding: 2px 8px`, `border-radius: 9999px`, `font-size: 12px`, `background: var(--color-accent-subtle)`, `color: var(--color-accent)`
+- **Date:** 14px, `color: var(--color-fg-muted)`
+- **Category pill:** `display: inline-block`, `padding: 2px 8px`, `border-radius: 9999px`, `font-size: 14px`, `background: var(--color-accent-subtle)`, `color: var(--color-accent)`
 - **Sticky badge:** Same pill style as category but with `background: var(--color-accent)`, `color: white`
 - **Gap between list items:** 16px
 
@@ -243,7 +243,7 @@ All copy in Chinese (zh-CN) to match the site's language and 二次元 audience.
 - **Container:** `border-radius: 12px`, `overflow: hidden`, `margin: 1.5rem 0`
 - **Pre padding:** `1rem 1.25rem`
 - **Font:** `font-family: 'JetBrains Mono', 'Fira Code', monospace`, `font-size: 14px`, `line-height: 1.6`
-- **Copy button:** Absolute top-right, `padding: 4px 8px`, `border-radius: 6px`, `font-size: 12px`, `background: var(--color-surface)`, `border: 1px solid var(--color-border)`, `opacity: 0` on container, `opacity: 1` on container hover
+- **Copy button:** Absolute top-right, `padding: 4px 8px`, `border-radius: 6px`, `font-size: 14px`, `background: var(--color-surface)`, `border: 1px solid var(--color-border)`, `opacity: 0` on container, `opacity: 1` on container hover
 - **Line numbers:** `color: var(--color-fg-muted)`, `opacity: 0.5`, `padding-right: 1rem`, `user-select: none`
 
 ### CopyCodeButton
@@ -267,7 +267,7 @@ All copy in Chinese (zh-CN) to match the site's language and 二次元 audience.
 - **Layout:** Two cards side by side, `display: grid`, `grid-template-columns: 1fr 1fr`, `gap: 1rem`
 - **Card style:** `padding: 1rem`, `border-radius: 16px`, `background: var(--color-surface)`, `border: 1px solid var(--color-border)`
 - **Hover:** Same as ArticleListItem hover
-- **Label:** 12px, `color: var(--color-fg-muted)`, "上一篇" / "下一篇"
+- **Label:** 14px, `color: var(--color-fg-muted)`, "上一篇" / "下一篇"
 - **Title:** 14px, weight 500, `color: var(--color-fg)`, max 2 lines
 - **Arrow:** Chevron SVG inline, `color: var(--color-fg-muted)`
 - **Single article (no prev or next):** Hide the empty card, remaining card takes full width
@@ -411,11 +411,11 @@ No third-party registries. All components are custom Astro components. Dependenc
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS (revision: 12px Small merged into 14px Label → 4 sizes)
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved
