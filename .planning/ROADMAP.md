@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - Astro + Tailwind v4 + Zod schemas + BaseLayout + FOUC-safe theme + a11y baseline + Cloudflare Pages deploy + Home & About pages live
 - [x] **Phase 2: Core Content** - Articles index + detail UX + RSS + SEO L2 + Twikoo comments + sticker pack (completed 2026-06-03)
-- [ ] **Phase 3: Works + Friend Links** - Works hub + Projects module + Creations module + Friend Links page
+- [x] **Phase 3: Works + Friend Links** - Works hub + Projects module + Creations module + Friend Links page (completed 2026-06-03)
 - [ ] **Phase 4: Community + Search** - Microblog + Bangumi-driven anime/book/music + Timeline + Pagefind search + home widgets
 - [ ] **Phase 5: Atmosphere** - Live2D mascot + falling petals + BGM + custom right-click + easter eggs + intensity gating
 - [ ] **Phase 6: Polish** - Custom 404 + JSON-LD + friend-link health-check Action + tests at 80% + build hardening
@@ -91,9 +91,9 @@ Plans:
 **UI hint**: yes
 Plans:
 
-- [ ] 03-01: Works hub + Projects module (PAGE-05 hub layout linking both modules; PAGE-06 card grid + tech-stack tags + GitHub-stars build-time fetch with cache file `src/data/github-stars.json`)
-- [ ] 03-02: Creations module (PAGE-07 masonry layout with responsive breakpoints + lightbox with caption, alt text, and keyboard navigation)
-- [ ] 03-03: Friend Links + submission flow (PAGE-08 category-sorted card list, submission entry pointing to GitHub Issue template, dead-link badge UI consuming `src/data/friends-health.json` — the producer Action lands in Phase 6)
+- [x] 03-01: Works hub + Projects module (PAGE-05 hub layout linking both modules; PAGE-06 card grid + tech-stack tags + GitHub-stars build-time fetch with cache file `src/data/github-stars.json`)
+- [x] 03-02: Creations module (PAGE-07 masonry layout with responsive breakpoints + lightbox with caption, alt text, and keyboard navigation)
+- [x] 03-03: Friend Links + submission flow (PAGE-08 category-sorted card list, submission entry pointing to GitHub Issue template, dead-link badge UI consuming `src/data/friends-health.json` — the producer Action lands in Phase 6)
 
 ### Phase 4: Community + Search
 
@@ -164,7 +164,7 @@ Plans:
 Plans:
 
 - [ ] 06-01: Custom 404 + JSON-LD (INFRA-06 final: kawaii 404 page returning HTTP 404; `Article` + `Person` + `BreadcrumbList` JSON-LD via reusable Astro components; Rich Results Test validation)
-- [ ] 06-02: Friend-link health-check Action (INFRA-08 GitHub Action cron, 5s HEAD timeout per friend, writes `friends-health.json` consumed by Phase 3 UI; failure thresholds; admin notification on >5 dead links)
+- [x] 06-02: Friend-link health-check Action (INFRA-08 GitHub Action cron, 5s HEAD timeout per friend, writes `friends-health.json` consumed by Phase 3 UI; failure thresholds; admin notification on >5 dead links) (completed 2026-06-03)
 - [ ] 06-03: Tests + build hardening (TEST-01 Vitest unit + Playwright E2E with ≥80% on critical paths and CI gate; GIT-01 `NODE_OPTIONS=--max-old-space-size=4096` + Sharp output cache in `wrangler.toml` / CF Pages env)
 
 ## Progress
@@ -176,7 +176,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | yes |
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
-| 3. Works + Friend Links | 0/3 | Not started | - |
+| 3. Works + Friend Links | 3/3 | Complete   | 2026-06-03 |
 | 4. Community + Search | 0/4 | Not started | - |
 | 5. Atmosphere | 0/5 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
