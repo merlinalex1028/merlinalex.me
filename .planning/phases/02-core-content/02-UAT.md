@@ -3,7 +3,7 @@ status: complete
 phase: 02-core-content
 source: [02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md, 02-04-SUMMARY.md]
 started: 2026-06-03T15:00:00.000Z
-updated: 2026-06-03T15:45:00.000Z
+updated: 2026-06-03T15:50:00.000Z
 ---
 
 ## Current Test
@@ -102,7 +102,11 @@ blocked: 0
   reason: "User reported: 没有高亮的感觉"
   severity: cosmetic
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "TagChips.astro .chip.active uses var(--color-accent-subtle) background which is too subtle (#FFC8DD light / #5A2D3F dark) — insufficient contrast difference from .chip default background var(--color-surface)"
+  artifacts:
+    - path: "src/components/articles/TagChips.astro"
+      issue: ".chip.active background too subtle, needs stronger visual distinction"
+  missing:
+    - "Increase active chip background opacity or use accent color directly with transparency"
+    - "Consider adding box-shadow or font-weight boost for active state"
   debug_session: ""
