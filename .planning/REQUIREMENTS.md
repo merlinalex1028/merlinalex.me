@@ -42,10 +42,10 @@
 - [x] **INFRA-01**: Astro v6.4.2 + TypeScript strict + Tailwind v4 (via `@tailwindcss/vite`) + MDX; pnpm; Node 22 LTS
 - [x] **INFRA-02**: Zod-validated content collections: `articles`, `projects`, `creations`, `microblog`, `timeline`, `friends`, `anime`, `books`, `music` (in `src/content.config.ts`)
 - [ ] **INFRA-03**: Cloudflare Pages hosting — unlimited bandwidth, auto HTTPS, global CDN, 500 builds/month free
-- [ ] **INFRA-04**: Twikoo comments on separate Vercel project (MongoDB Atlas M0); embedded via `envId`; no Vercel Authentication enabled; third-party image host configured; admin email notifications
+- [x] **INFRA-04**: Twikoo comments on separate Vercel project (MongoDB Atlas M0); embedded via `envId`; no Vercel Authentication enabled; third-party image host configured; admin email notifications
 - [ ] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress
 - [ ] **INFRA-06**: APlayer v1.10.1 + MetingJS v2.0.2 for BGM; custom domain; custom 404 page returning HTTP 404 status (`Astro.response.status = 404`)
-- [ ] **INFRA-07**: Sticker/emote pack for Twikoo comments (Bilibili-style 表情包)
+- [x] **INFRA-07**: Sticker/emote pack for Twikoo comments (Bilibili-style 表情包)
 - [ ] **INFRA-08**: Friend-link health check via GitHub Action cron (5s timeout HEAD request); mark dead in UI
 - [ ] **TEST-01**: Vitest + Playwright per CLAUDE.md testing rules; 80% coverage on critical paths (comment posting, theme persistence, search index, Live2D fallback)
 - [ ] **GIT-01**: `NODE_OPTIONS=--max-old-space-size=4096` set in build env; cache Sharp outputs
