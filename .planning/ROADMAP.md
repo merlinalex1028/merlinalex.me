@@ -60,12 +60,18 @@ Plans:
 
 **Plans**: 4 plans
 **UI hint**: yes
-
 Plans:
+**Wave 1**
 
 - [ ] 02-01: Articles index + utilities + nav (PAGE-03 tag filter + chronological sort; reading-time, tag-extraction, related-posts utilities; TagChips, ArticleListItem, StickyBadge components; Nav enablement)
 - [ ] 02-02: Article detail page + all components (PAGE-04 TOC, code highlight via Shiki, copy-code, reading time, image lightbox, prev/next, related posts, share buttons, copyright footer, top button; medium-zoom install; welcome.md enrichment)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 02-03: RSS + SEO L2 (DISC-01 `@astrojs/rss` for `/feed.xml` + `/feed-full.xml` with CDATA escaping and `<link rel="alternate">` autodiscovery; SEO-02 Related component + alt-text enforcement)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 02-04: Twikoo deployment + integration + stickers (INFRA-04 separate Vercel project + MongoDB Atlas M0 with `envId` wired, admin email notifications, third-party image host configured, NO Vercel Authentication; INFRA-07 sticker/emote pack)
 
 ### Phase 3: Works + Friend Links
