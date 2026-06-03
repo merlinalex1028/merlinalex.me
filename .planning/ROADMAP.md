@@ -40,7 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **UI hint**: yes
 Plans:
 
-- [ ] 01-01: Project scaffold + Zod schemas (Astro v6.4.2 + TS strict + Tailwind v4 via `@tailwindcss/vite` + MDX + Node 22 + pnpm; `src/content.config.ts` with 9 Zod-validated collections: articles, projects, creations, microblog, timeline, friends, anime, books, music)
+- [x] 01-01: Project scaffold + Zod schemas (Astro v6.4.2 + TS strict + Tailwind v4 via `@tailwindcss/vite` + MDX + Node 22 + pnpm; `src/content.config.ts` with 9 Zod-validated collections: articles, projects, creations, microblog, timeline, friends, anime, books, music)
 - [ ] 01-02: BaseLayout + theme system + a11y gates (BaseLayout.astro, FOUC-safe pre-paint inline theme script in `<head>`, light/dark CSS tokens via `@theme`, A11Y-01 intensity toggle scaffold, A11Y-02 `prefers-reduced-motion` global CSS rule)
 - [ ] 01-03: Home + About pages + Cloudflare Pages deploy (PAGE-01 hero + notice bar slot + latest stubs, PAGE-02 persona card, SEO-01 `@astrojs/sitemap` + robots.txt + OG/Twitter, custom domain + HTTPS, basic 404 stub returning HTTP 404)
 
@@ -168,7 +168,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 1/3 | In Progress|  |
 | 2. Core Content | 0/3 | Not started | - |
 | 3. Works + Friend Links | 0/3 | Not started | - |
 | 4. Community + Search | 0/4 | Not started | - |

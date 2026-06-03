@@ -39,8 +39,8 @@
 - [ ] **SEO-02** (NEW): Internal linking "Related" component in article footer; alt text on all images
 
 ### Infrastructure
-- [ ] **INFRA-01**: Astro v6.4.2 + TypeScript strict + Tailwind v4 (via `@tailwindcss/vite`) + MDX; pnpm; Node 22 LTS
-- [ ] **INFRA-02**: Zod-validated content collections: `articles`, `projects`, `creations`, `microblog`, `timeline`, `friends`, `anime`, `books`, `music` (in `src/content.config.ts`)
+- [x] **INFRA-01**: Astro v6.4.2 + TypeScript strict + Tailwind v4 (via `@tailwindcss/vite`) + MDX; pnpm; Node 22 LTS
+- [x] **INFRA-02**: Zod-validated content collections: `articles`, `projects`, `creations`, `microblog`, `timeline`, `friends`, `anime`, `books`, `music` (in `src/content.config.ts`)
 - [ ] **INFRA-03**: Cloudflare Pages hosting — unlimited bandwidth, auto HTTPS, global CDN, 500 builds/month free
 - [ ] **INFRA-04**: Twikoo comments on separate Vercel project (MongoDB Atlas M0); embedded via `envId`; no Vercel Authentication enabled; third-party image host configured; admin email notifications
 - [ ] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-06-03T01:55:55.955Z"
-last_activity: 2026-06-03 -- Phase 01 planning complete
+last_updated: "2026-06-03T02:17:52.269Z"
+last_activity: 2026-06-03
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-06-02)
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 0 of 3 in current phase
+Plan: 1 of 3 in current phase
 Status: Ready to execute
-Last activity: 2026-06-03 -- Phase 01 planning complete
+Last activity: 2026-06-03
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-foundation P01 | 813 | 3 tasks | 25 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,9 @@ Recent decisions affecting current work:
 - Atmosphere accessibility: intensity toggle + `prefers-reduced-motion` wired in Phase 1 (non-negotiable, not retrofitted)
 - Live2D scheduled last (Phase 5): heaviest, most failure-prone; needs device-capability gate + static PNG fallback
 - v2 deferrals: avatar generator (PAGE-12), Live2D dress-up, email subscription, cross-collection search, full holiday theme variants
+- [Phase 01-foundation]: Astro 6.4.3 not pinned 6.4.2 (latest stable in npm at execution time)
+- [Phase 01-foundation]: file() loader treats JSON as entry map; plan's {items:[]} shape was a bug; auto-fixed to plain array [] + top-level z.array() schemas
+- [Phase 01-foundation]: pnpm-workspace.yaml allowBuilds + minimumReleaseAgeExclude required by pnpm 11 supply-chain policy (blocks esbuild/sharp builds + recently-published astro 6.4.3)
 
 ### Pending Todos
 
@@ -96,6 +100,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-06-02T12:28:29.351Z
+Last session: 2026-06-03T02:17:52.263Z
 Stopped at: Phase 1 UI-SPEC approved
-Resume file: .planning/phases/01-foundation/01-UI-SPEC.md
+Resume file: None
