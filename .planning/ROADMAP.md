@@ -14,7 +14,7 @@ A 二次元 (anime/kawaii) personal website that ships in 6 vertical-slice phase
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - Astro + Tailwind v4 + Zod schemas + BaseLayout + FOUC-safe theme + a11y baseline + Cloudflare Pages deploy + Home & About pages live
-- [ ] **Phase 2: Core Content** - Articles index + detail UX + RSS + SEO L2 + Twikoo comments + sticker pack
+- [x] **Phase 2: Core Content** - Articles index + detail UX + RSS + SEO L2 + Twikoo comments + sticker pack (completed 2026-06-03)
 - [ ] **Phase 3: Works + Friend Links** - Works hub + Projects module + Creations module + Friend Links page
 - [ ] **Phase 4: Community + Search** - Microblog + Bangumi-driven anime/book/music + Timeline + Pagefind search + home widgets
 - [ ] **Phase 5: Atmosphere** - Live2D mascot + falling petals + BGM + custom right-click + easter eggs + intensity gating
@@ -72,7 +72,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-04: Twikoo deployment + integration + stickers (INFRA-04 separate Vercel project + MongoDB Atlas M0 with `envId` wired, admin email notifications, third-party image host configured, NO Vercel Authentication; INFRA-07 sticker/emote pack)
+- [x] 02-04: Twikoo deployment + integration + stickers (INFRA-04 separate Vercel project + MongoDB Atlas M0 with `envId` wired, admin email notifications, third-party image host configured, NO Vercel Authentication; INFRA-07 sticker/emote pack)
 
 ### Phase 3: Works + Friend Links
 
@@ -176,7 +176,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | yes |
-| 2. Core Content | 3/4 | In Progress|  |
+| 2. Core Content | 4/4 | Complete   | 2026-06-03 |
 | 3. Works + Friend Links | 0/3 | Not started | - |
 | 4. Community + Search | 0/4 | Not started | - |
 | 5. Atmosphere | 0/5 | Not started | - |
