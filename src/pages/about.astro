@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PersonaCard from '../components/about/PersonaCard.astro';
+import persona from '../data/persona.yaml';
+
+const description = persona?.tagline || 'merlinalex.me — 关于我';
+---
+
+<BaseLayout title="关于" description={description} type="website">
+  <PersonaCard persona={persona} />
+</BaseLayout>

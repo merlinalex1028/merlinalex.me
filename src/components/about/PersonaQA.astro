@@ -1,0 +1,48 @@
+---
+const { qa = [] } = Astro.props;
+---
+
+<section class="persona-qa">
+  <h2>关于我</h2>
+  <dl>
+    {qa.map((item: any) => (
+      <div class="qa-item">
+        <dt class="qa-q">{item.q}</dt>
+        <dd class="qa-a">{item.a}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .persona-qa {
+    margin-bottom: var(--space-2xl, 3rem);
+  }
+  .persona-qa h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 var(--space-md, 1rem) 0;
+  }
+  .persona-qa dl {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl, 3rem);
+  }
+  .qa-item {
+    margin: 0;
+  }
+  .qa-q {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+  .qa-a {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-fg);
+    margin: 0;
+  }
+</style>

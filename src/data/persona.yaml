@@ -16,19 +16,27 @@ skills:
     level: 60
   - name: "日语"
     level: 45
+  - name: "调咖啡"
+    level: 70
 favorites:
   anime:
     - title: "孤独摇滚"
       year: 2022
     - title: "摇曳露营"
       year: 2018
+    - title: "莉可丽丝"
+      year: 2022
   characters:
     - name: "后藤一里"
       source: "孤独摇滚"
     - name: "各务原抚子"
       source: "摇曳露营"
+    - name: "锦木千束"
+      source: "莉可丽丝"
 qa:
-  - q: "你叫什么？"
-    a: "merlinalex。"
-  - q: "你住哪里？"
-    a: "在云端。"
+  - q: "你叫什么名字？"
+    a: "merlinalex。这是一个网名。"
+  - q: "你是做什么的？"
+    a: "写代码、画小画、偶尔写写文章。"
+  - q: "你最喜欢的季节是？"
+    a: "春天。樱花飘落的季节。"

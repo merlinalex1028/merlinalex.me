@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NotFound from '../components/core/NotFound.astro';
+
+// CRITICAL: Set the HTTP status BEFORE rendering (PITFALLS P-21 / RESEARCH Anti-pattern 8).
+// Without these two lines, Astro defaults to 200 and search engines treat the 404 page
+// as a duplicate of the homepage.
+Astro.response.status = 404;
+Astro.response.statusText = 'Not Found';
+---
+
+<BaseLayout title="404 · 迷路了？" description="找不到这个页面… 要不然回到首页吧">
+  <NotFound />
+</BaseLayout>

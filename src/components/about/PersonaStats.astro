@@ -1,0 +1,44 @@
+---
+const { mbti, zodiac, blood } = Astro.props;
+
+const chips: Array<{ label: string; value: string }> = [];
+if (mbti) chips.push({ label: 'MBTI', value: mbti });
+if (zodiac) chips.push({ label: '星座', value: zodiac });
+if (blood) chips.push({ label: '血型', value: blood });
+---
+
+<div class="persona-stats" role="list" aria-label="属性">
+  {chips.map((chip) => (
+    <span class="stat-chip" role="listitem" aria-label={`属性：${chip.value}`}>
+      <span class="stat-label">{chip.label}</span>
+      <span class="stat-value">{chip.value}</span>
+    </span>
+  ))}
+</div>
+
+<style>
+  .persona-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm, 0.5rem);
+    justify-content: center;
+    margin-bottom: var(--space-xl, 2rem);
+  }
+  .stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-fg);
+  }
+  .stat-label {
+    color: var(--color-fg-muted);
+  }
+  .stat-value {
+    font-weight: 600;
+  }
+</style>

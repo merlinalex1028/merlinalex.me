@@ -1,0 +1,75 @@
+---
+const { skills = [] } = Astro.props;
+---
+
+<section class="skill-bars">
+  <h2>技能</h2>
+  <ul>
+    {skills.map((skill: any) => (
+      <li class="skill-row">
+        <span class="skill-name">{skill.name}</span>
+        <div class="skill-track">
+          <div class="skill-fill" style={`width: ${Math.max(0, Math.min(100, skill.level))}%`}></div>
+        </div>
+        <span class="skill-pct">{skill.level}%</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .skill-bars {
+    margin-bottom: var(--space-xl, 2rem);
+  }
+  .skill-bars h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 var(--space-md, 1rem) 0;
+  }
+  .skill-bars ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md, 1rem);
+  }
+  .skill-row {
+    display: grid;
+    grid-template-columns: 1fr 8em auto;
+    align-items: center;
+    gap: var(--space-sm, 0.5rem);
+  }
+  .skill-name {
+    font-size: 14px;
+    color: var(--color-fg);
+  }
+  .skill-track {
+    background: var(--color-accent-subtle);
+    height: 8px;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .skill-fill {
+    background: var(--color-accent);
+    height: 100%;
+    border-radius: 9999px;
+    transition: width var(--duration-base, 250ms) var(--easing-default, ease);
+  }
+  .skill-pct {
+    font-size: 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: var(--color-fg-muted);
+    text-align: right;
+  }
+  @media (max-width: 480px) {
+    .skill-row {
+      grid-template-columns: 1fr auto;
+    }
+    .skill-track {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+  }
+</style>
