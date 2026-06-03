@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../../components/works/Breadcrumb.astro';
+import ProjectCard from '../../../components/works/ProjectCard.astro';
+import githubStars from '../../../data/github-stars.json';
+
+const allProjects = await getCollection('projects');
+
+// Sort: featured first, then alphabetical by name
+const sorted = [...allProjects].sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return a.data.name.localeCompare(b.data.name);
+});
+
+// Helper to get stars for a project
+function getStars(githubUrl?: string): number | undefined {
+  if (!githubUrl) return undefined;
+  try {
+    const parsed = new URL(githubUrl);
+    if (parsed.hostname !== 'github.com') return undefined;
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if (parts.length < 2) return undefined;
+    const slug = `${parts[0]}/${parts[1]}`;
+    return (githubStars as Record<string, number>)[slug];
+  } catch {
+    return undefined;
+  }
+}
+---
+
+<BaseLayout title="开源项目" description="开源项目与工具 — merlinalex.me">
+  <section class="projects-page">
+    <Breadcrumb items={[{ label: '作品', href: '/works' }, { label: '项目' }]} />
+
+    {sorted.length === 0 ? (
+      <div class="empty-state">
+        <h3>还没有项目</h3>
+        <p>添加第一个项目后会出现在这里</p>
+      </div>
+    ) : (
+      <div class="projects-grid">
+        {sorted.map(project => (
+          <ProjectCard
+            name={project.data.name}
+            description={project.data.description}
+            url={project.data.url}
+            github={project.data.github}
+            tags={project.data.tags}
+            cover={project.data.cover}
+            stars={getStars(project.data.github)}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .projects-page {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .projects-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty-state {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .empty-state p {
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+</style>
