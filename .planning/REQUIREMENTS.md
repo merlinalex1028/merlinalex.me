@@ -32,11 +32,11 @@
 - [ ] **A11Y-02** (NEW): `prefers-reduced-motion` media query — global CSS rule + gate Live2D motion amplitude + canvas RAF loops
 
 ### Discovery & Growth
-- [ ] **DISC-01**: RSS feed (`/feed.xml` summary + `/feed-full.xml` full-content) with CDATA escaping; validated in W3C feed validator; autodiscovery `<link rel="alternate">` in `<head>`
+- [x] **DISC-01**: RSS feed (`/feed.xml` summary + `/feed-full.xml` full-content) with CDATA escaping; validated in W3C feed validator; autodiscovery `<link rel="alternate">` in `<head>`
 - [ ] **DISC-02** (v1: articles-only): Site search via Pagefind (excludes microblog with `data-pagefind-filter="exclude"`); v1.1 expands to works + microblog
 - [ ] **DISC-03**: Tag cloud + chronological archive; hide tags with 0 or 1 posts
 - [ ] **SEO-01** (NEW): Sitemap (`@astrojs/sitemap`), robots.txt, OG/Twitter cards per article, `Article` + `Person` + `BreadcrumbList` JSON-LD structured data
-- [ ] **SEO-02** (NEW): Internal linking "Related" component in article footer; alt text on all images
+- [x] **SEO-02** (NEW): Internal linking "Related" component in article footer; alt text on all images
 
 ### Infrastructure
 - [x] **INFRA-01**: Astro v6.4.2 + TypeScript strict + Tailwind v4 (via `@tailwindcss/vite`) + MDX; pnpm; Node 22 LTS
