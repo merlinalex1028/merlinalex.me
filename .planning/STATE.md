@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-06-03T02:17:52.269Z"
+last_updated: "2026-06-03T11:20:00.000Z"
 last_activity: 2026-06-03
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 1
-  percent: 0
+  completed_plans: 3
+  percent: 17
 ---
 
 # Project State
@@ -24,12 +24,12 @@ See: .planning/PROJECT.md (updated 2026-06-02)
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation)
+Phase: 2 of 6 (Core Content)
 Plan: 1 of 3 in current phase
 Status: Ready to execute
 Last activity: 2026-06-03
 
-Progress: [███░░░░░░░] 33%
+Progress: [██░░░░░░░░] 17%
 
 ## Performance Metrics
 
@@ -43,7 +43,7 @@ Progress: [███░░░░░░░] 33%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 0/3 | - | - |
+| 1. Foundation | 3/3 | - | - |
 | 2. Core Content | 0/3 | - | - |
 | 3. Works + Friend Links | 0/3 | - | - |
 | 4. Community + Search | 0/4 | - | - |
@@ -52,8 +52,7 @@ Progress: [███░░░░░░░] 33%
 
 **Recent Trend:**
 
-- Last 5 plans: — (no data yet)
-- Trend: —
+- Last 3 plans: 01-01, 01-02, 01-03 — sequential, all complete
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 813 | 3 tasks | 25 files |
@@ -100,6 +99,33 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-06-03T02:17:52.263Z
-Stopped at: Phase 1 UI-SPEC approved
+Last session: 2026-06-03T11:20:00.000Z
+Stopped at: Phase 1 complete — ready for /gsd-plan-phase 2 (Core Content)
 Resume file: None
+
+## Phase 1 Closeout
+
+Phase 1 (Foundation) is **complete**. All 3 plans shipped:
+
+- **01-01** — Astro 6 + Tailwind v4 + TypeScript scaffold; 9 Zod-validated content collections (articles, projects, creations, microblog, timeline, friends, anime, books, music) with `file()`/`glob()` loaders; pnpm-workspace supply-chain policy.
+- **01-02** — `BaseLayout` + `Header` + `Footer` + `NotFound` + `NoticeBar` + `SEOMeta`; FOUC-safe pre-paint script that sets `data-theme` + `data-atmo` from `localStorage` and `prefers-color-scheme` / `prefers-reduced-motion`; theme switcher (system / light / dark) and intensity badge (off / subtle / full) wired in header; sitemap + RSS + robots integration; `astro:assets` image optimization.
+- **01-03** — Home (PAGE-01) with 5 components + `src/pages/index.astro`; About (PAGE-02) with 5 components + `src/pages/about.astro` loading from `src/data/persona.yaml`; 404 page (INFRA-06) with `Astro.response.status = 404`; `public/_redirects` www→apex 301 fallback; Cloudflare Pages deploy config (env vars, custom domain, build command, output dir) documented in commit body.
+
+**Walking Skeleton invariants verified:**
+- Pre-paint `<script>` runs before any `<link>`/`<style>` in `dist/index.html`.
+- `data-theme="light"` + `data-atmo="full"` defaults on `<html>` so the static file is self-sufficient if the pre-paint script fails.
+- `Astro.response.status = 404` set in `src/pages/404.astro` frontmatter; verified `HTTP/1.1 404 Not Found` for `/nonexistent-path` in dev.
+- `dist/404.html`, `dist/sitemap-index.xml`, `dist/sitemap-0.xml`, `dist/robots.txt` all generated.
+- `grep "301" public/_redirects` finds the www→apex rule.
+
+**Deferred items (per SKELETON.md Out-of-Scope) — to be picked up in later phases:**
+- Atmosphere consumers (Live2D, falling petals, BGM, custom right-click) — Phase 5
+- Twikoo comments (backend on Vercel + MongoDB Atlas) — Phase 2
+- Bangumi API integration (anime/book/music tracking) — Phase 4
+- RSS feed content + email subscription wiring — Phase 2 (collection exists, content pending)
+- Pagefind search index — Phase 4
+- JSON-LD structured data — Phase 6 polish
+- 80% test coverage (Playwright E2E + Vitest) — Phase 6 polish
+- Real persona avatar image (`/avatars/persona.png`) — Phase 6 polish
+
+**Next phase:** Phase 2 — Core Content (articles index + RSS feeds + Twikoo + sticker pack).
