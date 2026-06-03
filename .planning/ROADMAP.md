@@ -176,7 +176,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | yes |
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
-| 3. Works + Friend Links | 3/3 | Complete   | 2026-06-03 |
+| 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
 | 4. Community + Search | 0/4 | Not started | - |
 | 5. Atmosphere | 0/5 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |

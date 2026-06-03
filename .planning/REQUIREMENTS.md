@@ -12,10 +12,10 @@
 - [ ] **PAGE-02**: About page with second-anime persona card (avatar, MBTI, zodiac, blood type, skill bars, favorite anime/character list, Q&A)
 - [x] **PAGE-03**: Articles index with tag-based filtering (tags: tech, life, review, notes…)
 - [x] **PAGE-04**: Article detail page with TOC, code highlight, reading time, last-updated, share buttons, copy-code button, image lightbox, prev/next + related, sticky/pinned posts, copyright footer, top button, password-protected posts
-- [ ] **PAGE-05**: Works hub page linking to two sub-modules
-- [ ] **PAGE-06**: Works → Projects module (open-source, tools, websites) with card grid, tech-stack tags, GitHub stars (build-time fetch)
-- [ ] **PAGE-07**: Works → Creations module (illustrations, photos, crafts, videos) with masonry + lightbox gallery
-- [ ] **PAGE-08**: Friend Links page with submission entry, health-check badge, sorted by category
+- [x] **PAGE-05**: Works hub page linking to two sub-modules
+- [x] **PAGE-06**: Works → Projects module (open-source, tools, websites) with card grid, tech-stack tags, GitHub stars (build-time fetch)
+- [x] **PAGE-07**: Works → Creations module (illustrations, photos, crafts, videos) with masonry + lightbox gallery
+- [x] **PAGE-08**: Friend Links page with submission entry, health-check badge, sorted by category
 - [ ] **PAGE-09**: Microblog (说说 / 碎碎念) feed with image lightbox + comments; cap home to 5 latest; auto-archive >180 days
 - [ ] **PAGE-10**: Anime / Book / Music list pages (Bangumi-style: watching / watched / want) with build-time fetch + 12h cache
 - [ ] **PAGE-11**: Timeline / Journey page (year-by-year vertical alternating-side milestones)
@@ -46,7 +46,7 @@
 - [ ] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress
 - [ ] **INFRA-06**: APlayer v1.10.1 + MetingJS v2.0.2 for BGM; custom domain; custom 404 page returning HTTP 404 status (`Astro.response.status = 404`)
 - [x] **INFRA-07**: Sticker/emote pack for Twikoo comments (Bilibili-style 表情包)
-- [ ] **INFRA-08**: Friend-link health check via GitHub Action cron (5s timeout HEAD request); mark dead in UI
+- [x] **INFRA-08**: Friend-link health check via GitHub Action cron (5s timeout HEAD request); mark dead in UI
 - [ ] **TEST-01**: Vitest + Playwright per CLAUDE.md testing rules; 80% coverage on critical paths (comment posting, theme persistence, search index, Live2D fallback)
 - [ ] **GIT-01**: `NODE_OPTIONS=--max-old-space-size=4096` set in build env; cache Sharp outputs
 
