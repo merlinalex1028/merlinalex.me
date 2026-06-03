@@ -67,17 +67,15 @@ const microblog = defineCollection({
 // We use the array form so the schema is applied to each friend object directly.
 const friends = defineCollection({
   loader: file('./src/content/friends/friends.json'),
-  schema: z.array(
-    z.object({
-      id: z.string().optional(),
-      name: z.string(),
-      url: z.string().url(),
-      avatar: z.string().url().optional(),
-      description: z.string().optional(),
-      category: z.enum(['tech', 'anime', 'life', 'other']).optional(),
-      featured: z.boolean().default(false),
-    })
-  ),
+  schema: z.object({
+    id: z.string().optional(),
+    name: z.string(),
+    url: z.string().url(),
+    avatar: z.string().url().optional(),
+    description: z.string().optional(),
+    category: z.enum(['tech', 'anime', 'life', 'other']).optional(),
+    featured: z.boolean().default(false),
+  }),
 });
 
 // ─── TIMELINE (detailed, D-04) ──────────────────────────

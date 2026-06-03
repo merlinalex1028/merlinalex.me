@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../../components/works/Breadcrumb.astro';
+import CategoryChips from '../../../components/works/CategoryChips.astro';
+import CreationCard from '../../../components/works/CreationCard.astro';
+import CreationLightbox from '../../../components/works/CreationLightbox.astro';
+
+const allCreations = await getCollection('creations');
+
+const categories = [
+  { value: 'illustration', label: '插画' },
+  { value: 'photography', label: '摄影' },
+  { value: 'craft', label: '手工' },
+  { value: 'video', label: '视频' },
+];
+
+const selectedCategory = Astro.url.searchParams.get('category');
+
+const sorted = [...allCreations].sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const filtered = selectedCategory
+  ? sorted.filter(c => c.data.category === selectedCategory)
+  : sorted;
+
+const breadcrumbItems = [
+  { label: 'Works', href: '/works' },
+  { label: 'Creations' },
+];
+---
+
+<BaseLayout title="创意作品" description="创意作品画廊 — merlinalex.me">
+  <Breadcrumb items={breadcrumbItems} />
+  <CategoryChips
+    categories={categories}
+    selected={selectedCategory}
+    baseUrl="/works/creations"
+  />
+
+  <section class="creations-page">
+    {filtered.length === 0 ? (
+      <div class="empty-state">
+        <h3>还没有创意作品</h3>
+        <p>上传第一件作品之后会出现在这里 ✨</p>
+      </div>
+    ) : (
+      <div class="masonry-grid">
+        {filtered.map((creation, index) => (
+          <CreationCard
+            title={creation.data.title}
+            category={creation.data.category}
+            cover={creation.data.cover || creation.data.images[0]}
+            images={creation.data.images}
+            description={creation.data.description}
+            index={index}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+
+  <CreationLightbox />
+</BaseLayout>
+
+<style>
+  .creations-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+  }
+
+  .masonry-grid {
+    columns: 3 280px;
+    column-gap: 1rem;
+  }
+
+  @media (max-width: 1024px) {
+    .masonry-grid {
+      columns: 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .masonry-grid {
+      columns: 1;
+    }
+  }
+
+  .empty-state {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .empty-state p {
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+</style>

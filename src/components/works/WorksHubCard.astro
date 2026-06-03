@@ -1,0 +1,67 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  icon: string;
+}
+
+const { title, description, href, icon } = Astro.props;
+---
+
+<a href={href} class="hub-card">
+  <div class="hub-card-icon">
+    <Icon name={icon} />
+  </div>
+  <h2 class="hub-card-title">{title}</h2>
+  <p class="hub-card-desc">{description}</p>
+</a>
+
+<style>
+  .hub-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition:
+      transform var(--duration-base, 250ms) var(--easing-default, ease),
+      border-color var(--duration-fast, 150ms) var(--easing-default, ease),
+      box-shadow var(--duration-base, 250ms) var(--easing-default, ease);
+  }
+
+  .hub-card:hover,
+  .hub-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 24px rgba(255, 107, 157, 0.15);
+  }
+
+  .hub-card-icon {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .hub-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0;
+  }
+
+  .hub-card-desc {
+    font-size: 14px;
+    color: var(--color-fg-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>

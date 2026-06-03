@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "id": "zhangsan-blog",
+    "name": "张三的博客",
+    "url": "https://example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/1?v=4",
+    "description": "全栈开发 · 技术分享",
+    "category": "tech",
+    "featured": true
+  },
+  {
+    "id": "dev-notes",
+    "name": "开发者笔记",
+    "url": "https://dev.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/10?v=4",
+    "description": "前端工程化与性能优化",
+    "category": "tech",
+    "featured": false
+  },
+  {
+    "id": "rustacean",
+    "name": "Rustacean",
+    "url": "https://rust.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/11?v=4",
+    "description": "Rust 系统编程实践",
+    "category": "tech",
+    "featured": false
+  },
+  {
+    "id": "anime-lab",
+    "name": "二次元研究所",
+    "url": "https://anime.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/2?v=4",
+    "description": "动漫资讯与评测",
+    "category": "anime",
+    "featured": true
+  },
+  {
+    "id": "manga-corner",
+    "name": "漫画角落",
+    "url": "https://manga.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/12?v=4",
+    "description": "漫画推荐与同人创作",
+    "category": "anime",
+    "featured": false
+  },
+  {
+    "id": "life-diary",
+    "name": "小明的生活日记",
+    "url": "https://life.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/3?v=4",
+    "description": "日常记录与摄影",
+    "category": "life",
+    "featured": false
+  },
+  {
+    "id": "craft-studio",
+    "name": "创意工坊",
+    "url": "https://craft.example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/4?v=4",
+    "description": "手工与设计",
+    "category": "other",
+    "featured": false
+  },
+  {
+    "id": "offline-blog",
+    "name": "离线博客示例",
+    "url": "https://offline-example.com",
+    "avatar": "https://avatars.githubusercontent.com/u/99?v=4",
+    "description": "暂时无法访问的站点",
+    "category": "tech",
+    "featured": false
+  }
+]

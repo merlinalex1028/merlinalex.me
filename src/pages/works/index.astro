@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorksHubCard from '../../components/works/WorksHubCard.astro';
+---
+
+<BaseLayout title="作品" description="开源项目与创意作品 — merlinalex.me">
+  <section class="works-hub">
+    <h1 class="works-title">作品</h1>
+    <div class="works-grid">
+      <WorksHubCard
+        title="开源项目"
+        description="我的开源项目和工具"
+        href="/works/projects"
+        icon="mdi:code-braces"
+      />
+      <WorksHubCard
+        title="创意作品"
+        description="插画、摄影、手工、视频"
+        href="/works/creations"
+        icon="mdi:palette"
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .works-hub {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+  }
+
+  .works-title {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-fg);
+    margin: 0 0 2rem 0;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .works-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

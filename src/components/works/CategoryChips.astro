@@ -1,0 +1,85 @@
+---
+interface Category {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  categories: Category[];
+  selected: string | null;
+  baseUrl: string;
+}
+
+const { categories, selected, baseUrl } = Astro.props;
+---
+
+<div class="category-chips" role="navigation" aria-label="作品分类筛选">
+  <a
+    href={baseUrl}
+    class:list={['chip', { active: selected === null }]}
+    aria-current={selected === null ? 'page' : undefined}
+  >
+    全部
+  </a>
+  {categories.map(cat => (
+    <a
+      href={`${baseUrl}?category=${encodeURIComponent(cat.value)}`}
+      class:list={['chip', { active: selected === cat.value }]}
+      aria-current={selected === cat.value ? 'page' : undefined}
+    >
+      {cat.label}
+    </a>
+  ))}
+</div>
+
+<style>
+  .category-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    position: sticky;
+    top: 56px;
+    z-index: 40;
+    background: var(--color-bg);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .category-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    background: var(--color-surface);
+    color: var(--color-fg-muted);
+    border: 1px solid var(--color-border);
+    transition:
+      background var(--duration-fast, 150ms) var(--easing-default, ease),
+      color var(--duration-fast, 150ms) var(--easing-default, ease),
+      border-color var(--duration-fast, 150ms) var(--easing-default, ease);
+    flex-shrink: 0;
+  }
+
+  .chip:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .chip.active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  }
+</style>

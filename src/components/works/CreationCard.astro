@@ -1,0 +1,104 @@
+---
+interface Props {
+  title: string;
+  category?: string;
+  cover: string;
+  images: string[];
+  description?: string;
+  index: number;
+}
+
+const { title, category, cover, images, description, index } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  illustration: '插画',
+  photography: '摄影',
+  craft: '手工',
+  video: '视频',
+};
+
+const categoryLabel = category ? categoryLabels[category] || category : '';
+---
+
+<div
+  class="creation-card"
+  data-index={index}
+  data-images={JSON.stringify(images)}
+  data-title={title}
+  data-description={description || ''}
+>
+  <img
+    src={cover}
+    alt={title}
+    width={400}
+    height={300}
+    loading="lazy"
+    decoding="async"
+  />
+  {categoryLabel && (
+    <span class="category-badge">{categoryLabel}</span>
+  )}
+  <div class="title-overlay">
+    <h3>{title}</h3>
+  </div>
+</div>
+
+<style>
+  .creation-card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: var(--color-surface);
+  }
+
+  .creation-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .creation-card:hover img {
+    transform: scale(1.03);
+  }
+
+  .category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    opacity: 0;
+    transition: opacity 200ms var(--easing-default, ease);
+    pointer-events: none;
+  }
+
+  .creation-card:hover .category-badge {
+    opacity: 1;
+  }
+
+  .title-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    color: white;
+  }
+
+  .title-overlay h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+</style>
