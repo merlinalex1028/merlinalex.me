@@ -494,27 +494,31 @@ function getTagSize(count: number): string {
 | A4 | Bangumi cover images can be hotlinked without CORS issues | Pitfalls | Medium — if blocked, need to proxy or cache images locally |
 | A5 | Busuanzi icodeq CDN is reliable and free to use | Standard Stack | Low — fallback is to hide the visitor counter if script fails |
 
-## Open Questions
+## Open Questions (All Resolved)
 
 1. **Bangumi username configuration**
    - What we know: The API requires a username in the URL path
    - What's unclear: What username to use; whether to use env var or hardcoded
    - Recommendation: Use `BANGUMI_USERNAME` env var, document in `.env.example`
+   - **Resolution (Plan 04-02):** Accepted. `BANGUMI_USERNAME` env var used in prebuild script `src/scripts/fetch-bangumi.ts`.
 
 2. **Bangumi data refresh strategy**
    - What we know: 12h TTL cache, prebuild script
    - What's unclear: Should the prebuild script run automatically or only on manual trigger?
    - Recommendation: Add `prebuild` script to `package.json` that checks cache age; also support `pnpm bangumi:refresh` for manual override
+   - **Resolution (Plan 04-02):** Accepted. Prebuild script checks content file mtime against 12h TTL; `pnpm bangumi:refresh` for manual trigger.
 
 3. **Microblog "load more" implementation**
    - What we know: 10 posts per page, "加载更多" button
    - What's unclear: Client-side pagination via JSON endpoint vs. full page reload
    - Recommendation: Pre-build a JSON file at `/api/microblog.json` with all posts; client-side JS loads next page from this static file
+   - **Resolution (Plan 04-01):** Accepted. Static JSON endpoint at `/microblog/data.json` (Astro API route); client-side "load more" fetches from this file.
 
 4. **Pagefind search in nav bar vs. dedicated page**
    - What we know: CONTEXT.md says "search input in the nav bar"
    - What's unclear: Should results appear as dropdown overlay or navigate to a `/search` page?
    - Recommendation: Use `pagefind-searchbox` built-in dropdown (it has a results dropdown by default); no separate page needed
+   - **Resolution (Plan 04-04):** Accepted. `pagefind-searchbox` web component with built-in dropdown results; integrated into Header.astro.
 
 ## Environment Availability
 
