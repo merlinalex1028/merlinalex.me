@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FriendSection from '../components/friends/FriendSection.astro';
+import { getCollection } from 'astro:content';
+
+const friendsCollection = await getCollection('friends');
+const allFriends = friendsCollection.map((entry) => entry.data);
+
+const categoryOrder = ['tech', 'anime', 'life', 'other'] as const;
+const categoryNames: Record<string, string> = {
+  tech: '技术',
+  anime: '动漫',
+  life: '生活',
+  other: '其他',
+};
+
+// Group friends by category
+const grouped: Record<string, typeof allFriends> = {};
+for (const cat of categoryOrder) {
+  grouped[cat] = [];
+}
+
+for (const friend of allFriends) {
+  const cat = friend.category ?? 'other';
+  if (grouped[cat]) {
+    grouped[cat].push(friend);
+  }
+}
+
+// Sort within each category: featured first, then alphabetical
+for (const cat of categoryOrder) {
+  grouped[cat].sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return a.name.localeCompare(b.name, 'zh-CN');
+  });
+}
+---
+
+<BaseLayout title="友人帐" description="merlinalex.me — 友人帐，发现更多有趣的站点">
+  <div class="friends-page">
+    <h1 class="page-title">友人帐</h1>
+
+    {categoryOrder.map((cat) => {
+      const friends = grouped[cat];
+      if (friends.length === 0) return null;
+      return (
+        <FriendSection
+          title={categoryNames[cat]}
+          friends={friends}
+        />
+      );
+    })}
+
+    <div class="submission-cta">
+      <p class="cta-text">想要交换友链？欢迎提交申请！</p>
+      <a
+        href="https://github.com/merlinalex/merlinalex.me/issues/new?template=friend-link.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="submit-btn"
+      >
+        申请友链
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .friends-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-fg);
+    text-align: center;
+    margin: 0 0 2rem 0;
+  }
+
+  .submission-cta {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .cta-text {
+    font-size: 16px;
+    color: var(--color-fg-muted);
+    margin: 0 0 1rem 0;
+  }
+
+  .submit-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    background: var(--color-accent);
+    color: white;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .submit-btn:hover,
+  .submit-btn:focus-visible {
+    background: var(--color-accent-hover, #e55a7a);
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import FriendCard from './FriendCard.astro';
+
+interface Friend {
+  id?: string;
+  name: string;
+  url: string;
+  avatar?: string;
+  description?: string;
+  category?: string;
+  featured?: boolean;
+}
+
+interface Props {
+  title: string;
+  friends: Friend[];
+}
+
+const { title, friends } = Astro.props;
+---
+
+<section class="friend-section">
+  <h2 class="section-title">{title}</h2>
+  <div class="friend-grid">
+    {friends.map((friend) => (
+      <FriendCard
+        name={friend.name}
+        url={friend.url}
+        avatar={friend.avatar}
+        description={friend.description}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .friend-section {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+  }
+
+  .friend-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .friend-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
