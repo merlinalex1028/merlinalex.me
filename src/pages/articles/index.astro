@@ -13,10 +13,12 @@ const allArticles = await getCollection(
 const tags = extractTags(allArticles);
 const selectedTag = Astro.url.searchParams.get('tag');
 
-// Sort: sticky first, then newest
-const sorted = allArticles.sort((a, b) => {
+// Sort: sticky first, then newest (immutable — spread to avoid mutating collection cache)
+const sorted = [...allArticles].sort((a, b) => {
   if (a.data.sticky !== b.data.sticky) return a.data.sticky ? -1 : 1;
-  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+  const timeDiff = b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+  if (timeDiff !== 0) return timeDiff;
+  return a.id.localeCompare(b.id);
 });
 
 const filtered = selectedTag
