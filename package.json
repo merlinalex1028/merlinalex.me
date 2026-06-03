@@ -28,6 +28,7 @@
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
     "@playwright/test": "^1.60.0",
     "@rollup/plugin-yaml": "^5.0.0",
     "@types/markdown-it": "^14.1.2",
