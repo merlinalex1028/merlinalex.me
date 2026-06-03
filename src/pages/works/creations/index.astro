@@ -4,6 +4,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../../components/works/Breadcrumb.astro';
 import CategoryChips from '../../../components/works/CategoryChips.astro';
 import CreationCard from '../../../components/works/CreationCard.astro';
+import CreationLightbox from '../../../components/works/CreationLightbox.astro';
 
 const allCreations = await getCollection('creations');
 
@@ -59,6 +60,8 @@ const breadcrumbItems = [
       </div>
     )}
   </section>
+
+  <CreationLightbox />
 </BaseLayout>
 
 <style>
