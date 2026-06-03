@@ -1,0 +1,105 @@
+---
+// Twikoo comment section — loads from CDN only when scrolled into view.
+// envId is the Vercel-deployed Twikoo backend URL (public, not a secret).
+const envId = import.meta.env.TWIKOO_ENV_ID;
+---
+
+<section class="twikoo-section" data-envid={envId}>
+  <h2 class="twikoo-heading">评论</h2>
+  {envId ? (
+    <div id="tcomment"></div>
+  ) : (
+    <p class="twikoo-fallback">评论功能正在配置中</p>
+  )}
+</section>
+
+{envId && (
+  <script is:inline define:vars={{ envId }}>
+    (function () {
+      function loadTwikoo() {
+        // Avoid double-init
+        if (document.getElementById('tcomment')?.dataset.twikooInit) return;
+
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.7.11/dist/twikoo.min.js';
+        script.onload = function () {
+          var el = document.getElementById('tcomment');
+          if (!el || el.dataset.twikooInit) return;
+          twikoo.init({
+            envId: envId,
+            el: '#tcomment',
+          });
+          el.dataset.twikooInit = 'true';
+        };
+        document.head.appendChild(script);
+      }
+
+      // client:visible equivalent — IntersectionObserver
+      var section = document.querySelector('.twikoo-section');
+      if (section) {
+        if ('IntersectionObserver' in window) {
+          var observer = new IntersectionObserver(
+            function (entries) {
+              if (entries[0].isIntersecting) {
+                loadTwikoo();
+                observer.disconnect();
+              }
+            },
+            { rootMargin: '200px' }
+          );
+          observer.observe(section);
+        } else {
+          // Fallback: load immediately if IntersectionObserver not supported
+          loadTwikoo();
+        }
+      }
+
+      // Re-init after View Transitions navigation
+      document.addEventListener('astro:after-swap', function () {
+        var newSection = document.querySelector('.twikoo-section');
+        if (newSection && newSection.dataset.envid) {
+          var el = document.getElementById('tcomment');
+          if (el) {
+            el.dataset.twikooInit = '';
+            el.innerHTML = '';
+          }
+          loadTwikoo();
+        }
+      });
+    })();
+  </script>
+)}
+
+<style>
+  .twikoo-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .twikoo-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 1rem 0;
+  }
+
+  .twikoo-fallback {
+    color: var(--color-fg-muted);
+    font-size: 14px;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  /* Override Twikoo CSS variables to match site theme */
+  :global(#tcomment) {
+    --twikoo-font-color: var(--color-fg);
+    --twikoo-background: var(--color-surface);
+    --twikoo-border: var(--color-border);
+    --twikoo-accent: var(--color-accent);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+</style>

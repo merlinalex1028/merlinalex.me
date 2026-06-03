@@ -10,6 +10,7 @@ import ShareButtons from '../../components/articles/ShareButtons.astro';
 import CopyrightFooter from '../../components/articles/CopyrightFooter.astro';
 import TopButton from '../../components/articles/TopButton.astro';
 import ReadingMeta from '../../components/articles/ReadingMeta.astro';
+import TwikooComments from '../../components/comments/TwikooComments.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
 import { findRelated } from '../../utils/related-posts';
 
@@ -74,6 +75,7 @@ const permalink = new URL(`/articles/${article.id}/`, Astro.site).toString();
       <CopyrightFooter title={article.data.title} url={permalink} />
       <ArticleNav prev={prev} next={next} />
       <RelatedPosts articles={related} />
+      <TwikooComments />
     </article>
   </div>
 
