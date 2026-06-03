@@ -58,14 +58,15 @@ Plans:
   4. Reader can post a comment via Twikoo (anonymous OK), pick a Bilibili-style sticker from the emote pack, and see admin email notifications fire for the owner
   5. Every article has alt text on images and a "Related posts" component in the footer (SEO-02)
 
-**Plans**: 3 plans
+**Plans**: 4 plans
 **UI hint**: yes
 
 Plans:
 
-- [ ] 02-01: Articles index + detail UX (PAGE-03 tag filter + chronological default sort; PAGE-04 with TOC, code highlight via Shiki, copy-code, reading time, last-updated, image lightbox, prev/next, sticky, copyright footer, top button, password-protected post gating)
-- [ ] 02-02: RSS + SEO L2 (DISC-01 `@astrojs/rss` for `/feed.xml` + `/feed-full.xml` with CDATA escaping and `<link rel="alternate">` autodiscovery; SEO-02 Related component + alt-text lint)
-- [ ] 02-03: Twikoo deployment + integration + stickers (INFRA-04 separate Vercel project + MongoDB Atlas M0 with `envId` wired, admin email notifications, third-party image host configured, NO Vercel Authentication; INFRA-07 sticker/emote pack)
+- [ ] 02-01: Articles index + utilities + nav (PAGE-03 tag filter + chronological sort; reading-time, tag-extraction, related-posts utilities; TagChips, ArticleListItem, StickyBadge components; Nav enablement)
+- [ ] 02-02: Article detail page + all components (PAGE-04 TOC, code highlight via Shiki, copy-code, reading time, image lightbox, prev/next, related posts, share buttons, copyright footer, top button; medium-zoom install; welcome.md enrichment)
+- [ ] 02-03: RSS + SEO L2 (DISC-01 `@astrojs/rss` for `/feed.xml` + `/feed-full.xml` with CDATA escaping and `<link rel="alternate">` autodiscovery; SEO-02 Related component + alt-text enforcement)
+- [ ] 02-04: Twikoo deployment + integration + stickers (INFRA-04 separate Vercel project + MongoDB Atlas M0 with `envId` wired, admin email notifications, third-party image host configured, NO Vercel Authentication; INFRA-07 sticker/emote pack)
 
 ### Phase 3: Works + Friend Links
 
@@ -169,13 +170,13 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | yes |
-| 2. Core Content | 0/3 | Planned | - |
+| 2. Core Content | 0/4 | Planned | - |
 | 3. Works + Friend Links | 0/3 | Not started | - |
 | 4. Community + Search | 0/4 | Not started | - |
 | 5. Atmosphere | 0/5 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
-**Totals:** 6 phases, 21 plans, 3/21 (14%) complete.
+**Totals:** 6 phases, 22 plans, 3/22 (14%) complete.
 
 ---
 
