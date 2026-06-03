@@ -51,9 +51,28 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 
 <script is:inline>
   (function () {
+    var currentObserver = null;
+
     function initTOC() {
+      // Disconnect previous observer to prevent duplicate callbacks
+      if (currentObserver) {
+        currentObserver.disconnect();
+        currentObserver = null;
+      }
+
       var links = document.querySelectorAll('.toc-link');
       if (links.length === 0) return;
+
+      // Clone links to remove any previously attached event listeners
+      links.forEach(function (link) {
+        var newLink = link.cloneNode(true);
+        if (link.parentNode) {
+          link.parentNode.replaceChild(newLink, link);
+        }
+      });
+
+      // Re-query after cloning
+      links = document.querySelectorAll('.toc-link');
 
       // Click handler for smooth scroll
       links.forEach(function (link) {
@@ -71,14 +90,11 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
       var headings = document.querySelectorAll('article h2, article h3');
       if (headings.length === 0) return;
 
-      var activeSlug = null;
-
-      var observer = new IntersectionObserver(
+      currentObserver = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              activeSlug = entry.target.id;
-              updateActiveLink(activeSlug);
+              updateActiveLink(entry.target.id);
             }
           });
         },
@@ -86,11 +102,11 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
       );
 
       headings.forEach(function (h) {
-        if (h.id) observer.observe(h);
+        if (h.id) currentObserver.observe(h);
       });
 
       function updateActiveLink(slug) {
-        links.forEach(function (link) {
+        document.querySelectorAll('.toc-link').forEach(function (link) {
           if (link.getAttribute('data-slug') === slug) {
             link.classList.add('active');
           } else {
