@@ -5,8 +5,13 @@
 <script>
   import mediumZoom from 'medium-zoom';
 
+  let zoomInstance: ReturnType<typeof mediumZoom> | null = null;
+
   function initZoom() {
-    mediumZoom('article img', {
+    if (zoomInstance) {
+      zoomInstance.detach();
+    }
+    zoomInstance = mediumZoom('article img', {
       margin: 24,
       background: 'rgba(0, 0, 0, 0.8)',
     });
