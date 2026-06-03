@@ -89,7 +89,6 @@ Plans:
 
 **Plans**: 3 plans
 **UI hint**: yes
-
 Plans:
 
 - [ ] 03-01: Works hub + Projects module (PAGE-05 hub layout linking both modules; PAGE-06 card grid + tech-stack tags + GitHub-stars build-time fetch with cache file `src/data/github-stars.json`)
