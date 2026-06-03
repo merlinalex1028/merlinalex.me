@@ -61,22 +61,23 @@ const microblog = defineCollection({
 });
 
 // ─── FRIENDS (detailed, D-03) ──────────────────────────
+// The `file()` loader treats the JSON as a map of entries:
+// - Array form: each element becomes an entry, id derived from element.id or element.slug
+// - Object form: each key-value pair becomes an entry, key is id, value is data
+// We use the array form so the schema is applied to each friend object directly.
 const friends = defineCollection({
   loader: file('./src/content/friends/friends.json'),
-  schema: z.object({
-    items: z
-      .array(
-        z.object({
-          name: z.string(),
-          url: z.string().url(),
-          avatar: z.string().url().optional(),
-          description: z.string().optional(),
-          category: z.enum(['tech', 'anime', 'life', 'other']).optional(),
-          featured: z.boolean().default(false),
-        })
-      )
-      .default([]),
-  }),
+  schema: z.array(
+    z.object({
+      id: z.string().optional(),
+      name: z.string(),
+      url: z.string().url(),
+      avatar: z.string().url().optional(),
+      description: z.string().optional(),
+      category: z.enum(['tech', 'anime', 'life', 'other']).optional(),
+      featured: z.boolean().default(false),
+    })
+  ),
 });
 
 // ─── TIMELINE (detailed, D-04) ──────────────────────────
@@ -94,23 +95,19 @@ const timeline = defineCollection({
 
 // ─── ANIME / BOOKS / MUSIC (placeholder, D-01) ─────────
 // Detailed schemas land in Phase 4; Phase 1 only validates file exists.
+// `file()` loader treats the JSON array as the entry list — each element becomes
+// an entry whose data is validated against the schema's element type.
 const anime = defineCollection({
   loader: file('./src/content/anime/list.json'),
-  schema: z.object({
-    items: z.array(z.object({})).default([]),
-  }),
+  schema: z.array(z.object({})).default([]),
 });
 const books = defineCollection({
   loader: file('./src/content/books/list.json'),
-  schema: z.object({
-    items: z.array(z.object({})).default([]),
-  }),
+  schema: z.array(z.object({})).default([]),
 });
 const music = defineCollection({
   loader: file('./src/content/music/list.json'),
-  schema: z.object({
-    items: z.array(z.object({})).default([]),
-  }),
+  schema: z.array(z.object({})).default([]),
 });
 
 export const collections = {

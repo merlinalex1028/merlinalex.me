@@ -1,0 +1,34 @@
+avatar: /avatars/persona.png
+name:
+  zh: "merlinalex"
+  romaji: "merlinalex"
+mbti: "INFJ"
+zodiac: "双鱼座"
+blood: "O"
+tagline: "在代码与次元之间来回穿梭的小小人"
+bio: "一个喜欢动画 / 写代码 / 画小画的家伙。"
+skills:
+  - name: "TypeScript"
+    level: 85
+  - name: "Astro"
+    level: 75
+  - name: "插画"
+    level: 60
+  - name: "日语"
+    level: 45
+favorites:
+  anime:
+    - title: "孤独摇滚"
+      year: 2022
+    - title: "摇曳露营"
+      year: 2018
+  characters:
+    - name: "后藤一里"
+      source: "孤独摇滚"
+    - name: "各务原抚子"
+      source: "摇曳露营"
+qa:
+  - q: "你叫什么？"
+    a: "merlinalex。"
+  - q: "你住哪里？"
+    a: "在云端。"
