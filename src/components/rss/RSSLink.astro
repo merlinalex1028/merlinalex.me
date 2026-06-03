@@ -1,0 +1,50 @@
+---
+// RSS link component — renders two feed links with icon
+---
+
+<div class="rss-links">
+  <svg
+    class="rss-icon"
+    viewBox="0 0 16 16"
+    width="16"
+    height="16"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M2.5 2a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1zM2 8a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1 4 4 0 0 1 4 4 1 1 0 1 1-2 0 2 2 0 0 0-2-2 1 1 0 0 1-1-1z" />
+  </svg>
+  <a href="/feed.xml" class="rss-link">RSS</a>
+  <span class="rss-sep">|</span>
+  <a href="/feed-full.xml" class="rss-link">完整内容</a>
+</div>
+
+<style>
+  .rss-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .rss-icon {
+    flex-shrink: 0;
+    color: var(--color-fg-muted);
+  }
+
+  .rss-link {
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .rss-link:hover,
+  .rss-link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .rss-sep {
+    color: var(--color-border);
+    font-size: 0.8rem;
+  }
+</style>
