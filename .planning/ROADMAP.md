@@ -114,9 +114,9 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 04-01: Microblog feed (PAGE-09 paginated stream, image lightbox, Twikoo comments per entry, home-page 5-latest cap, >180d auto-archive grouping)
-- [ ] 04-02: Bangumi-driven lists (PAGE-10 anime / books / music; INFRA-05 Bangumi v0 `/v0/users/{username}/collections` build-time fetch → `src/data/bangumi.json` 12h TTL, prebuild refresh script, manual override file for per-episode progress)
-- [ ] 04-03: Timeline (PAGE-11 vertical alternating-side milestone layout, year grouping, image + caption + link support)
+- [x] 04-01: Microblog feed (PAGE-09 paginated stream, image lightbox, Twikoo comments per entry, home-page 5-latest cap, >180d auto-archive grouping)
+- [x] 04-02: Bangumi-driven lists (PAGE-10 anime / books / music; INFRA-05 Bangumi v0 `/v0/users/{username}/collections` build-time fetch → `src/data/bangumi.json` 12h TTL, prebuild refresh script, manual override file for per-episode progress)
+- [x] 04-03: Timeline (PAGE-11 vertical alternating-side milestone layout, year grouping, image + caption + link support)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -180,7 +180,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | yes |
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
 | 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
-| 4. Community + Search | 0/4 | Not started | - |
+| 4. Community + Search | 3/4 | In Progress|  |
 | 5. Atmosphere | 0/5 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
