@@ -134,6 +134,8 @@ export function writeCollectionFiles(data: {
   for (const [type, items] of entries) {
     const dir = path.join(baseDir, type);
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, 'list.json'), JSON.stringify(items, null, 2));
+    // Add id field required by Astro file() loader
+    const itemsWithId = items.map((item) => ({ id: String(item.subjectId), ...item }));
+    fs.writeFileSync(path.join(dir, 'list.json'), JSON.stringify(itemsWithId, null, 2));
   }
 }

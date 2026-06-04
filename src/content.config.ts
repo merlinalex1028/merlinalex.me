@@ -93,6 +93,7 @@ const timeline = defineCollection({
 
 // ─── ANIME / BOOKS / MUSIC (Bangumi, PAGE-10) ──────────
 const bangumiItemSchema = z.object({
+  id: z.string().optional(),
   subjectId: z.number(),
   name: z.string(),
   nameCn: z.string().default(''),

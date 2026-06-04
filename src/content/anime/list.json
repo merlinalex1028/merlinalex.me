@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "231278",
+    "subjectId": 231278,
+    "name": "Back Street Girls -ゴクドルズ-",
+    "nameCn": "后街女孩",
+    "cover": "https://lain.bgm.tv/pic/cover/l/5d/10/231278_FrbN1.jpg",
+    "score": 6.6,
+    "rate": 0,
+    "type": 2,
+    "epStatus": 0,
+    "volStatus": 0,
+    "eps": 10,
+    "updatedAt": "2026-06-04T14:24:57+08:00",
+    "tags": []
+  },
+  {
+    "id": "633836",
+    "subjectId": 633836,
+    "name": "Re:ゼロから始める異世界生活 4th season 奪還編",
+    "nameCn": "Re：从零开始的异世界生活 第四季 夺还篇",
+    "cover": "https://lain.bgm.tv/pic/cover/l/43/ca/633836_hVGc7.jpg",
+    "score": 7.4,
+    "rate": 0,
+    "type": 1,
+    "epStatus": 0,
+    "volStatus": 0,
+    "eps": 8,
+    "updatedAt": "2026-06-04T14:24:16+08:00",
+    "tags": []
+  }
+]
