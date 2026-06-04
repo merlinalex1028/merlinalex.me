@@ -39,7 +39,8 @@
   --color-focus: #FF8FB8;
 }
 
-/* ATMOSPHERE INTENSITY GATE — Phase 5 contract: .atmo-petals, .atmo-cursor-trail, .atmo-live2d are hidden when data-atmo="off" */
+/* ATMOSPHERE INTENSITY GATE — Phase 5 contract: .atmo-layer and child islands hidden when data-atmo="off" */
+:root[data-atmo="off"] .atmo-layer,
 :root[data-atmo="off"] .atmo-petals,
 :root[data-atmo="off"] .atmo-cursor-trail,
 :root[data-atmo="off"] .atmo-live2d {
