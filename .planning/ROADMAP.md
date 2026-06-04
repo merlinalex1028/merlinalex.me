@@ -138,10 +138,13 @@ Plans:
 
 **Plans**: 5 plans
 **UI hint**: yes
-
 Plans:
+**Wave 1**
 
 - [ ] 05-01: Intensity gate wiring + date-based atmosphere tweaks (wire the Phase 1 intensity toggle into a runtime gate consumed by every atmosphere island; lightweight date-based color tweaks for 2-3 dates max — no full holiday variant work)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 05-02: Falling petals + cursor trail (ATM-02 tsParticles with Astro wrapper, theme-linked color, ≤20 on mobile, 30 FPS throttle, `document.hidden` pause, reduced-motion + intensity gates)
 - [ ] 05-03: BGM player (ATM-05 + INFRA-06 BGM: APlayer + MetingJS, muted-by-default + unmute button, single-track + playlist, iOS `AudioContext.resume()` in `click`/`touchend`, `transition:persist` across nav)
 - [ ] 05-04: Live2D mascot (ATM-01 l2d-widget v0.1.0, device-capability gate, `client:visible` hydration, WebP/AVIF textures, static PNG fallback, model switcher with greeting; license + acquisition decision logged)
