@@ -95,6 +95,10 @@ Bangumi-driven anime/book/music lists with build-time API fetch, 12h cache, manu
 
 - Build verification not run (permission blocked) — needs manual `pnpm exec astro build`
 
+## Self-Check: PASSED
+
+All 9 created files verified present. All 4 commits verified in git log.
+
 ## Deviations from Plan
 
 None — plan executed as written.
