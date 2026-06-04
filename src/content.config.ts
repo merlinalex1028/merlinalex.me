@@ -110,15 +110,15 @@ const bangumiItemSchema = z.object({
 
 const anime = defineCollection({
   loader: file('./src/content/anime/list.json'),
-  schema: z.array(bangumiItemSchema).default([]),
+  schema: bangumiItemSchema,
 });
 const books = defineCollection({
   loader: file('./src/content/books/list.json'),
-  schema: z.array(bangumiItemSchema).default([]),
+  schema: bangumiItemSchema,
 });
 const music = defineCollection({
   loader: file('./src/content/music/list.json'),
-  schema: z.array(bangumiItemSchema).default([]),
+  schema: bangumiItemSchema,
 });
 
 export const collections = {
