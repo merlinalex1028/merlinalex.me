@@ -1,7 +1,7 @@
 ---
 const { posts = [] } = Astro.props;
 
-function truncate(text: string, max = 100): string {
+function truncate(text: string, max = 80): string {
   if (text.length <= max) return text;
   return text.slice(0, max) + '…';
 }
@@ -15,16 +15,41 @@ function truncate(text: string, max = 100): string {
       <p>（等我有话想说的时候再来看看吧）</p>
     </div>
   ) : (
-    <ul class="microblog-list">
-      {posts.map((post: any) => (
-        <li class="microblog-item">
-          <time datetime={post.data.publishedAt.toISOString()}>
-            {post.data.publishedAt.toLocaleDateString('zh-CN')}
-          </time>
-          <p>{truncate(post.data.content, 100)}</p>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul class="microblog-list">
+        {posts.map((post: any) => (
+          <li class="microblog-item">
+            <div class="item-header">
+              <time datetime={post.data.publishedAt.toISOString()}>
+                {post.data.publishedAt.toLocaleDateString('zh-CN')}
+              </time>
+              {post.data.mood && (
+                <span class="mood-badge">{post.data.mood}</span>
+              )}
+            </div>
+            <p>{truncate(post.data.content, 80)}</p>
+            {post.data.images && post.data.images.length > 0 && (
+              <div class="item-image">
+                <img
+                  src={post.data.images[0]}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="item-tags">
+                {post.data.tags.map((tag: string) => (
+                  <span class="tag-chip">{tag}</span>
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+      <a href="/microblog" class="view-more">查看更多 →</a>
+    </>
   )}
 </section>
 
@@ -87,16 +112,61 @@ function truncate(text: string, max = 100): string {
     border-radius: var(--radius-md, 12px);
     padding: var(--space-md, 1rem);
   }
+  .item-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
   .microblog-item time {
     font-size: 12px;
     color: var(--color-fg-muted);
-    display: block;
-    margin-bottom: 0.25rem;
+  }
+  .mood-badge {
+    font-size: 14px;
+    line-height: 1;
   }
   .microblog-item p {
     font-size: 14px;
     line-height: 1.5;
     color: var(--color-fg);
-    margin: 0;
+    margin: 0 0 0.5rem 0;
+  }
+  .item-image {
+    margin-bottom: 0.5rem;
+    border-radius: var(--radius-sm, 8px);
+    overflow: hidden;
+  }
+  .item-image img {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-sm, 8px);
+  }
+  .item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .tag-chip {
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 9999px;
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  .view-more {
+    display: block;
+    text-align: center;
+    margin-top: var(--space-md, 1rem);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+  .view-more:hover {
+    color: var(--color-accent-hover);
   }
 </style>
