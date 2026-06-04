@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g transform="translate(16,16)">
+    <!-- 5-petal cherry blossom silhouette -->
+    <ellipse cx="0" cy="-7" rx="4" ry="7" fill="#FFB7C5" opacity="0.9" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-7" rx="4" ry="7" fill="#FFB7C5" opacity="0.9" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-7" rx="4" ry="7" fill="#FFB7C5" opacity="0.9" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-7" rx="4" ry="7" fill="#FFB7C5" opacity="0.9" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-7" rx="4" ry="7" fill="#FFB7C5" opacity="0.9" transform="rotate(288)"/>
+    <!-- Center -->
+    <circle cx="0" cy="0" r="2.5" fill="#FF69B4" opacity="0.7"/>
+  </g>
+</svg>
