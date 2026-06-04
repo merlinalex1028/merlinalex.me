@@ -6,6 +6,7 @@ import SEOMeta from '../components/seo/SEOMeta.astro';
 import AtmosphereLayer from '../components/atmosphere/AtmosphereLayer.astro';
 import PetalsIsland from '../components/atmosphere/PetalsIsland.astro';
 import CursorTrailIsland from '../components/atmosphere/CursorTrailIsland.astro';
+import BGMIsland from '../components/atmosphere/BGMIsland.astro';
 
 const {
   title,
@@ -109,6 +110,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <AtmosphereLayer>
       <PetalsIsland client:idle />
       <CursorTrailIsland client:idle />
+      <BGMIsland client:idle />
     </AtmosphereLayer>
   </body>
 </html>

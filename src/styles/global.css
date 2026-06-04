@@ -43,7 +43,8 @@
 :root[data-atmo="off"] .atmo-layer,
 :root[data-atmo="off"] .atmo-petals,
 :root[data-atmo="off"] .atmo-cursor-trail,
-:root[data-atmo="off"] .atmo-live2d {
+:root[data-atmo="off"] .atmo-live2d,
+:root[data-atmo="off"] .atmo-bgm {
   display: none;
 }
 
