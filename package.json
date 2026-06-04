@@ -11,7 +11,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "bangumi:refresh": "node --import tsx src/scripts/fetch-bangumi.ts",
+    "prebuild": "node --import tsx src/scripts/fetch-bangumi.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",
