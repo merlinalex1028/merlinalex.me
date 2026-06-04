@@ -141,7 +141,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 05-01: Intensity gate wiring + date-based atmosphere tweaks (wire the Phase 1 intensity toggle into a runtime gate consumed by every atmosphere island; lightweight date-based color tweaks for 2-3 dates max — no full holiday variant work)
+- [x] 05-01: Intensity gate wiring + date-based atmosphere tweaks (wire the Phase 1 intensity toggle into a runtime gate consumed by every atmosphere island; lightweight date-based color tweaks for 2-3 dates max — no full holiday variant work)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -184,7 +184,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
 | 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
 | 4. Community + Search | 4/4 | Complete    | 2026-06-04 |
-| 5. Atmosphere | 0/5 | Not started | - |
+| 5. Atmosphere | 1/5 | In Progress|  |
 | 6. Polish | 0/3 | Not started | - |
 
 **Totals:** 6 phases, 22 plans, 3/22 (14%) complete.
