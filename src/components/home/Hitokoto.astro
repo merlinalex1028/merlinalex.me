@@ -1,10 +1,42 @@
 ---
-// Placeholder per UI-SPEC line 301 / 390. Phase 4 replaces with hitokoto.cn fetch.
+// Hitokoto random quote widget — fetches from v1.hitokoto.cn API client-side.
+// Uses textContent (never innerHTML) to prevent XSS from external API response.
+// Silent failure keeps placeholder text if API is unavailable.
 ---
 
 <aside class="hitokoto" aria-label="一言">
-  <span>「 一言 」</span>
+  <span id="hitokoto-text" class="hitokoto-text">「 加载中... 」</span>
+  <span id="hitokoto-from" class="hitokoto-from"></span>
 </aside>
+
+<script>
+  // Load quote after page is idle to not block first paint
+  function loadHitokoto() {
+    fetch('https://v1.hitokoto.cn/?encode=json')
+      .then((res) => res.json())
+      .then((data) => {
+        const textEl = document.getElementById('hitokoto-text');
+        const fromEl = document.getElementById('hitokoto-from');
+        if (textEl && data?.hitokoto) {
+          textEl.textContent = `「 ${data.hitokoto} 」`;
+        }
+        if (fromEl && data?.from) {
+          const who = data.from_who ? `${data.from_who}` : '';
+          const from = data.from ? `《${data.from}》` : '';
+          fromEl.textContent = who || from ? `—— ${who}${who && from ? ' ' : ''}${from}` : '';
+        }
+      })
+      .catch(() => {
+        // Silent failure — keeps placeholder text
+      });
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadHitokoto, { timeout: 3000 });
+  } else {
+    setTimeout(loadHitokoto, 1000);
+  }
+</script>
 
 <style>
   .hitokoto {
@@ -13,10 +45,19 @@
     max-width: 768px;
     margin: 0 auto;
   }
-  .hitokoto span {
+  .hitokoto-text {
+    display: block;
     font-size: 16px;
     font-style: italic;
     color: var(--color-fg-muted);
     letter-spacing: 0.05em;
+  }
+  .hitokoto-from {
+    display: block;
+    font-size: 13px;
+    color: var(--color-fg-muted);
+    opacity: 0.7;
+    margin-top: 0.375rem;
+    text-align: right;
   }
 </style>

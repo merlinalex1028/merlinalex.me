@@ -1,11 +1,17 @@
 ---
 const { articleCount = 0, totalWords = 0 } = Astro.props;
+
+// Runtime: days since launch date
+const LAUNCH_DATE = new Date('2026-06-01');
+const runtimeDays = Math.floor(
+  (Date.now() - LAUNCH_DATE.getTime()) / (1000 * 60 * 60 * 24)
+);
 ---
 
 <section class="site-stats">
   <div class="stat">
     <div class="stat-label">运行时间</div>
-    <div class="stat-value">即将上线</div>
+    <div class="stat-value"><span>{runtimeDays}</span> 天</div>
   </div>
   <div class="stat">
     <div class="stat-label">文章数</div>
@@ -13,9 +19,17 @@ const { articleCount = 0, totalWords = 0 } = Astro.props;
   </div>
   <div class="stat">
     <div class="stat-label">总字数</div>
-    <div class="stat-value"><span>{totalWords}</span> 字</div>
+    <div class="stat-value"><span>{totalWords.toLocaleString()}</span> 字</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">访客数</div>
+    <div class="stat-value">
+      <span id="busuanzi_value_site_uv">...</span> 人
+    </div>
   </div>
 </section>
+
+<script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
 
 <style>
   .site-stats {
@@ -23,7 +37,7 @@ const { articleCount = 0, totalWords = 0 } = Astro.props;
     margin: 0 auto;
     padding: var(--space-md, 1rem) 1rem;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-sm, 0.5rem);
   }
   .stat {
@@ -46,5 +60,11 @@ const { articleCount = 0, totalWords = 0 } = Astro.props;
   }
   .stat-value span {
     color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .site-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>
