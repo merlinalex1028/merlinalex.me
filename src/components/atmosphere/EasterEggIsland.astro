@@ -1,0 +1,304 @@
+---
+/**
+ * EasterEggIsland — Konami code easter egg with secret terminal.
+ *
+ * - Detects the Konami code (↑↑↓↓←→←→BA) via global keydown listener
+ * - Input guard: skips detection when focus is on INPUT, TEXTAREA, or contentEditable
+ * - Opens a secret terminal with fun interactive commands
+ * - Also listens for 'open-secret-terminal' custom event from ContextMenuIsland
+ */
+---
+
+<div class="atmo-terminal" id="secret-terminal" hidden>
+  <div class="terminal-header">
+    <span class="terminal-title">🌸 秘密终端</span>
+    <button class="terminal-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="terminal-body" id="terminal-output"></div>
+  <div class="terminal-input-line">
+    <span class="terminal-prompt">❯</span>
+    <input class="terminal-input" id="terminal-input" type="text" placeholder="输入命令..." autocomplete="off" />
+  </div>
+</div>
+
+<script>
+  const KONAMI_CODE = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'KeyB', 'KeyA'
+  ];
+
+  let konamiIndex = 0;
+  let terminalOpen = false;
+
+  const terminal = document.getElementById('secret-terminal') as HTMLElement | null;
+  const output = document.getElementById('terminal-output') as HTMLElement | null;
+  const input = document.getElementById('terminal-input') as HTMLInputElement | null;
+  const closeBtn = document.querySelector('.terminal-close') as HTMLButtonElement | null;
+
+  function appendLine(text: string, className: string = ''): void {
+    if (!output) return;
+    const line = document.createElement('div');
+    line.classList.add('terminal-line');
+    if (className) line.classList.add(className);
+    line.textContent = text;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function getTheme(): string {
+    return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  }
+
+  function getAtmoLevel(): string {
+    return document.documentElement.dataset.atmo || 'off';
+  }
+
+  function formatDate(): string {
+    const d = new Date();
+    const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    return `📅 ${d.getFullYear()}年${months[d.getMonth()]}${d.getDate()}日 — 今天也是美好的一天~`;
+  }
+
+  function executeCommand(cmd: string): void {
+    const trimmed = cmd.trim().toLowerCase();
+    appendLine(`❯ ${cmd}`, 'terminal-line-user');
+
+    switch (trimmed) {
+      case 'help':
+        appendLine('可用命令：', 'terminal-line-system');
+        appendLine('  help     — 显示此帮助信息');
+        appendLine('  whoami   — 我是谁？');
+        appendLine('  secret   — 隐藏彩蛋');
+        appendLine('  theme    — 当前主题');
+        appendLine('  atmo     — 当前氛围强度');
+        appendLine('  date     — 今天的日期');
+        appendLine('  neko     — 喵~');
+        appendLine('  clear    — 清空终端');
+        appendLine('  exit     — 关闭终端');
+        break;
+      case 'whoami':
+        appendLine('merlinalex — 二次元の住人', 'terminal-line-system');
+        break;
+      case 'secret':
+        appendLine('你发现了隐藏彩蛋！🎉 这个站点是用 Astro + Tailwind CSS 构建的二次元个人站。', 'terminal-line-system');
+        break;
+      case 'theme':
+        appendLine(`当前主题：${getTheme()}`, 'terminal-line-system');
+        break;
+      case 'atmo':
+        appendLine(`氛围强度：${getAtmoLevel()}`, 'terminal-line-system');
+        break;
+      case 'date':
+        appendLine(formatDate(), 'terminal-line-system');
+        break;
+      case 'neko':
+        appendLine('  /\\_/\\', 'terminal-line-system');
+        appendLine(' ( o.o )', 'terminal-line-system');
+        appendLine('  > ^ <', 'terminal-line-system');
+        appendLine(' /|   |\\', 'terminal-line-system');
+        appendLine('(_|   |_)', 'terminal-line-system');
+        break;
+      case 'clear':
+        if (output) output.innerHTML = '';
+        return;
+      case 'exit':
+      case 'quit':
+        closeTerminal();
+        return;
+      default:
+        appendLine('🤔 未知命令。输入 help 查看可用命令。', 'terminal-line-system');
+    }
+  }
+
+  function openTerminal(): void {
+    if (!terminal || !input) return;
+    terminal.hidden = false;
+    terminal.classList.add('terminal-visible');
+    terminalOpen = true;
+
+    if (output && output.children.length === 0) {
+      appendLine('🌸 欢迎来到秘密终端！输入 help 查看可用命令。', 'terminal-line-system');
+    }
+
+    input.focus();
+  }
+
+  function closeTerminal(): void {
+    if (!terminal) return;
+    terminal.hidden = true;
+    terminal.classList.remove('terminal-visible');
+    terminalOpen = false;
+  }
+
+  // --- Konami code detection ---
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    // Guard: skip if focus is in a form field (per ATM-06, Pitfall 5)
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.isContentEditable
+    ) {
+      return;
+    }
+
+    // Escape closes terminal
+    if (e.code === 'Escape' && terminalOpen) {
+      closeTerminal();
+      return;
+    }
+
+    // Match Konami code
+    if (e.code === KONAMI_CODE[konamiIndex]) {
+      konamiIndex++;
+      if (konamiIndex === KONAMI_CODE.length) {
+        konamiIndex = 0;
+        openTerminal();
+      }
+    } else {
+      konamiIndex = 0;
+    }
+  });
+
+  // --- Listen for custom event from ContextMenuIsland ---
+  document.addEventListener('open-secret-terminal', () => {
+    openTerminal();
+  });
+
+  // --- Terminal input handling ---
+  if (input) {
+    input.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.code === 'Enter') {
+        const value = input.value;
+        if (value.trim()) {
+          executeCommand(value);
+        }
+        input.value = '';
+      }
+      // Stop propagation so Konami detection doesn't fire while typing
+      e.stopPropagation();
+    });
+  }
+
+  // --- Close button ---
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      closeTerminal();
+    });
+  }
+</script>
+
+<style>
+  .atmo-terminal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    width: min(500px, 90vw);
+    max-height: 60vh;
+    background: var(--color-bg-elevated, #fff);
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    opacity: 0;
+    animation: terminal-enter 300ms ease forwards;
+  }
+
+  @keyframes terminal-enter {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0);
+    }
+  }
+
+  .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface, #f5f5f5);
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+  }
+
+  .terminal-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-fg, #1a1a1a);
+  }
+
+  .terminal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--color-fg-muted, #6b7280);
+    padding: 0.25rem;
+  }
+
+  .terminal-close:hover {
+    color: var(--color-fg, #1a1a1a);
+  }
+
+  .terminal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--color-fg, #1a1a1a);
+    min-height: 200px;
+    max-height: 40vh;
+  }
+
+  :global(.terminal-line) {
+    margin-bottom: 0.3rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  :global(.terminal-line-system) {
+    color: var(--color-accent, #ff69b4);
+  }
+
+  :global(.terminal-line-user) {
+    color: var(--color-fg-muted, #6b7280);
+  }
+
+  .terminal-input-line {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--color-border, #e5e7eb);
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt {
+    color: var(--color-accent, #ff69b4);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+
+  .terminal-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--color-fg, #1a1a1a);
+  }
+
+  .terminal-input::placeholder {
+    color: var(--color-fg-muted, #6b7280);
+  }
+</style>

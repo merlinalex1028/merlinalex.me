@@ -8,6 +8,8 @@ import PetalsIsland from '../components/atmosphere/PetalsIsland.astro';
 import CursorTrailIsland from '../components/atmosphere/CursorTrailIsland.astro';
 import BGMIsland from '../components/atmosphere/BGMIsland.astro';
 import Live2DIsland from '../components/atmosphere/Live2DIsland.astro';
+import ContextMenuIsland from '../components/atmosphere/ContextMenuIsland.astro';
+import EasterEggIsland from '../components/atmosphere/EasterEggIsland.astro';
 
 const {
   title,
@@ -113,6 +115,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       <CursorTrailIsland client:idle />
       <BGMIsland client:idle />
       <Live2DIsland client:idle />
+      <ContextMenuIsland client:idle />
+      <EasterEggIsland client:idle />
     </AtmosphereLayer>
   </body>
 </html>
