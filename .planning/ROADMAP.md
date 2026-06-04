@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Foundation** - Astro + Tailwind v4 + Zod schemas + BaseLayout + FOUC-safe theme + a11y baseline + Cloudflare Pages deploy + Home & About pages live
 - [x] **Phase 2: Core Content** - Articles index + detail UX + RSS + SEO L2 + Twikoo comments + sticker pack (completed 2026-06-03)
 - [x] **Phase 3: Works + Friend Links** - Works hub + Projects module + Creations module + Friend Links page (completed 2026-06-03)
-- [ ] **Phase 4: Community + Search** - Microblog + Bangumi-driven anime/book/music + Timeline + Pagefind search + home widgets
+- [x] **Phase 4: Community + Search** - Microblog + Bangumi-driven anime/book/music + Timeline + Pagefind search + home widgets (completed 2026-06-04)
 - [ ] **Phase 5: Atmosphere** - Live2D mascot + falling petals + BGM + custom right-click + easter eggs + intensity gating
 - [ ] **Phase 6: Polish** - Custom 404 + JSON-LD + friend-link health-check Action + tests at 80% + build hardening
 
@@ -120,7 +120,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 04-04: Search + tag cloud + home widgets (DISC-02 Pagefind articles-only index with microblog filter exclude; DISC-03 tag cloud + chronological archive with 0/1-post tag hiding; Hitokoto, site-stats, notice bar widgets on Home)
+- [x] 04-04: Search + tag cloud + home widgets (DISC-02 Pagefind articles-only index with microblog filter exclude; DISC-03 tag cloud + chronological archive with 0/1-post tag hiding; Hitokoto, site-stats, notice bar widgets on Home)
 
 ### Phase 5: Atmosphere
 
@@ -180,7 +180,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 3/3 | Complete | yes |
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
 | 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
-| 4. Community + Search | 3/4 | In Progress|  |
+| 4. Community + Search | 4/4 | Complete   | 2026-06-04 |
 | 5. Atmosphere | 0/5 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
