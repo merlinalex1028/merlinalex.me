@@ -16,9 +16,9 @@
 - [x] **PAGE-06**: Works → Projects module (open-source, tools, websites) with card grid, tech-stack tags, GitHub stars (build-time fetch)
 - [x] **PAGE-07**: Works → Creations module (illustrations, photos, crafts, videos) with masonry + lightbox gallery
 - [x] **PAGE-08**: Friend Links page with submission entry, health-check badge, sorted by category
-- [ ] **PAGE-09**: Microblog (说说 / 碎碎念) feed with image lightbox + comments; cap home to 5 latest; auto-archive >180 days
-- [ ] **PAGE-10**: Anime / Book / Music list pages (Bangumi-style: watching / watched / want) with build-time fetch + 12h cache
-- [ ] **PAGE-11**: Timeline / Journey page (year-by-year vertical alternating-side milestones)
+- [x] **PAGE-09**: Microblog (说说 / 碎碎念) feed with image lightbox + comments; cap home to 5 latest; auto-archive >180 days
+- [x] **PAGE-10**: Anime / Book / Music list pages (Bangumi-style: watching / watched / want) with build-time fetch + 12h cache
+- [x] **PAGE-11**: Timeline / Journey page (year-by-year vertical alternating-side milestones)
 - [ ] **PAGE-12** (v2+): Avatar generator (let visitors generate kawaii avatars) — DEFERRED; embed Picrew link in v1
 
 ### Atmosphere & Decorations
@@ -33,8 +33,8 @@
 
 ### Discovery & Growth
 - [x] **DISC-01**: RSS feed (`/feed.xml` summary + `/feed-full.xml` full-content) with CDATA escaping; validated in W3C feed validator; autodiscovery `<link rel="alternate">` in `<head>`
-- [ ] **DISC-02** (v1: articles-only): Site search via Pagefind (excludes microblog with `data-pagefind-filter="exclude"`); v1.1 expands to works + microblog
-- [ ] **DISC-03**: Tag cloud + chronological archive; hide tags with 0 or 1 posts
+- [x] **DISC-02** (v1: articles-only): Site search via Pagefind (excludes microblog with `data-pagefind-filter="exclude"`); v1.1 expands to works + microblog
+- [x] **DISC-03**: Tag cloud + chronological archive; hide tags with 0 or 1 posts
 - [ ] **SEO-01** (NEW): Sitemap (`@astrojs/sitemap`), robots.txt, OG/Twitter cards per article, `Article` + `Person` + `BreadcrumbList` JSON-LD structured data
 - [x] **SEO-02** (NEW): Internal linking "Related" component in article footer; alt text on all images
 
@@ -43,7 +43,7 @@
 - [x] **INFRA-02**: Zod-validated content collections: `articles`, `projects`, `creations`, `microblog`, `timeline`, `friends`, `anime`, `books`, `music` (in `src/content.config.ts`)
 - [ ] **INFRA-03**: Cloudflare Pages hosting — unlimited bandwidth, auto HTTPS, global CDN, 500 builds/month free
 - [x] **INFRA-04**: Twikoo comments on separate Vercel project (MongoDB Atlas M0); embedded via `envId`; no Vercel Authentication enabled; third-party image host configured; admin email notifications
-- [ ] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress
+- [x] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress
 - [ ] **INFRA-06**: APlayer v1.10.1 + MetingJS v2.0.2 for BGM; custom domain; custom 404 page returning HTTP 404 status (`Astro.response.status = 404`)
 - [x] **INFRA-07**: Sticker/emote pack for Twikoo comments (Bilibili-style 表情包)
 - [x] **INFRA-08**: Friend-link health check via GitHub Action cron (5s timeout HEAD request); mark dead in UI
