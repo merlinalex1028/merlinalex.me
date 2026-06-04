@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TagCloud from '../components/archive/TagCloud.astro';
+import ArchiveList from '../components/archive/ArchiveList.astro';
+
+// Get all non-draft articles
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+
+// Compute tag counts
+const tagCounts: Record<string, number> = {};
+for (const article of allArticles) {
+  for (const tag of article.data.tags ?? []) {
+    tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
+  }
+}
+
+// Sort articles by publishedAt descending
+const sortedArticles = [...allArticles].sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+---
+
+<BaseLayout title="归档" description="按标签和时间线浏览所有文章 — merlinalex.me">
+  <main class="archive-page">
+    <h1 class="archive-title">归档</h1>
+    <p class="archive-subtitle">
+      共 {allArticles.length} 篇文章
+    </p>
+
+    <section class="archive-section">
+      <h2 class="section-heading">标签云</h2>
+      <TagCloud tagCounts={tagCounts} />
+    </section>
+
+    <section class="archive-section">
+      <h2 class="section-heading">时间线</h2>
+      <ArchiveList articles={sortedArticles} />
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-xl, 2rem) 1rem var(--space-2xl, 3rem);
+  }
+
+  .archive-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-fg);
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .archive-subtitle {
+    text-align: center;
+    color: var(--color-fg-muted);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xl, 2rem);
+  }
+
+  .archive-section {
+    margin-bottom: var(--space-xl, 2rem);
+  }
+
+  .section-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin-bottom: var(--space-sm, 0.5rem);
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--color-accent);
+  }
+</style>

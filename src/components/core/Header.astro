@@ -3,6 +3,7 @@ import Nav from './Nav.astro';
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import IntensityBadge from './IntensityBadge.astro';
 import NoticeBar from './NoticeBar.astro';
+import SearchBar from '../search/SearchBar.astro';
 ---
 
 <header class="site-header">
@@ -10,6 +11,7 @@ import NoticeBar from './NoticeBar.astro';
     <a class="logo" href="/">merlinalex.me</a>
     <Nav />
     <div class="header-actions">
+      <SearchBar />
       <ThemeSwitcher />
       <IntensityBadge />
     </div>
