@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Core Content** - Articles index + detail UX + RSS + SEO L2 + Twikoo comments + sticker pack (completed 2026-06-03)
 - [x] **Phase 3: Works + Friend Links** - Works hub + Projects module + Creations module + Friend Links page (completed 2026-06-03)
 - [x] **Phase 4: Community + Search** - Microblog + Bangumi-driven anime/book/music + Timeline + Pagefind search + home widgets (completed 2026-06-04)
-- [ ] **Phase 5: Atmosphere** - Live2D mascot + falling petals + BGM + custom right-click + easter eggs + intensity gating
+- [x] **Phase 5: Atmosphere** - Live2D mascot + falling petals + BGM + custom right-click + easter eggs + intensity gating (completed 2026-06-04)
 - [ ] **Phase 6: Polish** - Custom 404 + JSON-LD + friend-link health-check Action + tests at 80% + build hardening
 
 ## Phase Details
@@ -145,10 +145,10 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 05-02: Falling petals + cursor trail (ATM-02 tsParticles with Astro wrapper, theme-linked color, ≤20 on mobile, 30 FPS throttle, `document.hidden` pause, reduced-motion + intensity gates)
-- [ ] 05-03: BGM player (ATM-05 + INFRA-06 BGM: APlayer + MetingJS, muted-by-default + unmute button, single-track + playlist, iOS `AudioContext.resume()` in `click`/`touchend`, `transition:persist` across nav)
-- [ ] 05-04: Live2D mascot (ATM-01 l2d-widget v0.1.0, device-capability gate, `client:visible` hydration, WebP/AVIF textures, static PNG fallback, model switcher with greeting; license + acquisition decision logged)
-- [ ] 05-05: Right-click menu + easter eggs (ATM-03 `Shift+right-click` only + long-press toolbar fallback + intensity selector entry; ATM-06 Konami code + secret terminal + input-field guards)
+- [x] 05-02: Falling petals + cursor trail (ATM-02 tsParticles with Astro wrapper, theme-linked color, ≤20 on mobile, 30 FPS throttle, `document.hidden` pause, reduced-motion + intensity gates)
+- [x] 05-03: BGM player (ATM-05 + INFRA-06 BGM: APlayer + MetingJS, muted-by-default + unmute button, single-track + playlist, iOS `AudioContext.resume()` in `click`/`touchend`, `transition:persist` across nav)
+- [x] 05-04: Live2D mascot (ATM-01 l2d-widget v0.1.0, device-capability gate, `client:visible` hydration, WebP/AVIF textures, static PNG fallback, model switcher with greeting; license + acquisition decision logged)
+- [x] 05-05: Right-click menu + easter eggs (ATM-03 `Shift+right-click` only + long-press toolbar fallback + intensity selector entry; ATM-06 Konami code + secret terminal + input-field guards)
 
 ### Phase 6: Polish
 
@@ -184,7 +184,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Core Content | 4/4 | Complete    | 2026-06-03 |
 | 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
 | 4. Community + Search | 4/4 | Complete    | 2026-06-04 |
-| 5. Atmosphere | 1/5 | In Progress|  |
+| 5. Atmosphere | 5/5 | Complete   | 2026-06-04 |
 | 6. Polish | 0/3 | Not started | - |
 
 **Totals:** 6 phases, 22 plans, 3/22 (14%) complete.
