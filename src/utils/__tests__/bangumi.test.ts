@@ -26,10 +26,11 @@ beforeEach(() => {
 });
 
 describe('BANGUMI_TYPES', () => {
-  it('maps anime=2, book=1, music=3', () => {
+  it('maps anime=2, book=1, music=3, game=4', () => {
     expect(BANGUMI_TYPES.anime).toBe(2);
     expect(BANGUMI_TYPES.book).toBe(1);
     expect(BANGUMI_TYPES.music).toBe(3);
+    expect(BANGUMI_TYPES.game).toBe(4);
   });
 });
 
@@ -192,19 +193,21 @@ describe('mergeOverrides', () => {
 });
 
 describe('writeCollectionFiles', () => {
-  it('writes anime/books/music to separate JSON files', () => {
+  it('writes anime/books/music/game to separate JSON files', () => {
     const anime: BangumiItem[] = [{ subjectId: 1, name: 'A', nameCn: '', cover: '', score: 0, rate: 0, type: 2, epStatus: 0, volStatus: 0, eps: 0, updatedAt: '', tags: [] }];
     const books: BangumiItem[] = [{ subjectId: 2, name: 'B', nameCn: '', cover: '', score: 0, rate: 0, type: 1, epStatus: 0, volStatus: 0, eps: 0, updatedAt: '', tags: [] }];
     const music: BangumiItem[] = [];
+    const game: BangumiItem[] = [];
 
-    writeCollectionFiles({ anime, books, music });
+    writeCollectionFiles({ anime, books, music, game });
 
     expect(mockFs.mkdirSync).toHaveBeenCalled();
-    expect(mockFs.writeFileSync).toHaveBeenCalledTimes(3);
-    // Verify each call writes valid JSON
+    expect(mockFs.writeFileSync).toHaveBeenCalledTimes(4);
+    // Verify each call writes valid JSON with id field added
     const calls = mockFs.writeFileSync.mock.calls;
-    expect(JSON.parse(calls[0][1] as string)).toEqual(anime);
-    expect(JSON.parse(calls[1][1] as string)).toEqual(books);
-    expect(JSON.parse(calls[2][1] as string)).toEqual(music);
+    expect(JSON.parse(calls[0][1] as string)[0].id).toBe('1');
+    expect(JSON.parse(calls[1][1] as string)[0].id).toBe('2');
+    expect(JSON.parse(calls[2][1] as string)).toEqual([]);
+    expect(JSON.parse(calls[3][1] as string)).toEqual([]);
   });
 });
