@@ -22,12 +22,12 @@
 - [ ] **PAGE-12** (v2+): Avatar generator (let visitors generate kawaii avatars) — DEFERRED; embed Picrew link in v1
 
 ### Atmosphere & Decorations
-- [ ] **ATM-01**: Live2D / static mascot (kanban girl) — interactive: greeting, model switcher; with device-capability gate (`navigator.deviceMemory >= 4 && hardwareConcurrency >= 4`) + `client:visible` hydration + static PNG fallback for low-end devices + WebP/AVIF textures
-- [ ] **ATM-02**: Falling-petal / snow / cursor-trail effects; theme-linked color; capped to 20 on mobile; 30 FPS throttle; pause on `document.hidden`
-- [ ] **ATM-03**: Custom right-click menu (`Shift+right-click` only — never hijack global `contextmenu`); long-press toolbar fallback
+- [x] **ATM-01**: Live2D / static mascot (kanban girl) — interactive: greeting, model switcher; with device-capability gate (`navigator.deviceMemory >= 4 && hardwareConcurrency >= 4`) + `client:visible` hydration + static PNG fallback for low-end devices + WebP/AVIF textures
+- [x] **ATM-02**: Falling-petal / snow / cursor-trail effects; theme-linked color; capped to 20 on mobile; 30 FPS throttle; pause on `document.hidden`
+- [x] **ATM-03**: Custom right-click menu (`Shift+right-click` only — never hijack global `contextmenu`); long-press toolbar fallback
 - [ ] **ATM-04**: Light/dark theme switcher with persistence; pre-paint inline script in `<head>` (FOUC-safe); light date-based atmosphere tweaks for 2–3 dates max
-- [ ] **ATM-05**: Site-wide BGM player with APlayer+MetingJS, playlist + single-track mode, muted-by-default + unmute button, resume-on-return; iOS `AudioContext.resume()` in `'click'` / `'touchend'`
-- [ ] **ATM-06**: Hidden easter eggs (Konami code, secret terminal); ignore key events in inputs/textareas/contenteditable
+- [x] **ATM-05**: Site-wide BGM player with APlayer+MetingJS, playlist + single-track mode, muted-by-default + unmute button, resume-on-return; iOS `AudioContext.resume()` in `'click'` / `'touchend'`
+- [x] **ATM-06**: Hidden easter eggs (Konami code, secret terminal); ignore key events in inputs/textareas/contenteditable
 - [ ] **A11Y-01** (NEW): **Atmosphere intensity toggle** in right-click menu (Off / Subtle / Full); persisted in `localStorage`; gates Live2D/petals/BGM
 - [ ] **A11Y-02** (NEW): `prefers-reduced-motion` media query — global CSS rule + gate Live2D motion amplitude + canvas RAF loops
 
@@ -44,7 +44,7 @@
 - [ ] **INFRA-03**: Cloudflare Pages hosting — unlimited bandwidth, auto HTTPS, global CDN, 500 builds/month free
 - [x] **INFRA-04**: Twikoo comments on separate Vercel project (MongoDB Atlas M0); embedded via `envId`; no Vercel Authentication enabled; third-party image host configured; admin email notifications
 - [x] **INFRA-05**: Bangumi API build-time fetch (`/v0/users/{username}/collections`); cached to `src/data/bangumi.json` with 12h TTL; refresh via prebuild script; manual override file for per-episode progress
-- [ ] **INFRA-06**: APlayer v1.10.1 + MetingJS v2.0.2 for BGM; custom domain; custom 404 page returning HTTP 404 status (`Astro.response.status = 404`)
+- [x] **INFRA-06**: APlayer v1.10.1 + MetingJS v2.0.2 for BGM; custom domain; custom 404 page returning HTTP 404 status (`Astro.response.status = 404`)
 - [x] **INFRA-07**: Sticker/emote pack for Twikoo comments (Bilibili-style 表情包)
 - [x] **INFRA-08**: Friend-link health check via GitHub Action cron (5s timeout HEAD request); mark dead in UI
 - [ ] **TEST-01**: Vitest + Playwright per CLAUDE.md testing rules; 80% coverage on critical paths (comment posting, theme persistence, search index, Live2D fallback)
