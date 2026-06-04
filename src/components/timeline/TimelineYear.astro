@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TimelineEntry from './TimelineEntry.astro';
+
+interface Props {
+  year: number;
+  entries: CollectionEntry<'timeline'>[];
+}
+
+const { year, entries } = Astro.props;
+---
+
+<div class="timeline-year">
+  <div class="timeline-year__header">
+    <span class="timeline-year__badge">{year}</span>
+  </div>
+  <div class="timeline-year__entries">
+    {entries.map((entry, index) => (
+      <TimelineEntry
+        entry={entry}
+        side={index % 2 === 0 ? 'left' : 'right'}
+      />
+    ))}
+  </div>
+</div>
+
+<style>
+  .timeline-year {
+    position: relative;
+    padding-bottom: 1rem;
+  }
+
+  .timeline-year__header {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 3;
+    padding: 1rem 0;
+  }
+
+  .timeline-year__badge {
+    display: inline-block;
+    background: var(--color-accent);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.35rem 1.25rem;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.25);
+  }
+
+  .timeline-year__entries {
+    position: relative;
+  }
+
+  /* Mobile: badge stays centered */
+  @media (max-width: 639px) {
+    .timeline-year__header {
+      justify-content: flex-start;
+      padding-left: 0;
+    }
+  }
+</style>

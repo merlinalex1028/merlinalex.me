@@ -1,0 +1,158 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'timeline'>;
+  side: 'left' | 'right';
+}
+
+const { entry, side } = Astro.props;
+const { date, title, description, image, link } = entry.data;
+
+// Format date as YYYY-MM-DD
+const formattedDate = date.toISOString().split('T')[0];
+---
+
+<article class:list={['timeline-entry', `timeline-entry--${side}`]}>
+  <div class="timeline-entry__dot" aria-hidden="true"></div>
+  <div class="timeline-entry__card">
+    <time class="timeline-entry__date" datetime={formattedDate}>
+      {formattedDate}
+    </time>
+    <h3 class="timeline-entry__title">{title}</h3>
+    {description && (
+      <p class="timeline-entry__desc">{description}</p>
+    )}
+    {image && (
+      <img
+        class="timeline-entry__image"
+        src={image}
+        alt={title}
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+    {link && (
+      <a class="timeline-entry__link" href={link} target="_blank" rel="noopener noreferrer">
+        了解更多 &rarr;
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  .timeline-entry {
+    position: relative;
+    width: 50%;
+    padding: 0 2rem 2rem;
+  }
+
+  /* Left-side entry: card on left, aligned right */
+  .timeline-entry--left {
+    left: 0;
+    text-align: right;
+    padding-right: 2.5rem;
+    padding-left: 1rem;
+  }
+
+  /* Right-side entry: card on right, aligned left */
+  .timeline-entry--right {
+    left: 50%;
+    text-align: left;
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+  }
+
+  /* Dot on the center line */
+  .timeline-entry__dot {
+    position: absolute;
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 2px solid var(--color-bg);
+    box-shadow: 0 0 0 2px var(--color-accent);
+    z-index: 2;
+  }
+
+  .timeline-entry--left .timeline-entry__dot {
+    right: -6px;
+  }
+
+  .timeline-entry--right .timeline-entry__dot {
+    left: -6px;
+  }
+
+  /* Card */
+  .timeline-entry__card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md, 12px);
+    padding: 1rem 1.25rem;
+    transition: box-shadow var(--duration-base, 250ms) var(--easing-default, ease);
+  }
+
+  .timeline-entry__card:hover {
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
+  }
+
+  .timeline-entry__date {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--color-fg-muted);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-entry__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem;
+  }
+
+  .timeline-entry__desc {
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    margin: 0 0 0.75rem;
+    line-height: 1.6;
+  }
+
+  .timeline-entry__image {
+    width: 100%;
+    border-radius: var(--radius-md, 8px);
+    margin-bottom: 0.75rem;
+    object-fit: cover;
+    max-height: 200px;
+  }
+
+  .timeline-entry__link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .timeline-entry__link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* Mobile: stack everything on left */
+  @media (max-width: 639px) {
+    .timeline-entry {
+      width: 100%;
+      left: 0 !important;
+      text-align: left !important;
+      padding-left: 2rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .timeline-entry__dot {
+      left: -6px !important;
+      right: auto !important;
+    }
+  }
+</style>
