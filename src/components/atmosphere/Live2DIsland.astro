@@ -1,0 +1,104 @@
+---
+// Live2D mascot island — tries to load l2d-widget, falls back to static SVG.
+// Gated by intensity toggle (off = hidden).
+---
+
+<div class="atmo-live2d" id="l2d-root">
+  <img
+    class="l2d-fallback"
+    src="/models/fallback.svg"
+    alt="站点吉祥物"
+    loading="lazy"
+    width="200"
+    height="300"
+  />
+</div>
+
+<script>
+  import { isOff, onAtmoChange } from '../../lib/atmosphere';
+
+  const root = document.getElementById('l2d-root');
+  const fallback = root?.querySelector('.l2d-fallback') as HTMLImageElement | null;
+
+  if (root && fallback) {
+    // Gate: hide if intensity is off
+    if (isOff()) {
+      root.style.display = 'none';
+    }
+
+    // Subscribe to intensity changes
+    onAtmoChange((level) => {
+      if (level === 'off') {
+        root.style.display = 'none';
+      } else {
+        root.style.display = '';
+      }
+    });
+
+    // Try to load Live2D (per D-01: try-load-all-devices)
+    async function loadLive2D() {
+      if (isOff()) return;
+
+      try {
+        const { createWidget } = await import('l2d-widget');
+
+        const widget = createWidget({
+          model: [
+            // Add real model paths here once model files are placed in public/models/
+            // { path: '/models/cat-black/model.json' },
+            // { path: '/models/cat-white/model.json' },
+          ],
+          tips: {
+            welcome: '欢迎回来~',
+            touch: '别戳我啦~',
+          },
+        });
+
+        // If createWidget succeeds, hide fallback
+        fallback.style.display = 'none';
+
+        // Subscribe to intensity changes for sleep/wake
+        onAtmoChange((level) => {
+          if (level === 'off' && widget?.sleep) {
+            widget.sleep();
+          }
+        });
+      } catch {
+        // Live2D failed (no WebGL, OOM, missing models, etc.)
+        // Keep fallback visible — already showing
+        console.warn('[Live2D] Failed to load — showing static fallback');
+      }
+    }
+
+    // Load during idle time
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadLive2D, { timeout: 5000 });
+    } else {
+      setTimeout(loadLive2D, 2000);
+    }
+  }
+</script>
+
+<style>
+  .atmo-live2d {
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    z-index: 100;
+    width: 200px;
+    height: 300px;
+    pointer-events: auto;
+    transition: opacity var(--duration-base, 300ms) var(--easing-default, ease);
+  }
+
+  .l2d-fallback {
+    width: 100%;
+    height: auto;
+    transition: opacity var(--duration-base, 300ms) var(--easing-default, ease);
+  }
+
+  /* Hide when intensity is off (CSS gate from global.css) */
+  :global([data-atmo="off"]) .atmo-live2d {
+    display: none !important;
+  }
+</style>
