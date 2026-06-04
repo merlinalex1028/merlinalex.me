@@ -39,7 +39,8 @@
   --color-focus: #FF8FB8;
 }
 
-/* ATMOSPHERE INTENSITY GATE — Phase 5 contract: .atmo-petals, .atmo-cursor-trail, .atmo-live2d are hidden when data-atmo="off" */
+/* ATMOSPHERE INTENSITY GATE — Phase 5 contract: .atmo-layer and child islands hidden when data-atmo="off" */
+:root[data-atmo="off"] .atmo-layer,
 :root[data-atmo="off"] .atmo-petals,
 :root[data-atmo="off"] .atmo-cursor-trail,
 :root[data-atmo="off"] .atmo-live2d {
@@ -78,4 +79,23 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+/* DATE-BASED ATMOSPHERE TWEAKS — Phase 5 */
+/* Valentine's Day (Feb 14) + White Day (Mar 14) */
+:root.atmo-date-valentine {
+  --color-accent: #E84393;
+  --color-accent-subtle: #FD79A8;
+}
+
+/* Christmas season (Dec 20-25) */
+:root.atmo-date-christmas {
+  --color-accent: #C0392B;
+  --color-accent-subtle: #27AE60;
+}
+
+/* Sakura season (Mar 25 - Apr 10) */
+:root.atmo-date-sakura {
+  --color-accent: #FFB7C5;
+  --color-accent-subtle: #FFE4ED;
 }

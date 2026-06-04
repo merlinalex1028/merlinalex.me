@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/core/Header.astro';
 import Footer from '../components/core/Footer.astro';
 import SEOMeta from '../components/seo/SEOMeta.astro';
+import AtmosphereLayer from '../components/atmosphere/AtmosphereLayer.astro';
 
 const {
   title,
@@ -71,6 +72,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       })();
     </script>
 
+    <!-- Date-based atmosphere class (FOUC-safe, blocking, synchronous) -->
+    <script is:inline>
+      (function(){
+        try {
+          var d = new Date();
+          var m = d.getMonth() + 1; var day = d.getDate();
+          if ((m === 2 && day === 14) || (m === 3 && day === 14)) {
+            document.documentElement.classList.add('atmo-date-valentine');
+          } else if (m === 12 && day >= 20 && day <= 25) {
+            document.documentElement.classList.add('atmo-date-christmas');
+          } else if ((m === 3 && day >= 25) || (m === 4 && day <= 10)) {
+            document.documentElement.classList.add('atmo-date-sakura');
+          }
+        } catch(e) {}
+      })();
+    </script>
+
     <SEOMeta
       title={title}
       description={description}
@@ -86,6 +104,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       <slot />
     </main>
     <Footer />
+    <AtmosphereLayer />
   </body>
 </html>
 
