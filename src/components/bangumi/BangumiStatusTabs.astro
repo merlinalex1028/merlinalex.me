@@ -1,0 +1,89 @@
+---
+interface Props {
+  selected?: 'all' | 'doing' | 'done' | 'wish';
+  counts: { all: number; doing: number; done: number; wish: number };
+  labels?: { doing: string; done: string; wish: string };
+}
+
+const { selected = 'all', counts, labels = { doing: '在看', done: '看过', wish: '想看' } } = Astro.props;
+
+const tabs = [
+  { key: 'all', label: '全部', count: counts.all },
+  { key: 'doing', label: labels.doing, count: counts.doing },
+  { key: 'done', label: labels.done, count: counts.done },
+  { key: 'wish', label: labels.wish, count: counts.wish },
+];
+---
+
+<div class="status-tabs" role="tablist" aria-label="状态筛选">
+  {tabs.map(tab => (
+    <button
+      role="tab"
+      aria-selected={selected === tab.key ? 'true' : 'false'}
+      class:list={['tab', { active: selected === tab.key }]}
+      data-filter={tab.key}
+    >
+      {tab.label}
+      <span class="count">{tab.count}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .status-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    position: sticky;
+    top: 56px;
+    z-index: 40;
+    background: var(--color-bg);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .status-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--color-surface);
+    color: var(--color-fg-muted);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition:
+      background 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease;
+    flex-shrink: 0;
+  }
+
+  .tab:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .tab.active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  }
+
+  .count {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+</style>

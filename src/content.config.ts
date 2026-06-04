@@ -91,21 +91,34 @@ const timeline = defineCollection({
   }),
 });
 
-// ─── ANIME / BOOKS / MUSIC (placeholder, D-01) ─────────
-// Detailed schemas land in Phase 4; Phase 1 only validates file exists.
-// `file()` loader treats the JSON array as the entry list — each element becomes
-// an entry whose data is validated against the schema's element type.
+// ─── ANIME / BOOKS / MUSIC (Bangumi, PAGE-10) ──────────
+const bangumiItemSchema = z.object({
+  subjectId: z.number(),
+  name: z.string(),
+  nameCn: z.string().default(''),
+  cover: z.string().url().or(z.literal('')).default(''),
+  score: z.number().default(0),
+  rate: z.number().default(0),
+  type: z.number(), // 1=wish, 2=done, 3=doing
+  epStatus: z.number().default(0),
+  volStatus: z.number().default(0),
+  eps: z.number().default(0),
+  updatedAt: z.string().optional(),
+  comment: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+});
+
 const anime = defineCollection({
   loader: file('./src/content/anime/list.json'),
-  schema: z.array(z.object({})).default([]),
+  schema: z.array(bangumiItemSchema).default([]),
 });
 const books = defineCollection({
   loader: file('./src/content/books/list.json'),
-  schema: z.array(z.object({})).default([]),
+  schema: z.array(bangumiItemSchema).default([]),
 });
 const music = defineCollection({
   loader: file('./src/content/music/list.json'),
-  schema: z.array(z.object({})).default([]),
+  schema: z.array(bangumiItemSchema).default([]),
 });
 
 export const collections = {
