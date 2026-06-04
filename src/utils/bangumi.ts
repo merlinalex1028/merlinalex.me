@@ -21,6 +21,7 @@ export const BANGUMI_TYPES = {
   anime: 2,
   book: 1,
   music: 3,
+  game: 4,
 } as const;
 
 const USER_AGENT = 'merlinalex.me/1.0 (Astro build)';
@@ -123,12 +124,14 @@ export function writeCollectionFiles(data: {
   anime: BangumiItem[];
   books: BangumiItem[];
   music: BangumiItem[];
+  game: BangumiItem[];
 }): void {
   const baseDir = path.resolve(process.cwd(), 'src/content');
   const entries: [string, BangumiItem[]][] = [
     ['anime', data.anime],
     ['books', data.books],
     ['music', data.music],
+    ['game', data.game],
   ];
 
   for (const [type, items] of entries) {

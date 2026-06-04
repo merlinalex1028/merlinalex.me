@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BangumiCard from '../components/bangumi/BangumiCard.astro';
+import BangumiStatusTabs from '../components/bangumi/BangumiStatusTabs.astro';
+
+const allGames = await getCollection('game');
+
+// Sort: 在玩(3) first, then 想玩(1), then 玩过(2)
+const sorted = [...allGames].sort((a, b) => {
+  const order: Record<number, number> = { 3: 0, 1: 1, 2: 2 };
+  return (order[a.data.type] ?? 3) - (order[b.data.type] ?? 3);
+});
+
+const counts = {
+  all: sorted.length,
+  doing: sorted.filter(i => i.data.type === 3).length,
+  done: sorted.filter(i => i.data.type === 2).length,
+  wish: sorted.filter(i => i.data.type === 1).length,
+};
+---
+
+<BaseLayout title="游戏 — merlinalex.me" description="我的游戏记录">
+  <div class="bangumi-page" data-pagefind-filter="exclude">
+    <BangumiStatusTabs
+      counts={counts}
+      labels={{ doing: '在玩', done: '玩过', wish: '想玩' }}
+    />
+    <div class="bangumi-grid" id="bangumi-grid">
+      {sorted.length === 0 ? (
+        <div class="empty-state">
+          <p>还没有游戏记录哦~</p>
+          <p class="hint">配置 BANGUMI_USERNAME 环境变量后运行 pnpm bangumi:refresh 获取数据</p>
+        </div>
+      ) : (
+        sorted.map(item => (
+          <div class="grid-item" data-status={item.data.type === 3 ? 'doing' : item.data.type === 2 ? 'done' : 'wish'}>
+            <BangumiCard item={item.data} />
+          </div>
+        ))
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function initFilter() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.status-tabs .tab');
+    const grid = document.getElementById('bangumi-grid');
+    if (!tabs.length || !grid) return;
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const filter = tab.dataset.filter;
+        const items = grid.querySelectorAll<HTMLElement>('.grid-item');
+
+        items.forEach(item => {
+          if (filter === 'all' || item.dataset.status === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  initFilter();
+  document.addEventListener('astro:after-swap', initFilter);
+</script>
+
+<style>
+  .bangumi-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 0;
+  }
+
+  .bangumi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 0 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .bangumi-grid {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--color-fg-muted);
+  }
+
+  .empty-state p {
+    margin: 0.5rem 0;
+  }
+
+  .hint {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+</style>

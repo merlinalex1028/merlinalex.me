@@ -21,15 +21,16 @@ async function main() {
 
   if (!username) {
     console.warn('[bangumi] BANGUMI_USERNAME not set — writing empty collections');
-    writeCollectionFiles({ anime: [], books: [], music: [] });
+    writeCollectionFiles({ anime: [], books: [], music: [], game: [] });
     return;
   }
 
   // Load overrides
-  let overrides: { anime: BangumiItem[]; books: BangumiItem[]; music: BangumiItem[] } = {
+  let overrides: { anime: BangumiItem[]; books: BangumiItem[]; music: BangumiItem[]; game: BangumiItem[] } = {
     anime: [],
     books: [],
     music: [],
+    game: [],
   };
   try {
     const raw = fs.readFileSync(OVERRIDE_PATH, 'utf-8');
@@ -43,6 +44,7 @@ async function main() {
     { key: 'anime', bangumiType: BANGUMI_TYPES.anime },
     { key: 'books', bangumiType: BANGUMI_TYPES.book },
     { key: 'music', bangumiType: BANGUMI_TYPES.music },
+    { key: 'game', bangumiType: BANGUMI_TYPES.game },
   ];
 
   for (const { key, bangumiType } of types) {
@@ -63,15 +65,16 @@ async function main() {
     anime: results.anime,
     books: results.books,
     music: results.music,
+    game: results.game,
   });
 
   console.log(
-    `[bangumi] Done: ${results.anime.length} anime, ${results.books.length} books, ${results.music.length} music written`
+    `[bangumi] Done: ${results.anime.length} anime, ${results.books.length} books, ${results.music.length} music, ${results.game.length} games written`
   );
 }
 
 main().catch(err => {
   console.error('[bangumi] Fatal error:', err);
   // Graceful fallback: write empty collections so build doesn't break
-  writeCollectionFiles({ anime: [], books: [], music: [] });
+  writeCollectionFiles({ anime: [], books: [], music: [], game: [] });
 });

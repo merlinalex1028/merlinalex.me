@@ -121,6 +121,10 @@ const music = defineCollection({
   loader: file('./src/content/music/list.json'),
   schema: bangumiItemSchema,
 });
+const game = defineCollection({
+  loader: file('./src/content/game/list.json'),
+  schema: bangumiItemSchema,
+});
 
 export const collections = {
   articles,
@@ -132,4 +136,5 @@ export const collections = {
   anime,
   books,
   music,
+  game,
 };
