@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "503983",
+    "subjectId": 503983,
+    "name": "异环",
+    "nameCn": "异环",
+    "cover": "https://lain.bgm.tv/pic/cover/l/e7/1f/503983_A6Zhh.jpg",
+    "score": 5.5,
+    "rate": 0,
+    "type": 3,
+    "epStatus": 0,
+    "volStatus": 0,
+    "eps": 0,
+    "updatedAt": "2026-06-04T15:14:45+08:00",
+    "tags": []
+  }
+]
