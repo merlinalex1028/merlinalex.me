@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TimelineYear from '../components/timeline/TimelineYear.astro';
+
+const allEntries = await getCollection('timeline');
+
+// Sort by date descending (newest first)
+const sorted = [...allEntries].sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Group by year
+const yearMap = new Map<number, typeof sorted>();
+for (const entry of sorted) {
+  const year = entry.data.date.getFullYear();
+  const existing = yearMap.get(year) ?? [];
+  existing.push(entry);
+  yearMap.set(year, existing);
+}
+
+// Years in descending order
+const years = [...yearMap.keys()].sort((a, b) => b - a);
+---
+
+<BaseLayout title="时间线 — merlinalex.me" description="我的里程碑时间线 — merlinalex.me">
+  <section class="timeline-page">
+    <h1 class="timeline-page__title">时间线</h1>
+    <p class="timeline-page__subtitle">记录成长路上的每一个脚印</p>
+
+    {sorted.length === 0 ? (
+      <div class="empty-state">
+        <h3>还没有里程碑</h3>
+        <p>添加第一个时间线条目后会出现在这里</p>
+      </div>
+    ) : (
+      <div class="timeline-container">
+        <div class="timeline-line" aria-hidden="true"></div>
+        {years.map((year) => (
+          <TimelineYear year={year} entries={yearMap.get(year)!} />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .timeline-page__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem;
+  }
+
+  .timeline-page__subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--color-fg-muted);
+    margin: 0 0 3rem;
+  }
+
+  .timeline-container {
+    position: relative;
+    padding: 0 0 2rem;
+  }
+
+  /* Vertical center line */
+  .timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-border);
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  .empty-state {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .empty-state p {
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+
+  /* Mobile: line moves to left edge */
+  @media (max-width: 639px) {
+    .timeline-line {
+      left: 0;
+      transform: none;
+    }
+  }
+</style>
