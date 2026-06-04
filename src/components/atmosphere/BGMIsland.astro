@@ -1,0 +1,178 @@
+---
+/**
+ * BGMIsland — site-wide background music player via APlayer + MetingJS.
+ *
+ * - Renders inside AtmosphereLayer (position: fixed, pointer-events: none)
+ * - Gated behind intensity toggle (off = hidden)
+ * - Muted by default — shows an unmute button on first visit
+ * - Loads APlayer + MetingJS from CDN on demand (after unmute click)
+ * - Persists across page navigation via Astro transition:persist
+ * - iOS AudioContext.resume on touch for Safari compatibility
+ * - APlayer CSS isolated from Tailwind via all: initial
+ */
+---
+
+<div id="bgm-root" class="atmo-bgm" transition:persist="bgm-player">
+  <button id="bgm-unmute" class="bgm-unmute-btn" aria-label="打开音乐" type="button">
+    <span class="bgm-unmute-icon">🔇</span>
+    <span class="bgm-unmute-text">打开音乐</span>
+  </button>
+  <div id="aplayer-container"></div>
+</div>
+
+<style>
+  .atmo-bgm {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    pointer-events: auto;
+  }
+
+  .bgm-unmute-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-fg);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition:
+      background var(--duration-fast) var(--easing-default),
+      box-shadow var(--duration-fast) var(--easing-default);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .bgm-unmute-btn:hover {
+    background: var(--color-surface-muted);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Isolate APlayer from Tailwind preflight */
+  #aplayer-container {
+    all: initial;
+  }
+
+  /* Ensure APlayer doesn't interfere with pointer events on page */
+  #aplayer-container .aplayer {
+    pointer-events: auto;
+  }
+</style>
+
+<script>
+  import { isOff, onAtmoChange } from '../../lib/atmosphere';
+
+  const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
+  const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
+  const METING_JS = 'https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js';
+
+  const root = document.getElementById('bgm-root') as HTMLElement | null;
+  const unmuteBtn = document.getElementById('bgm-unmute') as HTMLElement | null;
+  const container = document.getElementById('aplayer-container') as HTMLElement | null;
+
+  let aplayerLoaded = false;
+
+  function hideRoot(): void {
+    if (root) root.style.display = 'none';
+  }
+
+  function showRoot(): void {
+    if (root) root.style.display = '';
+  }
+
+  function hideUnmute(): void {
+    if (unmuteBtn) unmuteBtn.style.display = 'none';
+  }
+
+  function loadCSS(href: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => resolve();
+      link.onerror = () => reject(new Error(`Failed to load CSS: ${href}`));
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadScript(src: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.head.appendChild(script);
+    });
+  }
+
+  async function loadAPlayer(): Promise<void> {
+    if (aplayerLoaded || !container) return;
+    aplayerLoaded = true;
+
+    try {
+      // Load APlayer CSS
+      await loadCSS(APLAYER_CSS);
+
+      // Load APlayer JS
+      await loadScript(APLAYER_JS);
+
+      // Load MetingJS bridge
+      await loadScript(METING_JS);
+
+      // Create meting-js custom element
+      const meting = document.createElement('meting-js');
+      meting.setAttribute('server', 'netease');
+      meting.setAttribute('type', 'playlist');
+      meting.setAttribute('id', '2884035');
+      meting.setAttribute('autoplay', 'false');
+      meting.setAttribute('mutex', 'true');
+      meting.setAttribute('preload', 'none');
+      meting.setAttribute('theme', 'var(--color-accent)');
+
+      container.appendChild(meting);
+    } catch (err) {
+      console.warn('BGMIsland: failed to load APlayer/MetingJS', err);
+      aplayerLoaded = false;
+    }
+  }
+
+  function handleUnmute(): void {
+    // iOS AudioContext resume — required for Safari to allow audio playback
+    try {
+      const AudioCtx = window.AudioContext || (window as Record<string, unknown>).webkitAudioContext;
+      if (AudioCtx) {
+        new AudioCtx().resume();
+      }
+    } catch {
+      // AudioContext not critical — APlayer handles its own audio
+    }
+
+    void loadAPlayer();
+    localStorage.setItem('bgm:unmuted', 'true');
+    hideUnmute();
+  }
+
+  // Gate: if atmosphere is off, hide root and bail
+  if (isOff()) {
+    hideRoot();
+  } else if (localStorage.getItem('bgm:unmuted') === 'true') {
+    // Previously unmuted — load APlayer immediately
+    hideUnmute();
+    void loadAPlayer();
+  }
+
+  // Wire unmute button
+  unmuteBtn?.addEventListener('click', handleUnmute);
+
+  // Subscribe to atmosphere changes
+  onAtmoChange((state) => {
+    if (state.level === 'off') {
+      hideRoot();
+    } else {
+      showRoot();
+    }
+  });
+</script>
