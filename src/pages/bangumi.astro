@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const modules = [
+  { label: '追番', href: '/anime', icon: '📺', description: '动漫观看记录' },
+  { label: '追剧', href: '/anime', icon: '🎬', description: '影视剧观看记录' },
+  { label: '读书', href: '/books', icon: '📚', description: '书籍阅读记录' },
+  { label: '音乐', href: '/music', icon: '🎵', description: '音乐聆听记录' },
+  { label: '游戏', href: '/games', icon: '🎮', description: '游戏游玩记录' },
+];
+---
+
+<BaseLayout title="追更 — merlinalex.me" description="我的 Bangumi 追更记录">
+  <div class="bangumi-hub" data-pagefind-filter="exclude">
+    <header class="hub-header">
+      <h1>追更</h1>
+      <p class="hub-subtitle">记录我的动漫、书籍、音乐和游戏</p>
+    </header>
+
+    <div class="hub-grid">
+      {modules.map(mod => (
+        <a href={mod.href} class="hub-card">
+          <span class="hub-icon">{mod.icon}</span>
+          <span class="hub-label">{mod.label}</span>
+          <span class="hub-desc">{mod.description}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .bangumi-hub {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-xl, 2rem) 1rem;
+  }
+
+  .hub-header {
+    margin-bottom: var(--space-lg, 2rem);
+    text-align: center;
+  }
+
+  .hub-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-fg);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .hub-subtitle {
+    font-size: 14px;
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .hub-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg, 16px);
+    text-decoration: none;
+    color: var(--color-fg);
+    transition: transform var(--duration-fast, 150ms) var(--easing-default, ease),
+      box-shadow var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .hub-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .hub-icon {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .hub-label {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .hub-desc {
+    font-size: 13px;
+    color: var(--color-fg-muted);
+    text-align: center;
+  }
+</style>
