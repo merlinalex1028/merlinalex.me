@@ -64,6 +64,13 @@ export function getLevel(): 'off' | 'subtle' | 'full' {
   return 'off';
 }
 
+/** Set atmosphere intensity level. Persists to localStorage. */
+export function setLevel(level: 'off' | 'subtle' | 'full'): void {
+  const atmo = getAtmo();
+  if (!atmo) return;
+  atmo.set({ atmo: level });
+}
+
 /**
  * Returns true when reduced motion is preferred.
  *
