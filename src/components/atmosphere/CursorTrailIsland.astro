@@ -144,18 +144,35 @@
     clearAllParticles();
   }
 
-  // Initial gate
-  if (!isOff() && !isReducedMotion() && !isMobile()) {
-    activate();
+  // Wait for window.__atmo__ to be available (race condition guard)
+  function waitForAtmo(callback: () => void): void {
+    if ((window as any).__atmo__) {
+      callback();
+    } else {
+      const check = setInterval(() => {
+        if ((window as any).__atmo__) {
+          clearInterval(check);
+          callback();
+        }
+      }, 50);
+      setTimeout(() => clearInterval(check), 2000);
+    }
   }
 
-  // Subscribe to intensity changes
-  cleanupAtmo = onAtmoChange((state) => {
-    if (state.level === 'off' || state.reducedMotion || isMobile()) {
-      deactivate();
-    } else {
+  // Initial gate (with atmo race-condition guard)
+  waitForAtmo(() => {
+    if (!isOff() && !isReducedMotion() && !isMobile()) {
       activate();
     }
+
+    // Subscribe to intensity changes
+    cleanupAtmo = onAtmoChange((state) => {
+      if (state.level === 'off' || state.reducedMotion || isMobile()) {
+        deactivate();
+      } else {
+        activate();
+      }
+    });
   });
 
   // Cleanup on View Transition navigation
