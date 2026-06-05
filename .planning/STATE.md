@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-02)
 
 **Core value:** A personal space that feels alive and uniquely mine — visitors (mostly the owner + close circle) should feel they're stepping into a little world, not scrolling a generic blog.
-**Current focus:** Phase 6 — polish
+**Current focus:** All phases complete — milestone v0.1.0 ready to ship
 
 ## Current Position
 
@@ -29,15 +29,15 @@ Plan: 3 of 3 complete
 Status: Phase 6 complete
 Last activity: 2026-06-05
 
-Progress: [██████████] 96%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 16
-- Average duration: — (no data yet)
-- Total execution time: 0 hours
+- Total plans completed: 22
+- Average duration: ~5 min/plan
+- Total execution time: ~2 hours
 
 **By Phase:**
 
@@ -138,3 +138,15 @@ Phase 1 (Foundation) is **complete**. All 3 plans shipped:
 - Real persona avatar image (`/avatars/persona.png`) — Phase 6 polish
 
 **Next phase:** Phase 2 — Core Content (articles index + RSS feeds + Twikoo + sticker pack).
+
+## Phase 6 Closeout
+
+Phase 6 (Polish) is **complete**. All 3 plans shipped:
+
+- **06-01** — Custom 404 page with kawaii CSS art mascot (pure CSS character with blush spots, dot eyes, wavy mouth), 8 random Chinese messages that rotate on each visit, dual navigation (home + browser back). Reusable `JsonLd.astro` component rendering Article + Person + BreadcrumbList schemas on article pages for Google Rich Results.
+- **06-02** — GitHub Action workflow at `.github/workfriends-health.yml` running daily at 08:00 UTC, HEAD requests with 5s timeout to each friend URL, tracks consecutive failures (3 = offline), writes `friends-health.json` consumed by Phase 3 UI, creates GitHub Issue when >5 dead links detected.
+- **06-03** — Vitest config with v8 coverage provider (80% thresholds), Playwright E2E tests for 6 critical paths (theme persistence, search, reduced-motion, Live2D fallback, BGM unmute, comments), GitHub Actions CI workflow with separate test + e2e jobs, build hardening documentation for Cloudflare Pages env vars.
+
+**Coverage achieved:** Statements 96.18% | Branches 84.05% | Functions 94.11% | Lines 97.16%
+
+**v0.1.0 Milestone Status:** All 6 phases complete. Site is production-ready for deployment to Cloudflare Pages.

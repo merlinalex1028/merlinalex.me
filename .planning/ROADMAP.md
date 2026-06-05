@@ -171,7 +171,7 @@ Plans:
 
 - [x] 06-01: Custom 404 + JSON-LD (INFRA-06 final: kawaii 404 page returning HTTP 404; `Article` + `Person` + `BreadcrumbList` JSON-LD via reusable Astro components; Rich Results Test validation)
 - [x] 06-02: Friend-link health-check Action (INFRA-08 GitHub Action cron, 5s HEAD timeout per friend, writes `friends-health.json` consumed by Phase 3 UI; failure thresholds; admin notification on >5 dead links) (completed 2026-06-03)
-- [ ] 06-03: Tests + build hardening (TEST-01 Vitest unit + Playwright E2E with ≥80% on critical paths and CI gate; GIT-01 `NODE_OPTIONS=--max-old-space-size=4096` + Sharp output cache in `wrangler.toml` / CF Pages env)
+- [x] 06-03: Tests + build hardening (TEST-01 Vitest unit + Playwright E2E with ≥80% on critical paths and CI gate; GIT-01 `NODE_OPTIONS=--max-old-space-size=4096` + Sharp output cache in `wrangler.toml` / CF Pages env) (completed 2026-06-05)
 
 ## Progress
 
@@ -185,9 +185,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Works + Friend Links | 3/3 | Complete    | 2026-06-03 |
 | 4. Community + Search | 4/4 | Complete    | 2026-06-04 |
 | 5. Atmosphere | 5/5 | Complete    | 2026-06-04 |
-| 6. Polish | 2/2 | Complete    | 2026-06-05 |
+| 6. Polish | 3/3 | Complete    | 2026-06-05 |
 
-**Totals:** 6 phases, 22 plans, 4/22 (18%) complete.
+**Totals:** 6 phases, 22 plans, 22/22 (100%) complete.
 
 ---
 
