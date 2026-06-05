@@ -61,6 +61,7 @@ Progress: [██████████] 96%
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 813 | 3 tasks | 25 files |
 | Phase 02-core-content P01 | 6 | 2 tasks | 11 files |
+| Phase 06-polish P02 | 5 | 1 tasks | 1 files |
 | Phase 06-polish P03 | 10 | 3 tasks | 14 files |
 
 ## Accumulated Context
