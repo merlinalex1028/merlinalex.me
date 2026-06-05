@@ -175,4 +175,42 @@
       showRoot();
     }
   });
+
+  // View Transition lifecycle hooks for BGM persistence
+  // Save playback state before navigation
+  document.addEventListener('astro:before-swap', () => {
+    const audio = document.querySelector('#aplayer-container audio') as HTMLAudioElement | null;
+    if (audio) {
+      localStorage.setItem('bgm:time', String(audio.currentTime));
+      localStorage.setItem('bgm:playing', String(!audio.paused));
+    }
+  });
+
+  // Restore APlayer after navigation
+  document.addEventListener('astro:after-swap', () => {
+    if (localStorage.getItem('bgm:unmuted') === 'true') {
+      // Reset the loaded flag so loadAPlayer() can run again
+      aplayerLoaded = false;
+      // Hide unmute button (already unmuted)
+      hideUnmute();
+      // Re-load APlayer
+      void loadAPlayer().then(() => {
+        // Restore playback position after APlayer loads
+        const savedTime = parseFloat(localStorage.getItem('bgm:time') || '0');
+        const wasPlaying = localStorage.getItem('bgm:playing') === 'true';
+        if (savedTime > 0 || wasPlaying) {
+          // Wait for APlayer to initialize its audio element
+          setTimeout(() => {
+            const audio = document.querySelector('#aplayer-container audio') as HTMLAudioElement | null;
+            if (audio && savedTime > 0) {
+              audio.currentTime = savedTime;
+            }
+            if (audio && wasPlaying) {
+              audio.play().catch(() => {});
+            }
+          }, 500);
+        }
+      });
+    }
+  });
 </script>

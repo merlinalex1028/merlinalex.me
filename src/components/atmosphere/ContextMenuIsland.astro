@@ -10,7 +10,7 @@
  */
 ---
 
-<nav class="atmo-context-menu" id="context-menu" role="menu" aria-label="快捷菜单" hidden>
+<nav class="atmo-context-menu atmo-context-menu--hidden" id="context-menu" role="menu" aria-label="快捷菜单">
   <button role="menuitem" data-action="terminal">🖥️ 秘密终端</button>
   <button role="menuitem" data-action="home">🏠 首页</button>
   <button role="menuitem" data-action="sponsor">💖 赞赏</button>
@@ -64,7 +64,7 @@
 
     menu.style.left = `${posX}px`;
     menu.style.top = `${posY}px`;
-    menu.hidden = false;
+    menu.classList.remove('atmo-context-menu--hidden');
     menu.classList.add('ctx-visible');
     visible = true;
 
@@ -74,7 +74,7 @@
 
   function hideMenu(): void {
     if (!menu) return;
-    menu.hidden = true;
+    menu.classList.add('atmo-context-menu--hidden');
     menu.classList.remove('ctx-visible');
     visible = false;
   }
@@ -187,13 +187,22 @@
     backdrop-filter: blur(10px);
     opacity: 0;
     transform: scale(0.95);
-    transition: opacity 150ms ease, transform 150ms ease;
+    transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
     pointer-events: auto;
+    visibility: hidden;
+  }
+
+  .atmo-context-menu--hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+    visibility: hidden;
   }
 
   .atmo-context-menu.ctx-visible {
     opacity: 1;
     transform: scale(1);
+    visibility: visible;
   }
 
   .atmo-context-menu button {
