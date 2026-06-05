@@ -1,0 +1,21 @@
+---
+// Reusable JSON-LD structured data component
+// Accepts an array of schema objects and renders them as script tags
+
+interface Props {
+  schemas: Record<string, unknown>[];
+}
+
+const { schemas } = Astro.props;
+
+// Filter out undefined values from each schema
+function cleanSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(schema).filter(([, value]) => value !== undefined)
+  );
+}
+---
+
+{schemas.map((schema) => (
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(cleanSchema(schema))} />
+))}

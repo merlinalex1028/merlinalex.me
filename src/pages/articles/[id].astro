@@ -11,6 +11,7 @@ import CopyrightFooter from '../../components/articles/CopyrightFooter.astro';
 import TopButton from '../../components/articles/TopButton.astro';
 import ReadingMeta from '../../components/articles/ReadingMeta.astro';
 import TwikooComments from '../../components/comments/TwikooComments.astro';
+import JsonLd from '../../components/seo/JsonLd.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
 import { findRelated } from '../../utils/related-posts';
 
@@ -42,6 +43,63 @@ const prev = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : undef
 const next = currentIndex > 0 ? sorted[currentIndex - 1] : undefined;
 
 const permalink = new URL(`/articles/${article.id}/`, Astro.site).toString();
+
+// JSON-LD structured data schemas
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.data.title,
+  description: article.data.description ?? article.data.title,
+  author: {
+    '@type': 'Person',
+    name: 'merlinalex',
+    url: Astro.site?.toString(),
+  },
+  datePublished: article.data.publishedAt.toISOString(),
+  dateModified: (article.data.updatedAt ?? article.data.publishedAt).toISOString(),
+  image: article.data.cover ? new URL(article.data.cover, Astro.site).toString() : undefined,
+  url: permalink,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': permalink,
+  },
+};
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'merlinalex',
+  url: Astro.site?.toString(),
+  image: new URL('/avatar.png', Astro.site).toString(),
+  sameAs: [
+    'https://github.com/merlinalex',
+  ],
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: Astro.site?.toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '文章',
+      item: new URL('/articles/', Astro.site).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: article.data.title,
+      item: permalink,
+    },
+  ],
+};
 ---
 
 <BaseLayout
@@ -49,6 +107,8 @@ const permalink = new URL(`/articles/${article.id}/`, Astro.site).toString();
   description={article.data.description}
   type="article"
 >
+  <JsonLd schemas={[articleSchema, personSchema, breadcrumbSchema]} />
+
   <div class="article-layout">
     {article.data.toc && (
       <ArticleTOC headings={headings} />
