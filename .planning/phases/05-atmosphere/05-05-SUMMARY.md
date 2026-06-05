@@ -84,4 +84,14 @@ None — plan executed exactly as written.
 
 No new security-relevant surface beyond what the plan's threat model already covers.
 
-## Self-Check: PENDING
+## Self-Check: PASSED
+
+- [x] `src/components/atmosphere/ContextMenuIsland.astro` exists
+- [x] `src/components/atmosphere/EasterEggIsland.astro` exists
+- [x] `src/lib/atmosphere.ts` exports `setLevel`
+- [x] `src/layouts/BaseLayout.astro` imports both islands (2 matches each)
+- [x] `shiftKey` guard present in ContextMenuIsland
+- [x] `ArrowUp` Konami code detection present in EasterEggIsland
+- [x] Commit `85eabf4` exists (Task 1)
+- [x] Commit `844d6a3` exists (Task 2)
+- [x] Commit `cb180d1` exists (docs)
