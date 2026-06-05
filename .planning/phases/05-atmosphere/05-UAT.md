@@ -1,33 +1,33 @@
 ---
 status: complete
 phase: 05-atmosphere
-source: [05-01-SUMMARY.md, 05-02-SUMMARY.md, 05-03-SUMMARY.md, 05-04-SUMMARY.md, 05-05-SUMMARY.md]
+source: [05-01-SUMMARY.md, 05-02-SUMMARY.md, 05-03-SUMMARY.md, 05-04-SUMMARY.md, 05-05-SUMMARY.md, 05-06-SUMMARY.md, 05-07-SUMMARY.md]
 started: 2026-06-04T21:10:00.000Z
-updated: 2026-06-04T21:30:00.000Z
+updated: 2026-06-05T10:55:00.000Z
 ---
 
 ## Current Test
 
-[testing complete]
+[testing complete — gap closure failed]
 
 ## Tests
 
 ### 1. Intensity Toggle Gating
 expected: Toggle intensity to "off" — all atmosphere effects (petals, BGM, Live2D, cursor trail) should disappear. Toggle back to "subtle" or "full" — effects should reappear.
 result: issue
-reported: "BGM and Live2D fallback visible, but petals and cursor trail not showing"
+reported: "满的时候还是只有网易云bgm (when set to full, only NetEase BGM is visible)"
 severity: major
 
 ### 2. Cherry Blossom Petals
 expected: With intensity "subtle" or "full", cherry blossom petals fall across the screen. On mobile, fewer petals (≤15). Petals pause when switching to another tab.
 result: issue
-reported: "没有看到花瓣 (no petals visible)"
+reported: "没有看到花瓣 (no petals visible) — gap closure fix did not resolve"
 severity: major
 
 ### 3. Cursor Trail Effect
 expected: On desktop, moving the mouse leaves a trail of petals/particles following the cursor. On mobile, no cursor trail.
 result: issue
-reported: "没有光标轨迹 (no cursor trail visible)"
+reported: "没有光标轨迹 (no cursor trail visible) — gap closure fix did not resolve"
 severity: major
 
 ### 4. BGM Player Default State
@@ -37,7 +37,7 @@ result: pass
 ### 5. BGM Cross-page Persistence
 expected: Start playing BGM, then navigate to another page (e.g., /articles). Music continues playing without interruption.
 result: issue
-reported: "跨页面之后会停止播放 (stops playing after page navigation)"
+reported: "依然还是中断 (still stops after navigation) — gap closure fix did not resolve"
 severity: major
 
 ### 6. Live2D Mascot Display
@@ -55,7 +55,7 @@ severity: minor
 ### 8. Shift+Right-click Context Menu
 expected: On desktop, hold Shift and right-click anywhere on the page — a custom kawaii context menu appears with options (Terminal, Home, Sponsor, Intensity). Normal right-click (without Shift) shows the browser's default menu.
 result: issue
-reported: "点击右键还是显示浏览器默认菜单 (right-click still shows browser default menu)"
+reported: "还是浏览器默认右键菜单 (still shows browser default menu) — gap closure fix did not resolve"
 severity: major
 
 ### 9. Context Menu Intensity Selector
@@ -94,24 +94,24 @@ blocked: 1
 
 - truth: "Cherry blossom petals fall across the screen with intensity subtle/full"
   status: failed
-  reason: "User reported: 没有看到花瓣 (no petals visible)"
+  reason: "User reported: 没有看到花瓣 — gap closure fix (canvas→div) did not resolve"
   severity: major
   test: 2
 
 - truth: "Cursor trail follows mouse movement on desktop"
   status: failed
-  reason: "User reported: 没有光标轨迹 (no cursor trail visible)"
+  reason: "User reported: 没有光标轨迹 — gap closure fix (waitForAtmo guard) did not resolve"
   severity: major
   test: 3
 
 - truth: "BGM continues playing across page navigation"
   status: failed
-  reason: "User reported: 跨页面之后会停止播放 (stops playing after page navigation)"
+  reason: "User reported: 依然还是中断 — gap closure fix (astro:before-swap/after-swap hooks) did not resolve"
   severity: major
   test: 5
 
 - truth: "Shift+right-click shows custom kawaii context menu"
   status: failed
-  reason: "User reported: 点击右键还是显示浏览器默认菜单 (right-click still shows browser default menu)"
+  reason: "User reported: 还是浏览器默认右键菜单 — gap closure fix (CSS class visibility) did not resolve"
   severity: major
   test: 8
