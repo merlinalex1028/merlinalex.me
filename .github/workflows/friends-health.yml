@@ -1,0 +1,155 @@
+name: Friend-link Health Check
+
+on:
+  schedule:
+    # Daily at 08:00 UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check friend links
+        id: check
+        run: |
+          node << 'SCRIPT'
+          const fs = require('fs');
+          const path = require('path');
+
+          const FRIENDS_PATH = path.join('src/content/friends/friends.json');
+          const HEALTH_PATH = path.join('src/data/friends-health.json');
+
+          // --- Load friends ---
+          const friends = JSON.parse(fs.readFileSync(FRIENDS_PATH, 'utf-8'));
+
+          // --- Load existing health data for failure tracking ---
+          let existingHealth = {};
+          try {
+            existingHealth = JSON.parse(fs.readFileSync(HEALTH_PATH, 'utf-8'));
+          } catch {
+            // First run — no existing data
+          }
+
+          const CONSECUTIVE_FAILURE_THRESHOLD = 3;
+          const now = new Date().toISOString();
+
+          // --- HEAD request with 5s timeout ---
+          async function checkUrl(url) {
+            const start = Date.now();
+            try {
+              const controller = new AbortController();
+              const timeout = setTimeout(() => controller.abort(), 5000);
+              const response = await fetch(url, {
+                method: 'HEAD',
+                signal: controller.signal,
+                redirect: 'follow',
+                headers: { 'User-Agent': 'merlinalex-friend-health-check/1.0' },
+              });
+              clearTimeout(timeout);
+              const responseTime = Date.now() - start;
+              return {
+                statusCode: response.status,
+                responseTime,
+                ok: response.ok,
+              };
+            } catch (err) {
+              const responseTime = Date.now() - start;
+              return {
+                statusCode: 0,
+                responseTime,
+                ok: false,
+              };
+            }
+          }
+
+          // --- Check all friends ---
+          async function checkAll() {
+            const results = {};
+            let deadCount = 0;
+
+            for (const friend of friends) {
+              const url = friend.url;
+              const prev = existingHealth[url] || {};
+              const prevFailures = prev.consecutiveFailures || 0;
+
+              const result = await checkUrl(url);
+              const failures = result.ok ? 0 : prevFailures + 1;
+              const isOffline = failures >= CONSECUTIVE_FAILURE_THRESHOLD;
+
+              results[url] = {
+                status: isOffline ? 'offline' : 'online',
+                lastCheck: now,
+                statusCode: result.statusCode,
+                responseTime: result.responseTime,
+                consecutiveFailures: failures,
+              };
+
+              if (isOffline) {
+                deadCount++;
+              }
+            }
+
+            return { results, deadCount };
+          }
+
+          checkAll()
+            .then(({ results, deadCount }) => {
+              // Write health data
+              fs.writeFileSync(HEALTH_PATH, JSON.stringify(results, null, 2) + '\n');
+
+              // Output for subsequent steps
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, `dead_count=${deadCount}\n`);
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_changes=true\n`);
+
+              console.log(`Checked ${Object.keys(results).length} friends, ${deadCount} offline`);
+            })
+            .catch((err) => {
+              console.error('Health check failed:', err);
+              process.exit(1);
+            });
+          SCRIPT
+
+      - name: Commit health data
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/friends-health.json
+          git diff --cached --quiet || git commit -m "chore: update friend-link health data"
+          git push
+
+      - name: Notify on dead links
+        if: steps.check.outputs.dead_count > 5
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deadCount = ${{ steps.check.outputs.dead_count }};
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Health Check] ${deadCount} dead friend links detected`,
+              body: [
+                '## Friend-link Health Alert',
+                '',
+                `The daily health check found **${deadCount}** friend links offline.`,
+                '',
+                'This exceeds the threshold of 5 dead links.',
+                '',
+                'Please review `src/data/friends-health.json` for details.',
+                '',
+                '---',
+                '*This issue was created automatically by the friend-link health check workflow.*',
+              ].join('\n'),
+              labels: ['health-check'],
+            });
