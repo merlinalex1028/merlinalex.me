@@ -1,36 +1,197 @@
 ---
-// 404 placeholder UI per UI-SPEC lines 338-352
+// Kawaii 404 component with CSS art mascot and random messages
 ---
 
 <section class="not-found">
-  <div class="mascot-placeholder" role="img" aria-label="迷路的吉祥物"></div>
-  <h1>咦？这里什么都没有…</h1>
-  <p>迷路了？要不然回到首页吧</p>
-  <a class="cta" href="/">回到首页</a>
+  <div class="mascot" role="img" aria-label="迷路的吉祥物">
+    <div class="mascot-head">
+      <div class="eye eye-left"></div>
+      <div class="eye eye-right"></div>
+      <div class="blush blush-left"></div>
+      <div class="blush blush-right"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="mascot-body">
+      <div class="arm arm-left"></div>
+      <div class="arm arm-right"></div>
+    </div>
+  </div>
+
+  <p class="message">
+    <span id="random-msg">迷路了？这里什么都没有哦~</span>
+  </p>
+
+  <div class="actions">
+    <a class="cta-primary" href="/">回到首页</a>
+    <a class="cta-secondary" href="/" id="back-btn">返回上一页</a>
+  </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const messages = [
+      '迷路了？这里什么都没有哦~',
+      '走丢了？要不要我送你回去？',
+      '咦？这里好像不对劲…',
+      '404！连我都找不到这个页面',
+      '这个页面去冒险了，暂时回不来',
+      '糟糕，页面走丢了！',
+      '这里空空如也… 要不回首页看看？',
+      '这个页面被外星人带走了！',
+    ];
+
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    const msgEl = document.getElementById('random-msg');
+    if (msgEl) {
+      msgEl.textContent = messages[randomIndex];
+    }
+
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = '/';
+        }
+      });
+    }
+  });
+</script>
 
 <style>
   .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 4rem 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 60vh;
   }
-  .mascot-placeholder {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 1.5rem auto;
-    background: linear-gradient(135deg, var(--color-accent-subtle), var(--color-accent));
-    border-radius: 24px;
+
+  /* Mascot */
+  .mascot {
+    margin-bottom: 2rem;
+    animation: float 3s ease-in-out infinite;
   }
-  .not-found h1 {
-    color: var(--color-fg);
-    margin: 0 0 0.5rem 0;
-    font-size: 1.75rem;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
-  .not-found p {
+
+  @media (prefers-reduced-motion: reduce) {
+    .mascot {
+      animation: none;
+    }
+  }
+
+  .mascot-head {
+    width: 120px;
+    height: 120px;
+    background: var(--color-accent-subtle);
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .eye {
+    width: 12px;
+    height: 12px;
+    background: var(--color-fg);
+    border-radius: 50%;
+    position: absolute;
+    top: 42px;
+  }
+
+  .eye-left {
+    left: 32px;
+  }
+
+  .eye-right {
+    right: 32px;
+  }
+
+  .blush {
+    width: 20px;
+    height: 12px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    position: absolute;
+    top: 58px;
+    opacity: 0.5;
+  }
+
+  .blush-left {
+    left: 18px;
+  }
+
+  .blush-right {
+    right: 18px;
+  }
+
+  .mouth {
+    width: 24px;
+    height: 12px;
+    border: 2px solid var(--color-fg);
+    border-radius: 0 0 50% 50%;
+    border-top: none;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .mascot-body {
+    width: 60px;
+    height: 40px;
+    background: var(--color-accent-subtle);
+    border-radius: 0 0 30px 30px;
+    margin: -5px auto 0;
+    position: relative;
+  }
+
+  .arm {
+    width: 20px;
+    height: 10px;
+    background: var(--color-accent-subtle);
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+  }
+
+  .arm-left {
+    left: -12px;
+    transform: rotate(-20deg);
+  }
+
+  .arm-right {
+    right: -12px;
+    transform: rotate(20deg);
+  }
+
+  /* Message */
+  .message {
     color: var(--color-fg-muted);
-    margin: 0 0 1.5rem 0;
+    font-size: 1.1rem;
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
   }
-  .not-found .cta {
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cta-primary {
     display: inline-block;
     background: var(--color-accent);
     color: white;
@@ -40,8 +201,41 @@
     font-weight: 600;
     transition: background var(--duration-fast) var(--easing-default);
   }
-  .not-found .cta:hover,
-  .not-found .cta:focus-visible {
+
+  .cta-primary:hover,
+  .cta-primary:focus-visible {
     background: var(--color-accent-hover);
+  }
+
+  .cta-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--color-accent);
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid var(--color-accent);
+    transition: background var(--duration-fast) var(--easing-default),
+                color var(--duration-fast) var(--easing-default);
+  }
+
+  .cta-secondary:hover,
+  .cta-secondary:focus-visible {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  @media (max-width: 480px) {
+    .actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
