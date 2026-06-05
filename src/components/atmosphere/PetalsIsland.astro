@@ -10,7 +10,11 @@
  */
 ---
 
-<div class="atmo-petals" style="pointer-events: none; width: 100%; height: 100%;">
+<div
+  class="atmo-petals"
+  style="pointer-events: none; width: 100%; height: 100%;"
+  transition:persist="atmo-petals"
+>
   <div id="tsparticles-petals" style="width:100%;height:100%;"></div>
 </div>
 
@@ -51,24 +55,25 @@
 
     initPromise = (async () => {
       try {
-        const { initParticlesEngine } = await import('@tsparticles/slim');
+        const { tsParticles } = await import('@tsparticles/engine');
         const { loadSlim } = await import('@tsparticles/slim');
-        const { loadImageShape } = await import(
-          '@tsparticles/shape-image'
-        );
+        const { loadImageShape } = await import('@tsparticles/shape-image');
 
-        await initParticlesEngine(async (engine) => {
-          await loadSlim(engine);
-          await loadImageShape(engine);
-        });
-
-        const { tsParticles } = await import('@tsparticles/slim');
+        await loadSlim(tsParticles);
+        await loadImageShape(tsParticles);
 
         particlesContainer = await tsParticles.load({
           id: CONTAINER_ID,
           options: {
             fullScreen: false,
             fpsLimit: 30,
+            preload: [
+              {
+                src: '/petals/sakura.svg',
+                width: 32,
+                height: 32,
+              },
+            ],
             particles: {
               number: {
                 value: 30,
@@ -83,10 +88,13 @@
               },
               shape: {
                 type: 'image',
-                image: {
-                  src: '/petals/sakura.svg',
-                  width: 32,
-                  height: 32,
+                options: {
+                  image: {
+                    src: '/petals/sakura.svg',
+                    width: 32,
+                    height: 32,
+                    replaceColor: false,
+                  },
                 },
               },
               opacity: {

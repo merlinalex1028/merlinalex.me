@@ -1,72 +1,83 @@
 ---
-// Live2D mascot island — tries to load l2d-widget, falls back to static SVG.
+// Live2D mascot island. Hidden unless /models/live2d-models.json configures models.
 // Gated by intensity toggle (off = hidden).
 ---
 
-<div class="atmo-live2d" id="l2d-root">
-  <img
-    class="l2d-fallback"
-    src="/models/fallback.svg"
-    alt="站点吉祥物"
-    loading="lazy"
-    width="200"
-    height="300"
-  />
-</div>
+<div class="atmo-live2d" id="l2d-root" transition:persist="atmo-live2d"></div>
 
 <script>
   import { isOff, onAtmoChange } from '../../lib/atmosphere';
 
-  const root = document.getElementById('l2d-root');
-  const fallback = root?.querySelector('.l2d-fallback') as HTMLImageElement | null;
+  interface Live2DConfig {
+    models?: Array<{ path: string }>;
+    tips?: {
+      welcome?: string;
+      touch?: string;
+    };
+  }
 
-  if (root && fallback) {
-    // Gate: hide if intensity is off
-    if (isOff()) {
-      root.style.display = 'none';
+  const root = document.getElementById('l2d-root') as HTMLElement | null;
+  let widgetLoaded = false;
+
+  async function loadConfig(): Promise<Live2DConfig> {
+    try {
+      const res = await fetch('/models/live2d-models.json', {
+        cache: 'no-store',
+      });
+      if (!res.ok) return {};
+
+      const data = (await res.json()) as Live2DConfig;
+      return data && typeof data === 'object' ? data : {};
+    } catch {
+      return {};
     }
+  }
 
-    // Subscribe to intensity changes
-    onAtmoChange((level) => {
-      if (level === 'off') {
+  function normalizeModels(config: Live2DConfig): Array<{ path: string }> {
+    return (config.models ?? []).filter(
+      (model) => model && typeof model.path === 'string' && model.path.length > 0
+    );
+  }
+
+  if (root) {
+    root.style.display = 'none';
+
+    onAtmoChange((state) => {
+      if (state.level === 'off' || !widgetLoaded) {
         root.style.display = 'none';
-      } else {
-        root.style.display = '';
       }
     });
 
-    // Try to load Live2D (per D-01: try-load-all-devices)
-    async function loadLive2D() {
+    async function loadLive2D(): Promise<void> {
       if (isOff()) return;
+
+      const config = await loadConfig();
+      const models = normalizeModels(config);
+      if (models.length === 0) return;
 
       try {
         const { createWidget } = await import('l2d-widget');
 
         const widget = createWidget({
-          model: [
-            // Add real model paths here once model files are placed in public/models/
-            // { path: '/models/cat-black/model.json' },
-            // { path: '/models/cat-white/model.json' },
-          ],
+          model: models,
           tips: {
-            welcome: '欢迎回来~',
-            touch: '别戳我啦~',
+            welcome: config.tips?.welcome ?? '欢迎回来~',
+            touch: config.tips?.touch ?? '别戳我啦~',
           },
         });
 
-        // If createWidget succeeds, hide fallback
-        fallback.style.display = 'none';
+        widgetLoaded = true;
+        root.style.display = '';
 
         // Subscribe to intensity changes for sleep/wake
-        onAtmoChange((level) => {
-          if (level === 'off' && widget?.sleep) {
+        onAtmoChange((state) => {
+          if (state.level === 'off' && widget?.sleep) {
             widget.sleep();
           }
         });
       } catch {
-        // Live2D failed (no WebGL, OOM, missing models, etc.)
-        // Keep fallback visible — already showing
-        console.warn('[Live2D] Failed to load — showing static fallback');
+        root.style.display = 'none';
+        console.warn('[Live2D] Failed to load configured model');
       }
     }
 
@@ -88,12 +99,6 @@
     width: 200px;
     height: 300px;
     pointer-events: auto;
-    transition: opacity var(--duration-base, 300ms) var(--easing-default, ease);
-  }
-
-  .l2d-fallback {
-    width: 100%;
-    height: auto;
     transition: opacity var(--duration-base, 300ms) var(--easing-default, ease);
   }
 

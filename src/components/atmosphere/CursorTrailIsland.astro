@@ -12,7 +12,7 @@
  */
 ---
 
-<div class="atmo-cursor-trail"></div>
+<div class="atmo-cursor-trail" transition:persist="atmo-cursor-trail"></div>
 
 <style>
   @keyframes cursor-fall {
@@ -175,9 +175,9 @@
     });
   });
 
-  // Cleanup on View Transition navigation
+  // Keep the island alive across View Transition navigation; only clear
+  // transient particles so old trails don't float over the new page.
   document.addEventListener('astro:before-swap', () => {
-    deactivate();
-    cleanupAtmo?.();
+    clearAllParticles();
   });
 </script>

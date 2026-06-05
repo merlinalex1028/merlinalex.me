@@ -2,7 +2,7 @@
 /**
  * BGMIsland — site-wide background music player via APlayer + MetingJS.
  *
- * - Renders inside AtmosphereLayer (position: fixed, pointer-events: none)
+ * - Portals to document.body so Astro route swaps can't break APlayer layout
  * - Gated behind intensity toggle (off = hidden)
  * - Muted by default — shows an unmute button on first visit
  * - Loads APlayer + MetingJS from CDN on demand (after unmute click)
@@ -60,35 +60,166 @@
   #aplayer-container .aplayer {
     pointer-events: auto;
   }
+
+  /* MetingJS reconnects during Astro client navigation; keep only the newest player visible. */
+  :global(#aplayer-container meting-js .aplayer:not(:last-of-type)) {
+    display: none !important;
+  }
 </style>
 
 <script>
   import { isOff, onAtmoChange } from '../../lib/atmosphere';
 
+  interface BgmSingleton {
+    initialized: boolean;
+    loaded: boolean;
+    loadingPromise: Promise<void> | null;
+  }
+
+  interface WindowWithBgm extends Window {
+    __bgmIsland?: BgmSingleton;
+    APlayer?: unknown;
+    MetingJSElement?: unknown;
+    webkitAudioContext?: typeof AudioContext;
+  }
+
+  interface PatchedMetingPrototype extends HTMLElement {
+    connectedCallback?: () => void;
+    disconnectedCallback?: () => void;
+    __bgmPatchedConnectedCallback?: boolean;
+    lock?: boolean;
+    aplayer?: unknown;
+  }
+
   const APLAYER_CSS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css';
   const APLAYER_JS = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js';
   const METING_JS = 'https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js';
 
-  const root = document.getElementById('bgm-root') as HTMLElement | null;
-  const unmuteBtn = document.getElementById('bgm-unmute') as HTMLElement | null;
-  const container = document.getElementById('aplayer-container') as HTMLElement | null;
+  const bgmWindow = window as WindowWithBgm;
+  const bgmState =
+    bgmWindow.__bgmIsland ??
+    (bgmWindow.__bgmIsland = {
+      initialized: false,
+      loaded: false,
+      loadingPromise: null,
+    });
 
-  let aplayerLoaded = false;
+  function getRoot(): HTMLElement | null {
+    return document.querySelector<HTMLElement>('#bgm-root');
+  }
+
+  function ensureRootPortal(): void {
+    const root = getRoot();
+    if (!root || root.parentElement === document.body) return;
+    root.dataset.bgmPortal = 'true';
+    document.body.appendChild(root);
+  }
+
+  function getUnmuteButton(): HTMLElement | null {
+    return getRoot()?.querySelector<HTMLElement>('#bgm-unmute') ?? null;
+  }
+
+  function getContainer(): HTMLElement | null {
+    return getRoot()?.querySelector<HTMLElement>('#aplayer-container') ?? null;
+  }
 
   function hideRoot(): void {
+    const root = getRoot();
     if (root) root.style.display = 'none';
   }
 
   function showRoot(): void {
+    const root = getRoot();
     if (root) root.style.display = '';
   }
 
   function hideUnmute(): void {
+    const unmuteBtn = getUnmuteButton();
     if (unmuteBtn) unmuteBtn.style.display = 'none';
+  }
+
+  function cleanupDuplicatePlayers(): void {
+    const roots = Array.from(document.querySelectorAll<HTMLElement>('#bgm-root'));
+    const keeper = roots.find((el) => el.querySelector('.aplayer, meting-js')) ?? roots[0];
+    for (const item of roots) {
+      if (item !== keeper) item.remove();
+    }
+
+    const activeContainer = keeper?.querySelector<HTMLElement>('#aplayer-container');
+    if (!activeContainer) return;
+
+    const metingElements = Array.from(
+      activeContainer.querySelectorAll<PatchedMetingPrototype>(':scope > meting-js')
+    );
+    for (const meting of metingElements.slice(1)) {
+      meting.lock = true;
+      meting.remove();
+    }
+
+  }
+
+  function detachGeneratedPlayer(): void {
+    const activeContainer = getContainer();
+    const meting = activeContainer?.querySelector<PatchedMetingPrototype>('meting-js');
+    const player = meting?.querySelector<HTMLElement>('.aplayer');
+    if (!activeContainer || !meting || !player) return;
+
+    meting.lock = true;
+    activeContainer.appendChild(player);
+    meting.remove();
+    bgmState.loaded = true;
+  }
+
+  function scheduleDetachGeneratedPlayer(): void {
+    for (const delay of [500, 1500, 3000]) {
+      window.setTimeout(() => {
+        detachGeneratedPlayer();
+        cleanupDuplicatePlayers();
+      }, delay);
+    }
+  }
+
+  async function patchMetingReconnect(): Promise<void> {
+    try {
+      await customElements.whenDefined('meting-js');
+    } catch {
+      return;
+    }
+
+    const MetingElement = customElements.get('meting-js') as
+      | (CustomElementConstructor & { prototype: PatchedMetingPrototype })
+      | undefined;
+    const proto = MetingElement?.prototype;
+    if (!proto || proto.__bgmPatchedConnectedCallback) return;
+
+    const originalConnected = proto.connectedCallback;
+    const originalDisconnected = proto.disconnectedCallback;
+    if (!originalConnected) return;
+
+    proto.connectedCallback = function connectedCallbackOnce() {
+      if (this.querySelector('.aplayer')) return;
+      return originalConnected.call(this);
+    };
+
+    proto.disconnectedCallback = function keepPersistentPlayerAlive() {
+      if (this.querySelector('.aplayer')) return;
+      if (this.lock || !this.aplayer) return;
+      return originalDisconnected?.call(this);
+    };
+
+    proto.__bgmPatchedConnectedCallback = true;
   }
 
   function loadCSS(href: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      const existing = document.querySelector<HTMLLinkElement>(
+        `link[rel="stylesheet"][href="${href}"]`
+      );
+      if (existing) {
+        resolve();
+        return;
+      }
+
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = href;
@@ -100,19 +231,46 @@
 
   function loadScript(src: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      const existing = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+      if (existing) {
+        if (existing.dataset.loaded === 'true') {
+          resolve();
+          return;
+        }
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), {
+          once: true,
+        });
+        return;
+      }
+
       const script = document.createElement('script');
       script.src = src;
-      script.onload = () => resolve();
+      script.onload = () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      };
       script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
       document.head.appendChild(script);
     });
   }
 
   async function loadAPlayer(): Promise<void> {
-    if (aplayerLoaded || !container) return;
-    aplayerLoaded = true;
+    ensureRootPortal();
+    cleanupDuplicatePlayers();
+    const container = getContainer();
+    if (!container) return;
+    if (container.querySelector('meting-js, .aplayer')) {
+      bgmState.loaded = true;
+      return;
+    }
+    if (bgmState.loaded) return;
+    if (bgmState.loadingPromise) {
+      await bgmState.loadingPromise;
+      return;
+    }
 
-    try {
+    bgmState.loadingPromise = (async () => {
       // Load APlayer CSS
       await loadCSS(APLAYER_CSS);
 
@@ -121,6 +279,7 @@
 
       // Load MetingJS bridge
       await loadScript(METING_JS);
+      await patchMetingReconnect();
 
       // Create meting-js custom element
       const meting = document.createElement('meting-js');
@@ -133,16 +292,24 @@
       meting.setAttribute('theme', 'var(--color-accent)');
 
       container.appendChild(meting);
+      bgmState.loaded = true;
+      scheduleDetachGeneratedPlayer();
+    })();
+
+    try {
+      await bgmState.loadingPromise;
     } catch (err) {
       console.warn('BGMIsland: failed to load APlayer/MetingJS', err);
-      aplayerLoaded = false;
+      bgmState.loaded = false;
+    } finally {
+      bgmState.loadingPromise = null;
     }
   }
 
   function handleUnmute(): void {
     // iOS AudioContext resume — required for Safari to allow audio playback
     try {
-      const AudioCtx = window.AudioContext || (window as Record<string, unknown>).webkitAudioContext;
+      const AudioCtx = window.AudioContext || bgmWindow.webkitAudioContext;
       if (AudioCtx) {
         new AudioCtx().resume();
       }
@@ -155,6 +322,17 @@
     hideUnmute();
   }
 
+  cleanupDuplicatePlayers();
+  ensureRootPortal();
+
+  if (bgmState.initialized) {
+    if (localStorage.getItem('bgm:unmuted') === 'true') {
+      hideUnmute();
+      void loadAPlayer();
+    }
+  } else {
+    bgmState.initialized = true;
+
   // Gate: if atmosphere is off, hide root and bail
   if (isOff()) {
     hideRoot();
@@ -165,7 +343,7 @@
   }
 
   // Wire unmute button
-  unmuteBtn?.addEventListener('click', handleUnmute);
+  getUnmuteButton()?.addEventListener('click', handleUnmute);
 
   // Subscribe to atmosphere changes
   onAtmoChange((state) => {
@@ -188,12 +366,11 @@
 
   // Restore APlayer after navigation
   document.addEventListener('astro:after-swap', () => {
+    ensureRootPortal();
     if (localStorage.getItem('bgm:unmuted') === 'true') {
-      // Reset the loaded flag so loadAPlayer() can run again
-      aplayerLoaded = false;
       // Hide unmute button (already unmuted)
       hideUnmute();
-      // Re-load APlayer
+      // Ensure a single APlayer exists after the view transition.
       void loadAPlayer().then(() => {
         // Restore playback position after APlayer loads
         const savedTime = parseFloat(localStorage.getItem('bgm:time') || '0');
@@ -213,4 +390,5 @@
       });
     }
   });
+  }
 </script>

@@ -1,0 +1,11 @@
+{
+  "models": [
+    {
+      "path": "/models/your-model/model.json"
+    }
+  ],
+  "tips": {
+    "welcome": "欢迎回来~",
+    "touch": "别戳我啦~"
+  }
+}
