@@ -15,6 +15,9 @@ export default defineConfig({
   integrations: [icon(), mdx(), sitemap(), pagefind()],
   vite: {
     plugins: [tailwindcss(), yaml()],
+    optimizeDeps: {
+      exclude: ['l2d-widget'],
+    },
   },
   trailingSlash: 'never',
   build: {

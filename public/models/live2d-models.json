@@ -1,3 +1,11 @@
 {
-  "models": []
+  "models": [
+    {
+      "path": "https://cdn.jsdelivr.net/npm/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json"
+    }
+  ],
+  "tips": {
+    "welcome": "喵~ 欢迎光临！",
+    "touch": "喵呜！"
+  }
 }
