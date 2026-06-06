@@ -50,10 +50,6 @@
     return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   }
 
-  function getAtmoLevel(): string {
-    return document.documentElement.dataset.atmo || 'off';
-  }
-
   function formatDate(): string {
     const d = new Date();
     const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
@@ -71,7 +67,6 @@
         appendLine('  whoami   — 我是谁？');
         appendLine('  secret   — 隐藏彩蛋');
         appendLine('  theme    — 当前主题');
-        appendLine('  atmo     — 当前氛围强度');
         appendLine('  date     — 今天的日期');
         appendLine('  neko     — 喵~');
         appendLine('  clear    — 清空终端');
@@ -85,9 +80,6 @@
         break;
       case 'theme':
         appendLine(`当前主题：${getTheme()}`, 'terminal-line-system');
-        break;
-      case 'atmo':
-        appendLine(`氛围强度：${getAtmoLevel()}`, 'terminal-line-system');
         break;
       case 'date':
         appendLine(formatDate(), 'terminal-line-system');

@@ -4,10 +4,6 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/core/Header.astro';
 import Footer from '../components/core/Footer.astro';
 import SEOMeta from '../components/seo/SEOMeta.astro';
-import AtmosphereLayer from '../components/atmosphere/AtmosphereLayer.astro';
-import PetalsIsland from '../components/atmosphere/PetalsIsland.astro';
-import CursorTrailIsland from '../components/atmosphere/CursorTrailIsland.astro';
-import BGMIsland from '../components/atmosphere/BGMIsland.astro';
 import ContextMenuIsland from '../components/atmosphere/ContextMenuIsland.astro';
 import EasterEggIsland from '../components/atmosphere/EasterEggIsland.astro';
 
@@ -22,76 +18,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light" data-atmo="full">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Pre-paint theme + atmo gate (FOUC-safe, blocking, synchronous) -->
+    <!-- Pre-paint theme gate (FOUC-safe, blocking, synchronous) -->
     <script is:inline>
       (function () {
         try {
           var storedTheme = localStorage.getItem('theme') || 'system';
-          var storedAtmo  = localStorage.getItem('atmo:level') || 'full';
           var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           var effectiveTheme = storedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : storedTheme;
-          var effectiveAtmo  = reduceMotion ? 'off' : storedAtmo;
           document.documentElement.dataset.theme = effectiveTheme;
-          document.documentElement.dataset.atmo = effectiveAtmo;
-          window.__atmo__ = {
-            level: effectiveAtmo,
-            storedLevel: storedAtmo,
-            theme: effectiveTheme,
-            storedTheme: storedTheme,
-            reducedMotion: reduceMotion,
-            set: function (patch) {
-              if (patch && patch.theme) {
-                localStorage.setItem('theme', patch.theme);
-                this.storedTheme = patch.theme;
-                var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                this.theme = patch.theme === 'system' ? (sysDark ? 'dark' : 'light') : patch.theme;
-                document.documentElement.dataset.theme = this.theme;
-              }
-              if (patch && patch.atmo) {
-                localStorage.setItem('atmo:level', patch.atmo);
-                this.storedLevel = patch.atmo;
-                this.level = this.reducedMotion ? 'off' : patch.atmo;
-                document.documentElement.dataset.atmo = this.level;
-              }
-              if (Array.isArray(this._listeners)) {
-                for (var i = 0; i < this._listeners.length; i++) {
-                  try { this._listeners[i](this); } catch (e) { /* ignore */ }
-                }
-              }
-            },
-            subscribe: function (fn) {
-              this._listeners = this._listeners || [];
-              this._listeners.push(fn);
-            },
-            _listeners: []
-          };
         } catch (e) {
           document.documentElement.dataset.theme = 'light';
-          document.documentElement.dataset.atmo = 'full';
         }
-      })();
-    </script>
-
-    <!-- Date-based atmosphere class (FOUC-safe, blocking, synchronous) -->
-    <script is:inline>
-      (function(){
-        try {
-          var d = new Date();
-          var m = d.getMonth() + 1; var day = d.getDate();
-          if ((m === 2 && day === 14) || (m === 3 && day === 14)) {
-            document.documentElement.classList.add('atmo-date-valentine');
-          } else if (m === 12 && day >= 20 && day <= 25) {
-            document.documentElement.classList.add('atmo-date-christmas');
-          } else if ((m === 3 && day >= 25) || (m === 4 && day <= 10)) {
-            document.documentElement.classList.add('atmo-date-sakura');
-          }
-        } catch(e) {}
       })();
     </script>
 
@@ -102,11 +44,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       type={type}
       canonical={canonical}
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
-      data-bgm-aplayer-css
-    />
     <ClientRouter />
   </head>
   <body>
@@ -116,13 +53,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       <slot />
     </main>
     <Footer />
-    <AtmosphereLayer>
-      <PetalsIsland />
-      <CursorTrailIsland />
-      <BGMIsland />
-      <ContextMenuIsland />
-      <EasterEggIsland />
-    </AtmosphereLayer>
+    <ContextMenuIsland />
+    <EasterEggIsland />
   </body>
 </html>
 

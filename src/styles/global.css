@@ -39,15 +39,6 @@
   --color-focus: #FF8FB8;
 }
 
-/* ATMOSPHERE INTENSITY GATE — effect islands hidden when data-atmo="off".
-   Keep the layer itself alive so the custom context menu can replace browser right-click. */
-:root[data-atmo="off"] .atmo-petals,
-:root[data-atmo="off"] .atmo-cursor-trail,
-:root[data-atmo="off"] .atmo-live2d,
-:root[data-atmo="off"] .atmo-bgm {
-  display: none;
-}
-
 /* A11Y-02 — global reduced-motion baseline. Per CONTEXT D-10. Phase 5 JS loops additionally gate on matchMedia. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

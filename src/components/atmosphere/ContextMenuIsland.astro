@@ -4,50 +4,23 @@
  *
  * - Desktop: right-click opens a custom menu
  * - Mobile: long-press (500ms) opens the same menu
- * - Always available, even when atmosphere intensity is off
- * - Menu items: Terminal, Home, Sponsor, Intensity selector
- * - Intensity selector syncs with atmosphere state
+ * - Menu items: Terminal, Home, Sponsor
  */
 ---
 
 <nav
-  class="atmo-context-menu atmo-context-menu--hidden"
+  class="ctx-menu ctx-menu--hidden"
   id="context-menu"
   role="menu"
   aria-label="快捷菜单"
-  transition:persist="atmo-context-menu"
+  transition:persist="ctx-menu"
 >
   <button role="menuitem" data-action="terminal">🖥️ 秘密终端</button>
   <button role="menuitem" data-action="home">🏠 首页</button>
   <button role="menuitem" data-action="sponsor">💖 赞赏</button>
-  <hr class="ctx-divider" />
-  <button
-    role="menuitem"
-    type="button"
-    class="ctx-intensity-trigger"
-    data-action="toggle-intensity"
-    aria-haspopup="true"
-    aria-expanded="false"
-    aria-controls="context-menu-intensity"
-  >
-    ✨ 氛围
-    <span aria-hidden="true">›</span>
-  </button>
-  <div
-    class="ctx-intensity ctx-intensity--hidden"
-    id="context-menu-intensity"
-    role="group"
-    aria-label="氛围强度"
-  >
-    <button role="menuitem" data-action="atmo-off" data-level="off">💤 关</button>
-    <button role="menuitem" data-action="atmo-subtle" data-level="subtle">🌸 柔</button>
-    <button role="menuitem" data-action="atmo-full" data-level="full">✨ 满</button>
-  </div>
 </nav>
 
 <script>
-  import { isMobile, getLevel, setLevel, onAtmoChange } from '../../lib/atmosphere';
-
   const MENU_ID = 'context-menu';
   const LONG_PRESS_MS = 500;
   const MOVE_THRESHOLD = 10;
@@ -58,42 +31,11 @@
   let touchStartX = 0;
   let touchStartY = 0;
 
-  function getIntensityGroup(): HTMLElement | null {
-    return document.getElementById('context-menu-intensity');
-  }
-
-  function getIntensityTrigger(): HTMLButtonElement | null {
-    return menu?.querySelector<HTMLButtonElement>('[data-action="toggle-intensity"]') ?? null;
-  }
-
-  function getIntensityButtons(): NodeListOf<HTMLButtonElement> {
-    return menu!.querySelectorAll<HTMLButtonElement>('[data-level]');
-  }
-
-  function highlightLevel(level: string): void {
-    getIntensityButtons().forEach((btn) => {
-      if (btn.dataset.level === level) {
-        btn.classList.add('ctx-intensity-active');
-      } else {
-        btn.classList.remove('ctx-intensity-active');
-      }
-    });
-  }
-
-  function setIntensityOpen(open: boolean): void {
-    const group = getIntensityGroup();
-    const trigger = getIntensityTrigger();
-    if (!group || !trigger) return;
-    group.classList.toggle('ctx-intensity--hidden', !open);
-    trigger.setAttribute('aria-expanded', String(open));
-  }
-
   function showMenu(x: number, y: number): void {
     if (!menu) return;
 
-    // Position with viewport boundary checks
     const menuWidth = 180;
-    const menuHeight = 200; // approximate
+    const menuHeight = 200;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
@@ -102,21 +44,16 @@
 
     menu.style.left = `${posX}px`;
     menu.style.top = `${posY}px`;
-    menu.classList.remove('atmo-context-menu--hidden');
+    menu.classList.remove('ctx-menu--hidden');
     menu.classList.add('ctx-visible');
     visible = true;
-    setIntensityOpen(false);
-
-    // Highlight current intensity
-    highlightLevel(getLevel());
   }
 
   function hideMenu(): void {
     if (!menu) return;
-    menu.classList.add('atmo-context-menu--hidden');
+    menu.classList.add('ctx-menu--hidden');
     menu.classList.remove('ctx-visible');
     visible = false;
-    setIntensityOpen(false);
   }
 
   function handleAction(action: string): void {
@@ -128,35 +65,22 @@
         window.location.href = '/';
         break;
       case 'sponsor':
-        // Placeholder — show a toast or tooltip
         alert('赞赏功能即将上线~');
-        break;
-      case 'toggle-intensity':
-        setIntensityOpen(
-          getIntensityGroup()?.classList.contains('ctx-intensity--hidden') ?? true
-        );
-        return;
-      case 'atmo-off':
-        setLevel('off');
-        break;
-      case 'atmo-subtle':
-        setLevel('subtle');
-        break;
-      case 'atmo-full':
-        setLevel('full');
         break;
     }
     hideMenu();
   }
 
+  function isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
+
   if (menu) {
-    // --- Desktop: right-click ---
     document.addEventListener('contextmenu', (e: MouseEvent) => {
       e.preventDefault();
       showMenu(e.clientX, e.clientY);
     });
 
-    // --- Mobile: long-press ---
     if (isMobile()) {
       document.addEventListener('touchstart', (e: TouchEvent) => {
         const touch = e.touches[0];
@@ -189,14 +113,12 @@
       }, { passive: true });
     }
 
-    // --- Menu item clicks ---
     menu.addEventListener('click', (e: Event) => {
       const target = e.target as HTMLElement;
       const action = target.dataset?.action;
       if (action) handleAction(action);
     });
 
-    // --- Dismiss: click outside ---
     document.addEventListener('click', (e: MouseEvent) => {
       if (!visible) return;
       if (menu && !menu.contains(e.target as Node)) {
@@ -204,22 +126,16 @@
       }
     });
 
-    // --- Dismiss: Escape key ---
     document.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.code === 'Escape' && visible) {
         hideMenu();
       }
     });
-
-    // --- Sync intensity highlight on external changes ---
-    onAtmoChange((state) => {
-      highlightLevel(state.level);
-    });
   }
 </script>
 
 <style>
-  .atmo-context-menu {
+  .ctx-menu {
     position: fixed;
     z-index: 10000;
     background: var(--color-bg-elevated, #fff);
@@ -236,20 +152,20 @@
     visibility: hidden;
   }
 
-  .atmo-context-menu--hidden {
+  .ctx-menu--hidden {
     opacity: 0;
     transform: scale(0.95);
     pointer-events: none;
     visibility: hidden;
   }
 
-  .atmo-context-menu.ctx-visible {
+  .ctx-menu.ctx-visible {
     opacity: 1;
     transform: scale(1);
     visibility: visible;
   }
 
-  .atmo-context-menu button {
+  .ctx-menu button {
     display: block;
     width: 100%;
     padding: 0.5rem 1rem;
@@ -263,45 +179,7 @@
     white-space: nowrap;
   }
 
-  .atmo-context-menu button:hover {
+  .ctx-menu button:hover {
     background: var(--color-surface, #f5f5f5);
-  }
-
-  .ctx-divider {
-    border: none;
-    border-top: 1px solid var(--color-border, #e5e7eb);
-    margin: 0.25rem 0;
-  }
-
-  .ctx-intensity {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 0.75rem 0.4rem;
-  }
-
-  .ctx-intensity--hidden {
-    display: none;
-  }
-
-  .ctx-intensity-trigger {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .ctx-intensity button {
-    display: block;
-    width: 100%;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    text-align: center;
-  }
-
-  :global(.ctx-intensity-active) {
-    background: var(--color-accent-subtle, rgba(255, 105, 180, 0.15)) !important;
-    border-radius: 6px;
   }
 </style>
