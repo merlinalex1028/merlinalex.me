@@ -18,24 +18,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Pre-paint theme gate (FOUC-safe, blocking, synchronous) -->
-    <script is:inline>
-      (function () {
-        try {
-          var storedTheme = localStorage.getItem('theme') || 'system';
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var effectiveTheme = storedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : storedTheme;
-          document.documentElement.dataset.theme = effectiveTheme;
-        } catch (e) {
-          document.documentElement.dataset.theme = 'light';
-        }
-      })();
-    </script>
 
     <SEOMeta
       title={title}

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root[data-theme="light"] {
+:root {
   --color-bg: #FFF8FA;
   --color-bg-elevated: #FFFFFF;
   --color-surface: #FFE4ED;
@@ -23,23 +23,7 @@
   --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-:root[data-theme="dark"] {
-  --color-bg: #1A0F1A;
-  --color-bg-elevated: #241824;
-  --color-surface: #2D1B2D;
-  --color-surface-muted: #3A2535;
-  --color-border: #4A2F45;
-  --color-fg: #F5E8EE;
-  --color-fg-muted: #B497A8;
-  --color-accent: #FF8FB8;
-  --color-accent-hover: #FFA8C8;
-  --color-accent-subtle: #5A2D3F;
-  --color-destructive: #FF6B7A;
-  --color-destructive-hover: #FF8593;
-  --color-focus: #FF8FB8;
-}
-
-/* A11Y-02 — global reduced-motion baseline. Per CONTEXT D-10. Phase 5 JS loops additionally gate on matchMedia. */
+/* A11Y-02 — global reduced-motion baseline. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -63,31 +47,9 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
-  transition:
-    background-color var(--duration-base) var(--easing-default),
-    color var(--duration-base) var(--easing-default);
 }
 
 :focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-}
-
-/* DATE-BASED ATMOSPHERE TWEAKS — Phase 5 */
-/* Valentine's Day (Feb 14) + White Day (Mar 14) */
-:root.atmo-date-valentine {
-  --color-accent: #E84393;
-  --color-accent-subtle: #FD79A8;
-}
-
-/* Christmas season (Dec 20-25) */
-:root.atmo-date-christmas {
-  --color-accent: #C0392B;
-  --color-accent-subtle: #27AE60;
-}
-
-/* Sakura season (Mar 25 - Apr 10) */
-:root.atmo-date-sakura {
-  --color-accent: #FFB7C5;
-  --color-accent-subtle: #FFE4ED;
 }
