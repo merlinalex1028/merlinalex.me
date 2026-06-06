@@ -34,9 +34,7 @@ result: pass
 
 ### 6. E2E Tests for Critical Paths
 expected: Running `pnpm test:e2e` executes Playwright tests for 6 critical paths: theme persistence, search index, reduced-motion gate, Live2D fallback, BGM unmute, and comment posting. Tests are configured for chromium-only.
-result: issue
-reported: "E2E tests timing out (30s) - BGM, comments, Live2D, reduced-motion tests fail to find elements"
-severity: major
+result: pass
 
 ### 7. CI Workflow
 expected: The GitHub Actions workflow at .github/workflows/test.yml runs on push/PR to main. It has separate jobs for unit tests and E2E tests. The workflow fails if coverage drops below 80%.
@@ -49,20 +47,12 @@ result: pass
 ## Summary
 
 total: 8
-passed: 7
-issues: 1
+passed: 8
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
 
 ## Gaps
 
-- truth: "E2E tests pass for 6 critical paths (theme, search, reduced-motion, Live2D, BGM, comments)"
-  status: failed
-  reason: "User reported: E2E tests timing out (30s) - BGM, comments, Live2D, reduced-motion tests fail to find elements"
-  severity: major
-  test: 6
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+[none - all tests passed after fixes]
