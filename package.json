@@ -16,8 +16,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "bangumi:refresh": "node --env-file=.env --import tsx src/scripts/fetch-bangumi.ts",
-    "prebuild": "node --env-file=.env --import tsx src/scripts/fetch-bangumi.ts"
+    "bangumi:refresh": "node --import tsx src/scripts/fetch-bangumi.ts",
+    "prebuild": "node --import tsx src/scripts/fetch-bangumi.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",
