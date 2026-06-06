@@ -3,7 +3,7 @@
 
 **merlinalex.me — Personal Site (二次元可爱风)**
 
-A 二次元 (anime) aesthetic personal website for merlinalex — a single-author site that doubles as a blog, portfolio, and small community hub for anime friends and tech-circle readers. The feel is **fully immersive kawaii** (Live2D mascot, falling petals, custom right-click, BGM, theme switching) but the content structure stays practical: mixed-genre articles sorted by tags, two distinct works modules (open-source projects vs creative works), and a tight set of community modules (friend links, RSS, microblog, anime/book/music lists, timeline).
+A 二次元 (anime) aesthetic personal website for merlinalex — a single-author site that doubles as a blog, portfolio, and small community hub for anime friends and tech-circle readers. The feel is **fully immersive kawaii** (Live2D mascot, falling petals, custom right-click, BGM, theme switching) but the content structure stays practical: mixed-genre articles sorted by tags, two distinct works modules (open-source projects vs creative works), and a tight set of community modules (friend links, RSS, anime/book/music lists, timeline).
 
 **Core Value:** A personal space that **feels alive and uniquely mine** — visitors (mostly the owner + close circle) should feel they're stepping into a little world, not scrolling a generic blog.
 
@@ -41,7 +41,7 @@ A 二次元 (anime) aesthetic personal website for merlinalex — a single-autho
 ### Core Technologies
 | Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| **Astro** | `^6.4.2` | Static site generator + islands runtime | Content Collections with Zod schemas map exactly to PROJECT.md's multi-module structure (articles, projects, creations, microblog, anime/book/music lists, timeline). Islands architecture loads atmosphere JS (Live2D, BGM) without blocking first paint — satisfies ATM-01 constraint. View Transitions API built-in for SPA-feel navigation. Active development, current release was 5 days ago. **Confidence: HIGH** (verified via Context7 `/withastro/docs` + GitHub releases) |
+| **Astro** | `^6.4.2` | Static site generator + islands runtime | Content Collections with Zod schemas map exactly to PROJECT.md's multi-module structure (articles, projects, creations, anime/book/music lists, timeline). Islands architecture loads atmosphere JS (Live2D, BGM) without blocking first paint — satisfies ATM-01 constraint. View Transitions API built-in for SPA-feel navigation. Active development, current release was 5 days ago. **Confidence: HIGH** (verified via Context7 `/withastro/docs` + GitHub releases) |
 | **Tailwind CSS** | `^4.3.0` | Utility-first CSS for kawaii design system | v4 is stable, ~5× faster build, simpler config (CSS-first via `@theme`). Installed as Vite plugin in Astro 5.2+, NOT via the legacy `@astrojs/tailwind` integration (which is Tailwind 3 only). Custom color palettes, animation utilities, and dark mode handle the theme-switching requirement (ATM-04) cleanly. **Confidence: HIGH** (verified via Tailwind GitHub + Astro styling docs) |
 | **TypeScript** | `^5.5.x` | Type safety, content schema enforcement | Astro 6 ships with TS defaults; Zod schemas in content collections give compile-time validation of every blog post / project / anime entry. Reduces "frontmatter typo" failures common in Hexo/Hugo. |
 | **MDX** (`@astrojs/mdx`) | `^4.x` | Rich markdown for articles | Lets PAGE-04 articles embed components (e.g., a Live2D vignette mid-article, charts, animated callouts). Astro's official integration. |
@@ -58,7 +58,7 @@ A 二次元 (anime) aesthetic personal website for merlinalex — a single-autho
 |---------|---------|---------|----------|
 | **`@astrojs/rss`** | `^4.x` | RSS feed generation (DISC-01) | Official Astro integration. Generates `/rss.xml` from any content collection. Pair with email subscription via Buttondown (free tier) or substack-style 3rd party. |
 | **`@astrojs/sitemap`** | `^3.x` | Sitemap for SEO | Auto-generated. One-line install: `astro add sitemap`. |
-| **Pagefind** | `^1.x` (via `astro-pagefind` integration) | Static search across articles / works / microblog (DISC-02) | Build-time indexer, zero infrastructure, no API costs, 100% client-side search. Better fit than Algolia/Meilisearch for $0/month constraint. Multilingual (handles CJK well). |
+| **Pagefind** | `^1.x` (via `astro-pagefind` integration) | Static search across articles / works (DISC-02) | Build-time indexer, zero infrastructure, no API costs, 100% client-side search. Better fit than Algolia/Meilisearch for $0/month constraint. Multilingual (handles CJK well). |
 | **Twikoo** | `^1.7.4` | Comment system (INFRA-03) | Deploy via Vercel one-click + MongoDB Atlas free tier (M0 cluster = 512 MB, free forever). Embedded via `twikoo.min.js` + 5-line init script. Supports anonymous comments, replies, likes, email/WeChat notifications. **Note:** Twikoo's *frontend* lives on the blog (Cloudflare Pages); its *backend* lives on Vercel — splits the deployment story across two platforms. |
 | **Shiki** | (bundled in Astro) | Code syntax highlighting (PAGE-04) | Astro ships Shiki by default. Theme-aware (light/dark via CSS variables). No runtime cost — highlights at build time. |
 ### Supporting Libraries — Integrations (External Services)

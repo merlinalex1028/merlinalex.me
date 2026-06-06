@@ -6,7 +6,6 @@ import Hero from '../components/home/Hero.astro';
 import Hitokoto from '../components/home/Hitokoto.astro';
 import SiteStats from '../components/home/SiteStats.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
-import LatestMicroblog from '../components/home/LatestMicroblog.astro';
 import { countWords } from '../utils/word-count';
 import persona from '../data/persona.yaml';
 
@@ -15,10 +14,6 @@ const latestArticles = allArticles
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .slice(0, 3);
 
-const allMicroblog = await getCollection('microblog');
-const latestMicroblog = allMicroblog
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-  .slice(0, 5);
 
 // Compute total word count from all non-draft articles (CJK-aware)
 const totalWords = allArticles.reduce((sum, article) => sum + countWords(article.body ?? ''), 0);
@@ -34,5 +29,4 @@ const description = persona?.tagline
   <Hitokoto />
   <SiteStats articleCount={allArticles.length} totalWords={totalWords} />
   <LatestArticles articles={latestArticles} />
-  <LatestMicroblog posts={latestMicroblog} />
 </BaseLayout>

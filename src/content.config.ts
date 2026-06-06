@@ -48,18 +48,6 @@ const creations = defineCollection({
   }),
 });
 
-// ─── MICROBLOG (detailed, D-05) ────────────────────────
-const microblog = defineCollection({
-  loader: glob({ base: './src/content/microblog', pattern: '**/*.md' }),
-  schema: z.object({
-    publishedAt: z.coerce.date(),
-    content: z.string(),
-    images: z.array(z.string()).default([]),
-    mood: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-  }),
-});
-
 // ─── FRIENDS (detailed, D-03) ──────────────────────────
 // The `file()` loader treats the JSON as a map of entries:
 // - Array form: each element becomes an entry, id derived from element.id or element.slug
@@ -130,7 +118,6 @@ export const collections = {
   articles,
   projects,
   creations,
-  microblog,
   friends,
   timeline,
   anime,
