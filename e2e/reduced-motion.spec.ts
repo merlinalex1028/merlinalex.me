@@ -2,21 +2,21 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Reduced-motion gate', () => {
   test('atmosphere respects prefers-reduced-motion', async ({ page }) => {
-    // Emulate reduced-motion preference
+    // Emulate reduced-motion preference before navigation
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Verify the atmosphere level is off or reduced
+    // Verify the atmosphere level is off
     const html = page.locator('html');
     const atmoLevel = await html.getAttribute('data-atmo');
 
     // With reduced-motion, atmosphere should be off
-    expect(atmoLevel === 'off' || atmoLevel === null).toBeTruthy();
+    expect(atmoLevel).toBe('off');
   });
 
   test('animations are disabled when reduced-motion is preferred', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     // Check that CSS animations are disabled via media query
     const animationState = await page.evaluate(() => {
@@ -27,12 +27,10 @@ test.describe('Reduced-motion gate', () => {
           hasReducedMotionRule = true;
         }
       });
-      // Also check if animations are paused via computed styles
       return { hasReducedMotionRule };
     });
 
     // The site should respect reduced-motion preference
-    // Either via CSS media query or via JS atmosphere gate
-    expect(animationState.hasReducedMotionRule || true).toBeTruthy();
+    expect(animationState.hasReducedMotionRule).toBeTruthy();
   });
 });

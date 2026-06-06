@@ -1,36 +1,29 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('BGM unmute', () => {
-  test('APlayer container is present and muted by default', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+  test('unmute button is present by default', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // APlayer should be present on the page
-    const aplayer = page.locator('.aplayer, #aplayer, [data-aplayer]');
-    await expect(aplayer).toBeVisible({ timeout: 5000 });
+    // The BGM island has an unmute button that loads APlayer on click
+    const bgmRoot = page.locator('#bgm-root');
+    await expect(bgmRoot).toBeAttached({ timeout: 10000 });
+
+    const unmuteButton = page.locator('#bgm-unmute');
+    await expect(unmuteButton).toBeVisible({ timeout: 10000 });
   });
 
-  test('clicking unmute changes APlayer state', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+  test('clicking unmute loads APlayer', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Wait for APlayer to initialize
-    const aplayer = page.locator('.aplayer, #aplayer, [data-aplayer]');
-    await expect(aplayer).toBeVisible({ timeout: 5000 });
+    // Wait for the unmute button
+    const unmuteButton = page.locator('#bgm-unmute');
+    await expect(unmuteButton).toBeVisible({ timeout: 10000 });
 
-    // Find the APlayer play/unmute button
-    const playButton = page.locator('.aplayer-icon, .aplayer-play, button[aria-label*="play"], button[aria-label*="Play"]');
+    // Click unmute to load APlayer
+    await unmuteButton.click();
 
-    if (await playButton.count() > 0) {
-      // Click play button to unmute/start
-      await playButton.first().click();
-
-      // Verify the APlayer state changed (playing class or attribute)
-      await page.waitForTimeout(500);
-      const aplayerElement = await aplayer.first();
-      const classList = await aplayerElement.getAttribute('class');
-      // After clicking, APlayer should be in playing state
-      expect(classList).toBeTruthy();
-    }
+    // APlayer should now load dynamically
+    const aplayer = page.locator('.aplayer');
+    await expect(aplayer).toBeVisible({ timeout: 10000 });
   });
 });

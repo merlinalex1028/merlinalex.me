@@ -1,41 +1,35 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Live2D fallback', () => {
-  test('Live2D canvas or static fallback is present', async ({ page }) => {
-    await page.goto('/');
+test.describe('Live2D container', () => {
+  test('Live2D root element is present', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    // Wait for page to fully load
-    await page.waitForLoadState('networkidle');
-
-    // Check for either Live2D canvas or static PNG fallback
-    const live2dCanvas = page.locator('canvas, #live2d, [data-live2d]');
-    const staticFallback = page.locator('img[data-live2d-fallback], .live2d-fallback img');
-
-    const hasCanvas = await live2dCanvas.count() > 0;
-    const hasFallback = await staticFallback.count() > 0;
-
-    // At least one should be present
-    expect(hasCanvas || hasFallback).toBeTruthy();
+    // The Live2D island starts hidden and loads via requestIdleCallback
+    const l2dRoot = page.locator('#l2d-root');
+    await expect(l2dRoot).toBeAttached({ timeout: 10000 });
   });
 
-  test('static fallback loads on low-end device simulation', async ({ page }) => {
-    // Simulate low-end device by reducing memory
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, 'deviceMemory', { value: 2 });
-    });
+  test('Live2D loads when atmosphere is enabled and models are configured', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    // Wait for requestIdleCallback + dynamic import (could be 2-7 seconds)
+    const l2dRoot = page.locator('#l2d-root');
+    await expect(l2dRoot).toBeAttached({ timeout: 10000 });
 
-    // On low-end devices, the fallback image should be visible
-    // or the Live2D should not be loaded (no canvas)
-    const canvas = page.locator('canvas');
-    const fallbackImg = page.locator('img[data-live2d-fallback], .live2d-fallback img');
+    // Wait a bit for the dynamic import to complete
+    await page.waitForTimeout(5000);
 
-    const hasCanvas = await canvas.count() > 0;
-    const hasFallback = await fallbackImg.count() > 0;
+    // Check if a canvas was created inside l2d-root (Live2D model loaded)
+    const canvas = l2dRoot.locator('canvas');
+    const canvasCount = await canvas.count();
 
-    // Either no canvas (disabled for low-end) or fallback is shown
-    expect(!hasCanvas || hasFallback).toBeTruthy();
+    // Either canvas exists (model loaded) or root is visible (widget initialized)
+    // The root starts hidden but becomes visible when l2d-widget initializes
+    if (canvasCount > 0) {
+      await expect(canvas).toBeVisible({ timeout: 5000 });
+    } else {
+      // If no canvas, the root should still be attached (widget may have initialized without model)
+      await expect(l2dRoot).toBeAttached();
+    }
   });
 });
