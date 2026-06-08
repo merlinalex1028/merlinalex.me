@@ -1,19 +1,31 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import NoticeBar from '../components/core/NoticeBar.astro';
 import Hero from '../components/home/Hero.astro';
-import Hitokoto from '../components/home/Hitokoto.astro';
 import SiteStats from '../components/home/SiteStats.astro';
 import LatestArticles from '../components/home/LatestArticles.astro';
+import HomeHighlights from '../components/home/HomeHighlights.astro';
 import { countWords } from '../utils/word-count';
 import persona from '../data/persona.yaml';
 
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
 const latestArticles = allArticles
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-  .slice(0, 3);
+  .slice(0, 1);
 
+const allAnime = await getCollection('anime');
+const recentAnime = [...allAnime]
+  .sort((a, b) => {
+    const aTime = a.data.updatedAt ? new Date(a.data.updatedAt).getTime() : 0;
+    const bTime = b.data.updatedAt ? new Date(b.data.updatedAt).getTime() : 0;
+    return bTime - aTime;
+  })
+  .slice(0, 4)
+  .map((entry) => entry.data);
+
+const timelineEntries = (await getCollection('timeline')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
 
 // Compute total word count from all non-draft articles (CJK-aware)
 const totalWords = allArticles.reduce((sum, article) => sum + countWords(article.body ?? ''), 0);
@@ -24,9 +36,8 @@ const description = persona?.tagline
 ---
 
 <BaseLayout title="首页" description={description} type="website">
-  <NoticeBar />
   <Hero />
-  <Hitokoto />
   <SiteStats articleCount={allArticles.length} totalWords={totalWords} />
   <LatestArticles articles={latestArticles} />
+  <HomeHighlights animeItems={recentAnime} timelineEntries={timelineEntries} />
 </BaseLayout>

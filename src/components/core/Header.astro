@@ -1,45 +1,138 @@
 ---
 import Nav from './Nav.astro';
-import NoticeBar from './NoticeBar.astro';
+import logoCat from '../../assets/logo-cat.png';
+import logoWord from '../../assets/logo.png';
+import social from '../../data/social.json';
+
+const githubUrl =
+  social.links.find((link) => link.name.toLowerCase() === 'github')?.url ??
+  'https://github.com/merlinalex';
 ---
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="logo" href="/">merlinalex.me</a>
+    <a class="logo" href="/" aria-label="MerlinAlex 首页">
+      <img class="logo-cat" src={logoCat.src} width="40" height="40" alt="" />
+      <img class="logo-word" src={logoWord.src} width="136" height="50" alt="MerlinAlex" />
+    </a>
     <Nav />
+    <div class="header-actions">
+      <a class="github-link" href={githubUrl} rel="noopener noreferrer" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 2C6.48 2 2 6.58 2 12.26c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.22-3.37-1.22-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.85.09-.66.35-1.12.64-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.28 9.28 0 0 1 12 6.98c.85 0 1.7.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.23 10.23 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"
+          />
+        </svg>
+      </a>
+    </div>
   </div>
 </header>
 
 <style>
   .site-header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 50;
-    width: 100%;
-    height: 56px;
-    background: var(--color-bg-elevated);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border);
+    width: calc(100% - 42px);
+    max-width: 1340px;
+    height: 70px;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.74);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 30px;
+    box-shadow:
+      0 18px 38px rgba(113, 88, 212, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
   }
   .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
     height: 100%;
-    padding: 0 1rem;
+    padding: 0 18px;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.8rem, 2vw, 1.45rem);
   }
   .logo {
+    flex: 0 0 auto;
     font-weight: 700;
     color: var(--color-fg);
     text-decoration: none;
-    font-size: 1.05rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+  .logo-cat {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+  }
+  .logo-word {
+    width: 137px;
+    height: 51px;
+    object-fit: contain;
   }
   .header-actions {
     margin-left: auto;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  .github-link {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    color: #111545;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.76);
+    box-shadow:
+      0 10px 20px rgba(96, 84, 178, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    transition:
+      transform var(--duration-fast) var(--easing-default),
+      color var(--duration-fast) var(--easing-default);
+  }
+  .github-link:hover,
+  .github-link:focus-visible {
+    color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+  .github-link svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  @media (max-width: 900px) {
+    .logo-word {
+      width: 118px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      top: 0;
+      left: 0;
+      transform: none;
+      width: 100%;
+      height: 70px;
+      margin-top: 0;
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+    .header-inner {
+      min-height: 0;
+      flex-wrap: nowrap;
+    }
+    .logo-word {
+      width: 112px;
+      height: 42px;
+    }
   }
 </style>

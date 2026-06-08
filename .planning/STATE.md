@@ -100,6 +100,7 @@ None yet.
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
+| 20260606-home-ui-refresh | 根据参考图刷新首页顶部、Hero、统计、文章、追番、关于/时间线和底部 UI | 2026-06-06 | uncommitted | [20260606-home-ui-refresh](./quick/20260606-home-ui-refresh/) |
 | 260606-f6c | 修复 Cloudflare Pages 构建时缺少 .env 导致 Bangumi prebuild 失败 | 2026-06-06 | fd3a8f8 | [260606-f6c-cloudflare-pages-env-bangumi-prebuild](./quick/260606-f6c-cloudflare-pages-env-bangumi-prebuild/) |
 
 ## Deferred Items

@@ -1,0 +1,325 @@
+---
+import homeAbout from '../../assets/home-about.png';
+import homeTimeline from '../../assets/home-timeline.png';
+import homePost1 from '../../assets/home-post-1.png';
+import homePost2 from '../../assets/home-post-2.png';
+import homePost3 from '../../assets/home-post-3.png';
+import persona from '../../data/persona.yaml';
+
+const { animeItems = [], timelineEntries = [] } = Astro.props;
+
+const fallbackShows = [
+  {
+    title: '孤独摇滚',
+    cover: homePost1.src,
+    score: 8.7,
+    progress: '12/12',
+    status: '补完',
+  },
+  {
+    title: '摇曳露营',
+    cover: homePost2.src,
+    score: 8.4,
+    progress: '12/12',
+    status: '补完',
+  },
+  {
+    title: '莉可丽丝',
+    cover: homePost3.src,
+    score: 8.1,
+    progress: '13/13',
+    status: '补完',
+  },
+  {
+    title: 'CLANNAD',
+    cover: homePost1.src,
+    score: 9.0,
+    progress: '24/24',
+    status: '补完',
+  },
+];
+
+const liveShows = animeItems.map((item: any) => ({
+  title: item.nameCn || item.name,
+  cover: item.cover || homePost1.src,
+  score: item.score || item.rate || 0,
+  progress: item.eps > 0 ? `${item.epStatus}/${item.eps}` : '待更新',
+  status: item.type === 3 ? '追更中' : item.type === 2 ? '补完' : '想看',
+}));
+
+const shows = [...liveShows, ...fallbackShows].slice(0, 4);
+const timeline = timelineEntries.slice(0, 3);
+---
+
+<section class="home-highlights">
+  <header class="section-head">
+    <div>
+      <h2>最近在追</h2>
+      <p>追番、追番和现实温柔的小世界</p>
+    </div>
+    <a href="/anime">查看更多</a>
+  </header>
+
+  <div class="watch-grid">
+    {
+      shows.map((show: any) => (
+        <article class="watch-card">
+          <div class="watch-cover">
+            <img src={show.cover} alt="" loading="lazy" decoding="async" />
+            <span>{show.status}</span>
+          </div>
+          <div class="watch-body">
+            <h3>{show.title}</h3>
+            <div class="watch-meta">
+              <span aria-label={`评分 ${show.score || '暂无'}`}>
+                <span class="stars" aria-hidden="true">★★★★★</span>
+                {show.score ? show.score.toFixed(1) : '未评分'}
+              </span>
+              <strong>{show.progress}</strong>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="mini-grid">
+    <article class="mini-card about-card">
+      <div class="mini-copy">
+        <h2>关于 MerlinAlex</h2>
+        <p>{persona.bio}</p>
+        <ul class="chips" aria-label="个人标签">
+          <li>Front-end Developer</li>
+          <li>Anime Lover</li>
+          <li>Coffee</li>
+          <li>Illustration</li>
+        </ul>
+        <a class="mini-link" href="/about">了解更多</a>
+      </div>
+      <img src={homeAbout.src} alt="" loading="lazy" decoding="async" />
+    </article>
+
+    <article class="mini-card timeline-card">
+      <div class="mini-copy">
+        <h2>时间线</h2>
+        <p>写代码也写生活，有些可爱，所以想把记录下来。</p>
+        <ol class="timeline-list">
+          {
+            timeline.map((entry: any) => (
+              <li>
+                <time datetime={entry.data.date.toISOString()}>
+                  {entry.data.date.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                  })}
+                </time>
+                <span>{entry.data.title}</span>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="mini-link" href="/timeline">查看时间线</a>
+      </div>
+      <img src={homeTimeline.src} alt="" loading="lazy" decoding="async" />
+    </article>
+  </div>
+</section>
+
+<style>
+  .home-highlights {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 1rem 0;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .section-head h2,
+  .mini-card h2 {
+    margin: 0;
+    color: #102173;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  .section-head p,
+  .mini-card p {
+    margin: 0.35rem 0 0;
+    color: #53609a;
+    font-weight: 700;
+    line-height: 1.65;
+  }
+  .section-head a,
+  .mini-link {
+    color: var(--color-accent);
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .section-head a::after,
+  .mini-link::after {
+    content: " ->";
+  }
+  .watch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.8rem, 2vw, 1.25rem);
+    margin-bottom: 1.35rem;
+  }
+  .watch-card,
+  .mini-card {
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.74);
+    box-shadow: 0 16px 30px rgba(100, 83, 204, 0.1);
+    backdrop-filter: blur(15px) saturate(140%);
+    -webkit-backdrop-filter: blur(15px) saturate(140%);
+  }
+  .watch-cover {
+    position: relative;
+    aspect-ratio: 1.55 / 1;
+    overflow: hidden;
+    background: var(--color-surface-muted);
+  }
+  .watch-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--easing-default);
+  }
+  .watch-card:hover .watch-cover img {
+    transform: scale(1.04);
+  }
+  .watch-cover span {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    padding: 0.22rem 0.55rem;
+    color: white;
+    background: linear-gradient(180deg, #ffb85f, #ff982f);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    box-shadow: 0 8px 18px rgba(220, 130, 36, 0.22);
+  }
+  .watch-body {
+    padding: 0.75rem 0.8rem 0.9rem;
+  }
+  .watch-body h3 {
+    margin: 0 0 0.5rem;
+    color: #102173;
+    font-size: 0.98rem;
+    font-weight: 900;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .watch-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    color: #445393;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+  .stars {
+    color: #ffb100;
+    letter-spacing: 0;
+    margin-right: 0.25rem;
+  }
+  .watch-meta strong {
+    color: #193184;
+    white-space: nowrap;
+  }
+  .mini-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 1.25rem);
+  }
+  .mini-card {
+    min-height: 250px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(180px, 0.86fr);
+    align-items: end;
+    padding: clamp(1.15rem, 2.5vw, 1.65rem);
+  }
+  .timeline-card {
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 0.72fr);
+  }
+  .mini-copy {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+  }
+  .mini-card img {
+    align-self: end;
+    justify-self: end;
+    width: min(100%, 230px);
+    max-height: 230px;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 20px rgba(89, 77, 175, 0.16));
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.1rem;
+  }
+  .chips li {
+    padding: 0.28rem 0.62rem;
+    border-radius: 999px;
+    background: rgba(117, 84, 246, 0.12);
+    color: var(--color-accent);
+    font-size: 0.76rem;
+    font-weight: 900;
+  }
+  .timeline-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.95rem 0 1.05rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+  .timeline-list li {
+    display: grid;
+    grid-template-columns: 5.7rem 1fr;
+    gap: 0.55rem;
+    color: #27367e;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+  .timeline-list time {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 900px) {
+    .watch-grid,
+    .mini-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .mini-card {
+      grid-template-columns: 1fr;
+    }
+    .mini-card img {
+      width: min(62%, 220px);
+      margin-top: 0.75rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .watch-grid,
+    .mini-grid {
+      grid-template-columns: 1fr;
+    }
+    .section-head {
+      align-items: flex-end;
+    }
+  }
+</style>

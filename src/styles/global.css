@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #FFF8FA;
+  --color-bg: #ecebfb;
   --color-bg-elevated: #FFFFFF;
-  --color-surface: #FFE4ED;
-  --color-surface-muted: #FFF0F4;
-  --color-border: #F5D4DE;
-  --color-fg: #2D1B2D;
-  --color-fg-muted: #7A5D6F;
-  --color-accent: #FF6B9D;
-  --color-accent-hover: #E85A8B;
-  --color-accent-subtle: #FFC8DD;
+  --color-surface: #f7f4ff;
+  --color-surface-muted: #f1ecff;
+  --color-border: #d9d2ff;
+  --color-fg: #13246f;
+  --color-fg-muted: #53609a;
+  --color-accent: #7554f6;
+  --color-accent-hover: #5b3de8;
+  --color-accent-subtle: #ded6ff;
   --color-destructive: #E63946;
   --color-destructive-hover: #C1303B;
   --color-focus: #FF6B9D;
@@ -47,6 +47,11 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+  min-width: 320px;
+}
+
+main {
+  overflow: clip;
 }
 
 :focus-visible {

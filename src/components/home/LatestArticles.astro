@@ -1,52 +1,95 @@
 ---
+import homePost from '../../assets/home-post.png';
+import { calculateReadingTime } from '../../utils/reading-time';
+
 const { articles = [] } = Astro.props;
+const article = articles[0];
+const readingMinutes = article ? calculateReadingTime(article.body ?? '') : 1;
 ---
 
 <section class="latest-articles">
-  <h2>最新文章</h2>
-  {articles.length === 0 ? (
+  <header class="section-head">
+    <div>
+      <h2>最新文章</h2>
+      <p>记录灵感、思考和热爱吧</p>
+    </div>
+    <a href="/articles">查看更多</a>
+  </header>
+  {!article ? (
     <div class="empty-state">
       <h3>还没有文章</h3>
-      <p>撰写第一篇之后会出现在这里 ✨</p>
+      <p>撰写第一篇之后会出现在这里</p>
       <a class="cta" href="/articles">撰写第一篇</a>
     </div>
   ) : (
-    <ul class="article-grid">
-      {articles.map((article: any) => (
-        <li class="article-card">
-          <a href={`/articles/${article.id}`}>
-            <h3>{article.data.title}</h3>
-            {article.data.description && <p class="excerpt">{article.data.description}</p>}
-            <time datetime={article.data.publishedAt.toISOString()}>
-              {article.data.publishedAt.toLocaleDateString('zh-CN')}
-            </time>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <article class="article-feature">
+      <a class="article-image" href={`/articles/${article.id}`} aria-label={article.data.title}>
+        <img src={homePost.src} alt="" loading="lazy" decoding="async" />
+      </a>
+      <div class="article-copy">
+        <h3>
+          <a href={`/articles/${article.id}`}>{article.data.title}</a>
+        </h3>
+        {article.data.description && <p class="excerpt">{article.data.description}</p>}
+        {article.data.tags?.length > 0 && (
+          <ul class="tag-list" aria-label="文章标签">
+            {article.data.tags.slice(0, 3).map((tag: string) => <li>{tag}</li>)}
+          </ul>
+        )}
+        <div class="article-meta">
+          <time datetime={article.data.publishedAt.toISOString()}>
+            {article.data.publishedAt.toLocaleDateString('zh-CN')}
+          </time>
+          <span>{readingMinutes} 分钟阅读</span>
+        </div>
+      </div>
+    </article>
   )}
 </section>
 
 <style>
   .latest-articles {
-    max-width: 768px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: var(--space-xl, 2rem) 1rem;
+    padding: 1rem 1rem 0;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
   .latest-articles h2 {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: clamp(1.55rem, 3vw, 2rem);
+    font-weight: 900;
     line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: var(--color-fg);
-    margin: 0 0 var(--space-md, 1rem) 0;
+    letter-spacing: 0;
+    color: #102173;
+    margin: 0;
+  }
+  .section-head p {
+    margin: 0.35rem 0 0;
+    color: #53609a;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .section-head a {
+    flex: 0 0 auto;
+    color: var(--color-accent);
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .section-head a::after {
+    content: " ->";
   }
   .empty-state {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg, 20px);
+    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid rgba(255, 255, 255, 0.76);
+    border-radius: 20px;
     padding: var(--space-2xl, 3rem) var(--space-md, 1rem);
     text-align: center;
+    backdrop-filter: blur(14px);
   }
   .empty-state h3 {
     font-size: 20px;
@@ -72,54 +115,92 @@ const { articles = [] } = Astro.props;
   .empty-state .cta:focus-visible {
     background: var(--color-accent-hover);
   }
-  .article-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .article-feature {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md, 1rem);
+    grid-template-columns: minmax(260px, 0.88fr) minmax(280px, 1.5fr);
+    gap: clamp(1.25rem, 3vw, 2rem);
+    align-items: center;
+    padding: clamp(0.85rem, 2vw, 1.25rem);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    box-shadow: 0 16px 34px rgba(100, 83, 204, 0.1);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
   }
-  @media (min-width: 640px) {
-    .article-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  .article-card a {
+  .article-image {
     display: block;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg, 20px);
-    padding: var(--space-md, 1rem);
+    aspect-ratio: 2.06 / 1;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--color-surface-muted);
+    box-shadow: 0 12px 24px rgba(35, 45, 128, 0.12);
+  }
+  .article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--easing-default);
+  }
+  .article-feature:hover .article-image img {
+    transform: scale(1.035);
+  }
+  .article-copy h3 {
+    margin: 0 0 0.8rem;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.25;
+    font-weight: 900;
+  }
+  .article-copy h3 a {
+    color: #12237a;
     text-decoration: none;
-    color: inherit;
-    transition: border-color var(--duration-fast, 150ms) var(--easing-default, ease),
-                box-shadow var(--duration-base, 250ms) var(--easing-default, ease);
   }
-  .article-card a:hover,
-  .article-card a:focus-visible {
-    border-color: var(--color-accent);
-    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
+  .article-copy h3 a:hover,
+  .article-copy h3 a:focus-visible {
+    color: var(--color-accent);
   }
-  .article-card h3 {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--color-fg);
-    margin: 0 0 0.5rem 0;
-  }
-  .article-card .excerpt {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--color-fg-muted);
-    margin: 0 0 0.75rem 0;
+  .excerpt {
+    max-width: 42em;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #445393;
+    margin: 0 0 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .article-card time {
-    font-size: 12px;
-    color: var(--color-fg-muted);
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+  }
+  .tag-list li {
+    padding: 0.28rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(117, 84, 246, 0.12);
+    color: var(--color-accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    color: #27367e;
+    font-size: 0.92rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 760px) {
+    .section-head {
+      align-items: flex-end;
+    }
+    .article-feature {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -1,4 +1,9 @@
 ---
+import timeIcon from '../../assets/time.svg';
+import bookIcon from '../../assets/book.svg';
+import penIcon from '../../assets/pen.svg';
+import userIcon from '../../assets/user.svg';
+
 const { articleCount = 0, totalWords = 0 } = Astro.props;
 
 // Runtime: days since launch date
@@ -6,65 +11,111 @@ const LAUNCH_DATE = new Date('2026-06-01');
 const runtimeDays = Math.floor(
   (Date.now() - LAUNCH_DATE.getTime()) / (1000 * 60 * 60 * 24)
 );
+
+const stats = [
+  { label: '运行时间', value: runtimeDays, suffix: '天', icon: timeIcon },
+  { label: '文章数', value: articleCount, suffix: '篇', icon: bookIcon },
+  { label: '总字数', value: totalWords.toLocaleString(), suffix: '字', icon: penIcon },
+  { label: '访客数', value: '1,234+', suffix: '', icon: userIcon, id: 'busuanzi_value_site_uv' },
+];
 ---
 
 <section class="site-stats">
-  <div class="stat">
-    <div class="stat-label">运行时间</div>
-    <div class="stat-value"><span>{runtimeDays}</span> 天</div>
-  </div>
-  <div class="stat">
-    <div class="stat-label">文章数</div>
-    <div class="stat-value"><span>{articleCount}</span> 篇</div>
-  </div>
-  <div class="stat">
-    <div class="stat-label">总字数</div>
-    <div class="stat-value"><span>{totalWords.toLocaleString()}</span> 字</div>
-  </div>
-  <div class="stat">
-    <div class="stat-label">访客数</div>
-    <div class="stat-value">
-      <span id="busuanzi_value_site_uv">...</span> 人
-    </div>
-  </div>
+  {
+    stats.map((stat) => (
+      <div class="stat">
+        <img class="stat-icon" src={stat.icon.src} alt="" loading="lazy" decoding="async" />
+        <div class="stat-copy">
+          <div class="stat-label">{stat.label}</div>
+          <div class="stat-value">
+            <span id={stat.id}>{stat.value}</span>
+            {stat.suffix && <small>{stat.suffix}</small>}
+          </div>
+        </div>
+      </div>
+    ))
+  }
 </section>
 
 <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
 
 <style>
   .site-stats {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: var(--space-md, 1rem) 1rem;
+    position: relative;
+    z-index: 2;
+    max-width: min(1260px, calc(100% - 112px));
+    margin: -64px auto 0;
+    padding: 0.75rem 1.2rem;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-sm, 0.5rem);
+    gap: 0;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.74);
+    box-shadow:
+      0 18px 36px rgba(98, 85, 183, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
   }
   .stat {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md, 12px);
-    padding: var(--space-md, 1rem) var(--space-sm, 0.5rem);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.7rem, 1.7vw, 1.05rem);
+    min-height: 72px;
+    padding: 0 0.95rem;
+  }
+  .stat + .stat {
+    border-left: 1px solid rgba(119, 111, 184, 0.2);
+  }
+  .stat-icon {
+    width: clamp(42px, 5vw, 58px);
+    height: clamp(42px, 5vw, 58px);
+    object-fit: contain;
+    filter: drop-shadow(0 8px 10px rgba(87, 75, 183, 0.15));
+  }
+  .stat-copy {
+    min-width: 0;
   }
   .stat-label {
-    font-size: 12px;
-    color: var(--color-fg-muted);
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.05em;
+    font-size: 0.82rem;
+    color: #1b2a82;
+    margin-bottom: 0.28rem;
+    font-weight: 800;
   }
   .stat-value {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-fg);
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    font-weight: 900;
+    color: #0f1d6a;
   }
   .stat-value span {
-    color: var(--color-accent);
+    color: #0f1d6a;
+  }
+  .stat-value small {
+    font-size: 0.85rem;
+    font-weight: 800;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
     .site-stats {
+      max-width: calc(100% - 2rem);
+      margin: -44px 1rem 0;
       grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      padding: 0.85rem;
+    }
+    .stat {
+      justify-content: flex-start;
+      border: 0;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .stat + .stat {
+      border-left: 0;
     }
   }
 </style>
