@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: planning
-last_updated: "2026-06-06T02:55:36.623Z"
-last_activity: 2026-06-06
+last_updated: "2026-06-08T10:16:00+08:00"
+last_activity: 2026-06-08
 progress:
   total_phases: 6
   completed_phases: 6
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-06-02)
 Phase: 6
 Plan: 3 of 3 complete
 Status: Phase 6 complete
-Last activity: 2026-06-06 - Completed quick task 260606-f6c: 修复 Cloudflare Pages 构建时缺少 .env 导致 Bangumi prebuild 失败
+Last activity: 2026-06-08 - Completed quick task 20260608-home-ui-reference-align: 对齐首页桌面端 header、hero 过渡和等宽玻璃面板
 
 Progress: [██████████] 100%
 
@@ -101,6 +101,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 20260606-home-ui-refresh | 根据参考图刷新首页顶部、Hero、统计、文章、追番、关于/时间线和底部 UI | 2026-06-06 | uncommitted | [20260606-home-ui-refresh](./quick/20260606-home-ui-refresh/) |
+| 20260608-home-ui-reference-align | 对齐首页桌面端 header 居中、hero 过渡、等宽胶囊和面板内标题 | 2026-06-08 | uncommitted | [20260608-home-ui-reference-align](./quick/20260608-home-ui-reference-align/) |
+| 260608-l4l-bangumi | 最近在追卡片图片切回 Bangumi 图源 | 2026-06-08 | uncommitted | [260608-l4l-bangumi](./quick/260608-l4l-bangumi/) |
+| 260608-l6b-fallback-bangumi | 最近在追 fallback 卡片也切回 Bangumi 图源 | 2026-06-08 | uncommitted | [260608-l6b-fallback-bangumi](./quick/260608-l6b-fallback-bangumi/) |
+| 260608-l9f-footer | 修复短内容页面 footer 不贴视口底部 | 2026-06-08 | uncommitted | [260608-l9f-footer](./quick/260608-l9f-footer/) |
 | 260606-f6c | 修复 Cloudflare Pages 构建时缺少 .env 导致 Bangumi prebuild 失败 | 2026-06-06 | fd3a8f8 | [260606-f6c-cloudflare-pages-env-bangumi-prebuild](./quick/260606-f6c-cloudflare-pages-env-bangumi-prebuild/) |
 
 ## Deferred Items

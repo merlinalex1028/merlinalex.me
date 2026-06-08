@@ -2,8 +2,6 @@
 import homeAbout from '../../assets/home-about.png';
 import homeTimeline from '../../assets/home-timeline.png';
 import homePost1 from '../../assets/home-post-1.png';
-import homePost2 from '../../assets/home-post-2.png';
-import homePost3 from '../../assets/home-post-3.png';
 import persona from '../../data/persona.yaml';
 
 const { animeItems = [], timelineEntries = [] } = Astro.props;
@@ -11,28 +9,28 @@ const { animeItems = [], timelineEntries = [] } = Astro.props;
 const fallbackShows = [
   {
     title: '孤独摇滚',
-    cover: homePost1.src,
+    cover: 'https://lain.bgm.tv/pic/cover/l/e2/e7/328609_2EHLJ.jpg',
     score: 8.7,
     progress: '12/12',
     status: '补完',
   },
   {
     title: '摇曳露营',
-    cover: homePost2.src,
+    cover: 'https://lain.bgm.tv/pic/cover/l/18/bc/207195_2Cp3o.jpg',
     score: 8.4,
     progress: '12/12',
     status: '补完',
   },
   {
     title: '莉可丽丝',
-    cover: homePost3.src,
+    cover: 'https://lain.bgm.tv/pic/cover/l/65/19/364450_xx2zx.jpg',
     score: 8.1,
     progress: '13/13',
     status: '补完',
   },
   {
     title: 'CLANNAD',
-    cover: homePost1.src,
+    cover: 'https://lain.bgm.tv/pic/cover/l/28/38/51_z0Ly8.jpg',
     score: 9.0,
     progress: '24/24',
     status: '补完',
@@ -52,35 +50,37 @@ const timeline = timelineEntries.slice(0, 3);
 ---
 
 <section class="home-highlights">
-  <header class="section-head">
-    <div>
-      <h2>最近在追</h2>
-      <p>追番、追番和现实温柔的小世界</p>
-    </div>
-    <a href="/anime">查看更多</a>
-  </header>
+  <div class="watch-panel">
+    <header class="section-head">
+      <div>
+        <h2>最近在追</h2>
+        <p>追番、追番和现实温柔的小世界</p>
+      </div>
+      <a href="/anime">查看更多</a>
+    </header>
 
-  <div class="watch-grid">
-    {
-      shows.map((show: any) => (
-        <article class="watch-card">
-          <div class="watch-cover">
-            <img src={show.cover} alt="" loading="lazy" decoding="async" />
-            <span>{show.status}</span>
-          </div>
-          <div class="watch-body">
-            <h3>{show.title}</h3>
-            <div class="watch-meta">
-              <span aria-label={`评分 ${show.score || '暂无'}`}>
-                <span class="stars" aria-hidden="true">★★★★★</span>
-                {show.score ? show.score.toFixed(1) : '未评分'}
-              </span>
-              <strong>{show.progress}</strong>
+    <div class="watch-grid">
+      {
+        shows.map((show: any) => (
+          <article class="watch-card">
+            <div class="watch-cover">
+              <img src={show.cover} alt="" loading="lazy" decoding="async" />
+              <span>{show.status}</span>
             </div>
-          </div>
-        </article>
-      ))
-    }
+            <div class="watch-body">
+              <h3>{show.title}</h3>
+              <div class="watch-meta">
+                <span aria-label={`评分 ${show.score || '暂无'}`}>
+                  <span class="stars" aria-hidden="true">★★★★★</span>
+                  {show.score ? show.score.toFixed(1) : '未评分'}
+                </span>
+                <strong>{show.progress}</strong>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
   </div>
 
   <div class="mini-grid">
@@ -127,9 +127,22 @@ const timeline = timelineEntries.slice(0, 3);
 
 <style>
   .home-highlights {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 1rem 1rem 0;
+    max-width: min(1260px, calc(100% - 112px));
+    margin: 1.15rem auto 0;
+    padding: 0;
+  }
+  .watch-panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1rem, 2vw, 1.35rem);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.74);
+    box-shadow:
+      0 16px 34px rgba(100, 83, 204, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
   }
   .section-head {
     display: flex;
@@ -167,7 +180,6 @@ const timeline = timelineEntries.slice(0, 3);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(0.8rem, 2vw, 1.25rem);
-    margin-bottom: 1.35rem;
   }
   .watch-card,
   .mini-card {
@@ -237,16 +249,18 @@ const timeline = timelineEntries.slice(0, 3);
     white-space: nowrap;
   }
   .mini-grid {
+    width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1rem, 2vw, 1.25rem);
+    margin-top: 1.35rem;
   }
   .mini-card {
-    min-height: 250px;
+    min-height: 282px;
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(180px, 0.86fr);
     align-items: end;
-    padding: clamp(1.15rem, 2.5vw, 1.65rem);
+    padding: clamp(1.3rem, 2.8vw, 1.9rem);
   }
   .timeline-card {
     grid-template-columns: minmax(0, 1fr) minmax(150px, 0.72fr);
@@ -259,8 +273,8 @@ const timeline = timelineEntries.slice(0, 3);
   .mini-card img {
     align-self: end;
     justify-self: end;
-    width: min(100%, 230px);
-    max-height: 230px;
+    width: min(100%, 270px);
+    max-height: 250px;
     object-fit: contain;
     filter: drop-shadow(0 18px 20px rgba(89, 77, 175, 0.16));
   }
@@ -300,6 +314,9 @@ const timeline = timelineEntries.slice(0, 3);
   }
 
   @media (max-width: 900px) {
+    .home-highlights {
+      max-width: calc(100% - 2rem);
+    }
     .watch-grid,
     .mini-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -6,7 +6,7 @@ import social from '../../data/social.json';
 
 const githubUrl =
   social.links.find((link) => link.name.toLowerCase() === 'github')?.url ??
-  'https://github.com/merlinalex';
+  'https://github.com/merlinalex1028';
 ---
 
 <header class="site-header">
@@ -15,7 +15,9 @@ const githubUrl =
       <img class="logo-cat" src={logoCat.src} width="40" height="40" alt="" />
       <img class="logo-word" src={logoWord.src} width="136" height="50" alt="MerlinAlex" />
     </a>
-    <Nav />
+    <div class="nav-slot">
+      <Nav />
+    </div>
     <div class="header-actions">
       <a class="github-link" href={githubUrl} rel="noopener noreferrer" aria-label="GitHub">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -52,11 +54,13 @@ const githubUrl =
   .header-inner {
     height: 100%;
     padding: 0 18px;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: clamp(0.8rem, 2vw, 1.45rem);
   }
   .logo {
+    justify-self: start;
     flex: 0 0 auto;
     font-weight: 700;
     color: var(--color-fg);
@@ -76,8 +80,15 @@ const githubUrl =
     height: 51px;
     object-fit: contain;
   }
+  .nav-slot {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+  }
   .header-actions {
-    margin-left: auto;
+    justify-self: end;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -128,7 +139,10 @@ const githubUrl =
     }
     .header-inner {
       min-height: 0;
-      flex-wrap: nowrap;
+      grid-template-columns: 1fr auto;
+    }
+    .nav-slot {
+      display: none;
     }
     .logo-word {
       width: 112px;
