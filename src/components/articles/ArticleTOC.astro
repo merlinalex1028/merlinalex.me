@@ -1,4 +1,6 @@
 ---
+import catCorner from '../../assets/articles/cat-corner.png';
+
 interface Heading {
   depth: number;
   slug: string;
@@ -17,8 +19,8 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 
 {tocHeadings.length > 0 && (
   <aside class="toc" aria-label="文章目录">
-    {/* Desktop sidebar */}
     <nav class="toc-desktop">
+      <img class="toc-cat" src={catCorner.src} width="70" height="70" alt="" loading="lazy" />
       <h2 class="toc-heading">目录</h2>
       <ul class="toc-list">
         {tocHeadings.map(h => (
@@ -31,9 +33,11 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
       </ul>
     </nav>
 
-    {/* Mobile accordion */}
     <details class="toc-mobile">
-      <summary class="toc-mobile-toggle">目录</summary>
+      <summary class="toc-mobile-toggle">
+        <span>目录</span>
+        <img class="toc-cat mobile-cat" src={catCorner.src} width="70" height="70" alt="" loading="lazy" />
+      </summary>
       <nav>
         <ul class="toc-list">
           {tocHeadings.map(h => (
@@ -126,31 +130,53 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
     font-size: 14px;
   }
 
-  /* Desktop: sticky sidebar */
   .toc-desktop {
-    display: none;
-    position: sticky;
-    top: 72px;
-    width: 220px;
-    max-height: calc(100vh - 72px);
+    position: relative;
+    width: 100%;
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
+    padding: 1.55rem 1.45rem;
+    border: 1px solid rgba(207, 199, 248, 0.82);
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.58)),
+      var(--color-surface);
+    box-shadow:
+      0 18px 45px rgba(113, 88, 212, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  .toc-cat {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.6rem;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
     flex-shrink: 0;
   }
 
-  @media (min-width: 1024px) {
-    .toc-desktop {
-      display: block;
-    }
-    .toc-mobile {
-      display: none;
-    }
+  .toc-mobile {
+    display: none;
   }
 
   .toc-heading {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-fg-muted);
-    margin: 0 0 12px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #10194d;
+    margin: 0 0 1rem 0;
+  }
+
+  .toc-heading::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 3px 8px 3px 8px;
+    background: linear-gradient(135deg, #ffb84c, #ffdb7a);
   }
 
   .toc-list {
@@ -164,48 +190,87 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
   }
 
   .toc-link {
+    position: relative;
     display: block;
-    padding: 4px 0 4px 12px;
-    border-left: 2px solid transparent;
-    color: var(--color-fg-muted);
+    padding: 0.46rem 0.82rem 0.46rem 1.72rem;
+    color: #4f5b8f;
     text-decoration: none;
     transition:
       color var(--duration-fast, 150ms) var(--easing-default, ease),
-      border-color var(--duration-fast, 150ms) var(--easing-default, ease);
+      background var(--duration-fast, 150ms) var(--easing-default, ease);
+  }
+
+  .toc-link::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0.58rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #ad94ff;
+    transform: translateY(-50%);
   }
 
   .toc-link:hover {
-    color: var(--color-fg);
+    color: #10194d;
   }
 
   .toc-link.active {
-    color: var(--color-accent);
-    border-left-color: var(--color-accent);
-    font-weight: 500;
+    color: #6f48f4;
+    font-weight: 850;
+    border-radius: 999px;
+    background: rgba(255, 221, 239, 0.72);
+  }
+
+  .toc-link.active::before {
+    background: #ff5aa5;
+    box-shadow: 0 0 0 6px rgba(255, 90, 165, 0.13);
   }
 
   .depth-3 .toc-link {
-    padding-left: 24px;
+    padding-left: 2.25rem;
   }
 
-  /* Mobile: collapsible accordion */
-  .toc-mobile {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
+  .depth-3 .toc-link::before {
+    left: 1.06rem;
+  }
+
+  @media (max-width: 1180px) {
+    .toc-desktop {
+      display: none;
+    }
+
+    .toc-mobile {
+      display: block;
+      position: relative;
+      border: 1px solid rgba(207, 199, 248, 0.82);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.58)),
+        var(--color-surface);
+      box-shadow:
+        0 18px 45px rgba(113, 88, 212, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    }
   }
 
   .toc-mobile-toggle {
-    padding: 0.75rem 1rem;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-fg-muted);
+    position: relative;
+    min-height: 78px;
+    padding: 1.25rem 4.8rem 1.25rem 1.45rem;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #10194d;
     cursor: pointer;
     list-style: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .mobile-cat {
+    top: 0.35rem;
   }
 
   .toc-mobile-toggle::after {
@@ -223,6 +288,6 @@ const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
   }
 
   .toc-mobile nav {
-    padding: 0 1rem 0.75rem;
+    padding: 0 1.45rem 1.2rem;
   }
 </style>

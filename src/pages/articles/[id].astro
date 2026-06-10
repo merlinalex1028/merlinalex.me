@@ -9,11 +9,12 @@ import RelatedPosts from '../../components/articles/RelatedPosts.astro';
 import ShareButtons from '../../components/articles/ShareButtons.astro';
 import CopyrightFooter from '../../components/articles/CopyrightFooter.astro';
 import TopButton from '../../components/articles/TopButton.astro';
-import ReadingMeta from '../../components/articles/ReadingMeta.astro';
 import TwikooComments from '../../components/comments/TwikooComments.astro';
 import JsonLd from '../../components/seo/JsonLd.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
+import { countWords } from '../../utils/word-count';
 import { findRelated } from '../../utils/related-posts';
+import detailHero from '../../assets/articles/article-detail-hero.png';
 
 export async function getStaticPaths() {
   const articles = await getCollection(
@@ -31,9 +32,9 @@ const { article, allArticles } = Astro.props;
 const { Content, headings } = await render(article);
 
 const readingMinutes = calculateReadingTime(article.body ?? '');
+const words = countWords(article.body ?? '');
 const related = findRelated(article, allArticles, 3);
 
-// Find prev/next by publishedAt
 const sorted = [...allArticles]
   .filter(a => !a.data.draft)
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
@@ -43,8 +44,10 @@ const prev = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : undef
 const next = currentIndex > 0 ? sorted[currentIndex - 1] : undefined;
 
 const permalink = new URL(`/articles/${article.id}/`, Astro.site).toString();
+const shareUrl = permalink.replace(/\/$/, '');
+const publishedDate = article.data.publishedAt.toLocaleDateString('zh-CN');
+const updatedDate = (article.data.updatedAt ?? article.data.publishedAt).toLocaleDateString('zh-CN');
 
-// JSON-LD structured data schemas
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -57,7 +60,7 @@ const articleSchema = {
   },
   datePublished: article.data.publishedAt.toISOString(),
   dateModified: (article.data.updatedAt ?? article.data.publishedAt).toISOString(),
-  image: article.data.cover ? new URL(article.data.cover, Astro.site).toString() : undefined,
+  image: new URL(detailHero.src, Astro.site).toString(),
   url: permalink,
   mainEntityOfPage: {
     '@type': 'WebPage',
@@ -105,38 +108,62 @@ const breadcrumbSchema = {
 <BaseLayout
   title={article.data.title}
   description={article.data.description}
+  image={detailHero.src}
   type="article"
 >
   <JsonLd schemas={[articleSchema, personSchema, breadcrumbSchema]} />
 
-  <div class="article-layout">
-    {article.data.toc && (
-      <ArticleTOC headings={headings} />
-    )}
-
-    <article class="article-body">
-      <header class="article-header">
-        <h1>{article.data.title}</h1>
-        <ReadingMeta minutes={readingMinutes} updatedAt={article.data.updatedAt} />
-        {article.data.cover && (
+  <div class="article-page">
+    <div class="article-layout">
+      <main class="article-main" aria-label="文章内容">
+        <header class="article-title-card">
+          <div class="title-copy">
+            <div class="title-tags">
+              {article.data.tags.slice(0, 2).map(tag => <span>{tag}</span>)}
+              {article.data.sticky && <span class="sticky-chip">置顶</span>}
+            </div>
+            <h1>{article.data.title}</h1>
+            {article.data.description && <p>{article.data.description}</p>}
+            <div class="title-meta" aria-label="文章信息">
+              <time datetime={article.data.publishedAt.toISOString()}>{publishedDate}</time>
+              <span>最后更新 {updatedDate}</span>
+              <span>{readingMinutes} 分钟阅读</span>
+              <span>{words} 字</span>
+              <span>作者 merlinalex</span>
+            </div>
+          </div>
           <img
-            src={article.data.cover}
-            alt={`${article.data.title} 封面图`}
-            class="cover-image"
+            class="title-art"
+            src={detailHero.src}
+            width={detailHero.width}
+            height={detailHero.height}
+            alt=""
+            loading="eager"
+            decoding="async"
           />
+        </header>
+
+        <article class="article-content-card">
+          <div class="prose">
+            <Content />
+          </div>
+        </article>
+
+        <div class="article-after">
+          <ShareButtons title={article.data.title} url={shareUrl} />
+          <CopyrightFooter title={article.data.title} url={shareUrl} />
+          <ArticleNav prev={prev} next={next} />
+          <RelatedPosts articles={related} />
+        </div>
+      </main>
+
+      <aside class="article-sidebar" aria-label="文章侧栏">
+        {article.data.toc && (
+          <ArticleTOC headings={headings} />
         )}
-      </header>
-
-      <div class="prose">
-        <Content />
-      </div>
-
-      <ShareButtons title={article.data.title} url={permalink} />
-      <CopyrightFooter title={article.data.title} url={permalink} />
-      <ArticleNav prev={prev} next={next} />
-      <RelatedPosts articles={related} />
-      <TwikooComments />
-    </article>
+        <TwikooComments />
+      </aside>
+    </div>
   </div>
 
   <TopButton />
@@ -145,66 +172,198 @@ const breadcrumbSchema = {
 </BaseLayout>
 
 <style>
-  .article-layout {
-    max-width: 1024px;
+  .article-page {
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1rem 2rem;
-    display: flex;
-    gap: 2rem;
+    padding: 8.25rem 1.4rem 4rem;
   }
 
-  @media (min-width: 1024px) {
-    .article-layout {
-      padding: 0 2rem 2rem;
-    }
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    gap: 1.25rem;
+    align-items: start;
   }
 
-  .article-body {
-    flex: 1;
+  .article-main {
+    display: grid;
     min-width: 0;
-    max-width: 768px;
+    gap: 1.25rem;
   }
 
-  .article-header {
-    margin-bottom: 2rem;
+  .article-sidebar {
+    position: sticky;
+    top: 110px;
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
   }
 
-  .article-header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--color-fg);
-    margin: 0;
-  }
-
-  .cover-image {
+  .article-title-card,
+  .article-content-card {
     width: 100%;
-    border-radius: 12px;
-    margin-top: 1.5rem;
-    object-fit: cover;
+    min-width: 0;
+    border: 1px solid rgba(207, 199, 248, 0.82);
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.58)),
+      var(--color-surface);
+    box-shadow:
+      0 18px 45px rgba(113, 88, 212, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
   }
 
-  /* Prose styling */
+  .article-title-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+    align-items: center;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  .article-title-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 44%, rgba(255, 255, 255, 0.18) 68%, rgba(255, 255, 255, 0) 100%),
+      radial-gradient(circle at 78% 46%, rgba(184, 171, 255, 0.22), transparent 42%);
+    pointer-events: none;
+  }
+
+  .title-copy {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    height: 100%;
+    padding: 1.35rem clamp(1.5rem, 3.4vw, 3.05rem);
+    padding-right: 0.85rem;
+  }
+
+  .title-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .title-tags span {
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: #efecff;
+    color: #673df2;
+    font-size: 0.9rem;
+    font-weight: 850;
+  }
+
+  .title-tags .sticky-chip {
+    color: #fff;
+    background: linear-gradient(135deg, #ff78b5, #ff668c);
+  }
+
+  .title-copy h1 {
+    max-width: 100%;
+    margin: 0;
+    color: #090f42;
+    font-size: clamp(2.05rem, 3vw, 2.85rem);
+    font-weight: 950;
+    line-height: 1.06;
+    letter-spacing: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .title-copy p {
+    max-width: 100%;
+    margin: 0.9rem 0 0;
+    color: #4d5a8f;
+    font-size: clamp(0.95rem, 1.18vw, 1.05rem);
+    font-weight: 650;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .title-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin-top: 1.25rem;
+    color: #3f4b82;
+    font-size: 0.86rem;
+    font-weight: 750;
+  }
+
+  .title-art {
+    position: relative;
+    z-index: 1;
+    top: auto;
+    right: auto;
+    justify-self: end;
+    align-self: center;
+    min-width: 0;
+    width: min(100%, 590px);
+    height: auto;
+    max-height: 258px;
+    margin-right: -1rem;
+    object-fit: contain;
+    object-position: right center;
+    filter: drop-shadow(0 20px 30px rgba(91, 77, 178, 0.13));
+    transform: none;
+  }
+
+  .article-content-card {
+    padding: clamp(1.35rem, 3vw, 2.6rem);
+  }
+
   .prose {
     font-size: 16px;
-    line-height: 1.5;
-    color: var(--color-fg);
+    line-height: 1.85;
+    color: #27336d;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #10194d;
+    font-weight: 900;
+    line-height: 1.3;
   }
 
   .prose :global(h2) {
-    font-size: 24px;
-    font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-    color: var(--color-fg);
+    font-size: clamp(1.45rem, 2.2vw, 1.75rem);
+    margin-top: 2.3rem;
+    margin-bottom: 0.9rem;
   }
 
   .prose :global(h3) {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-fg);
+    font-size: 1.2rem;
+    margin-top: 1.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .prose :global(h2)::before,
+  .prose :global(h3)::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    margin-top: -1px;
+    background-image: url("/images/article-heading-icon.svg") !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 5px 8px rgba(255, 178, 74, 0.2));
   }
 
   .prose :global(p) {
@@ -212,8 +371,9 @@ const breadcrumbSchema = {
   }
 
   .prose :global(a) {
-    color: var(--color-accent);
+    color: #6f48f4;
     text-decoration: none;
+    font-weight: 800;
   }
 
   .prose :global(a:hover) {
@@ -221,9 +381,10 @@ const breadcrumbSchema = {
   }
 
   .prose :global(code) {
-    background: var(--color-surface);
-    padding: 2px 6px;
-    border-radius: 4px;
+    background: #efecff;
+    padding: 2px 7px;
+    border-radius: 6px;
+    color: #673df2;
     font-size: 14px;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
   }
@@ -234,22 +395,26 @@ const breadcrumbSchema = {
     margin: 1.5rem 0;
     padding: 1rem 1.25rem;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.65;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    box-shadow: 0 16px 32px rgba(21, 20, 80, 0.18);
   }
 
   .prose :global(pre code) {
     background: none;
     padding: 0;
     border-radius: 0;
+    color: inherit;
     font-size: inherit;
   }
 
   .prose :global(blockquote) {
-    border-left: 3px solid var(--color-accent-subtle);
-    padding-left: 1rem;
-    margin: 1rem 0;
-    color: var(--color-fg-muted);
+    border-left: 4px solid #a68cff;
+    padding: 0.85rem 1rem;
+    margin: 1.25rem 0;
+    color: #4f5b8f;
+    border-radius: 0 14px 14px 0;
+    background: rgba(239, 236, 255, 0.66);
   }
 
   .prose :global(ul),
@@ -259,7 +424,14 @@ const breadcrumbSchema = {
   }
 
   .prose :global(li) {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.32rem;
+  }
+
+  .prose :global(img) {
+    width: 100%;
+    border-radius: 16px;
+    margin: 1.25rem 0 0.4rem;
+    box-shadow: 0 16px 34px rgba(113, 88, 212, 0.13);
   }
 
   .prose :global(table) {
@@ -271,19 +443,96 @@ const breadcrumbSchema = {
 
   .prose :global(th),
   .prose :global(td) {
-    border: 1px solid var(--color-border);
-    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(207, 199, 248, 0.9);
+    padding: 0.55rem 0.75rem;
     text-align: left;
   }
 
   .prose :global(th) {
-    background: var(--color-surface);
-    font-weight: 600;
+    background: #efecff;
+    font-weight: 800;
   }
 
   .prose :global(hr) {
     border: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid rgba(207, 199, 248, 0.88);
     margin: 2rem 0;
+  }
+
+  .article-after {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (max-width: 1180px) {
+    .article-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .article-sidebar {
+      position: static;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .article-page {
+      padding: 6.25rem 1rem 3rem;
+    }
+
+    .article-title-card {
+      display: block;
+      height: auto;
+      min-height: 0;
+    }
+
+    .article-title-card::after {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.88) 58%, rgba(255, 255, 255, 0.15) 100%),
+        radial-gradient(circle at 72% 72%, rgba(184, 171, 255, 0.2), transparent 44%);
+    }
+
+    .title-copy {
+      width: auto;
+      height: auto;
+      min-height: 0;
+      padding: 1.4rem 1.25rem 0;
+    }
+
+    .title-copy h1 {
+      font-size: clamp(2rem, 9vw, 2.65rem);
+    }
+
+    .title-art {
+      position: relative;
+      z-index: 1;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      display: block;
+      width: 114%;
+      height: auto;
+      max-width: none;
+      max-height: none;
+      margin: -0.65rem -7% -0.45rem;
+      object-position: center bottom;
+      transform: none;
+    }
+
+    .article-sidebar {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .article-page {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .article-title-card,
+    .article-content-card {
+      border-radius: 18px;
+    }
   }
 </style>

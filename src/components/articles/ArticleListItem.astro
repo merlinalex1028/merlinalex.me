@@ -1,30 +1,37 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import StickyBadge from './StickyBadge.astro';
+import { calculateReadingTime } from '../../utils/reading-time';
+import { countWords } from '../../utils/word-count';
 
 interface Props {
   article: CollectionEntry<'articles'>;
 }
 
 const { article } = Astro.props;
-const { title, description, publishedAt, category, sticky } = article.data;
+const { title, description, publishedAt, tags } = article.data;
+const minutes = calculateReadingTime(article.body ?? '');
+const words = countWords(article.body ?? '');
 ---
 
 <li class="article-item">
   <a href={`/articles/${article.id}`} class="article-link">
     <div class="article-content">
-      <div class="article-header">
-        {sticky && <StickyBadge />}
-        <h3 class="article-title">{title}</h3>
-      </div>
+      <h3 class="article-title">{title}</h3>
       {description && <p class="article-excerpt">{description}</p>}
+      {tags.length > 0 && (
+        <div class="article-tags">
+          {tags.slice(0, 3).map(tag => <span>{tag}</span>)}
+        </div>
+      )}
       <div class="article-meta">
         <time datetime={publishedAt.toISOString()}>
           {publishedAt.toLocaleDateString('zh-CN')}
         </time>
-        {category && <span class="category-pill">{category}</span>}
+        <span>{minutes} 分钟阅读</span>
+        <span>{words} 字</span>
       </div>
     </div>
+    <span class="read-button">阅读全文</span>
   </a>
 </li>
 
@@ -34,70 +41,117 @@ const { title, description, publishedAt, category, sticky } = article.data;
   }
 
   .article-link {
-    display: block;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    padding: 1rem;
-    text-decoration: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.2rem;
+    align-items: center;
+    min-height: 136px;
+    padding: 1.35rem 1.55rem;
     color: inherit;
+    text-decoration: none;
+    border: 1px solid rgba(211, 205, 244, 0.86);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
     transition:
-      border-color var(--duration-fast, 150ms) var(--easing-default, ease),
-      box-shadow var(--duration-base, 250ms) var(--easing-default, ease);
+      transform var(--duration-fast) var(--easing-default),
+      border-color var(--duration-fast) var(--easing-default),
+      box-shadow var(--duration-base) var(--easing-default);
   }
 
   .article-link:hover,
   .article-link:focus-visible {
-    border-color: var(--color-accent);
-    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
+    transform: translateY(-1px);
+    border-color: rgba(143, 108, 244, 0.5);
+    box-shadow:
+      0 14px 28px rgba(113, 88, 212, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 
   .article-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .article-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    min-width: 0;
   }
 
   .article-title {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--color-fg);
     margin: 0;
+    color: #10194d;
+    font-size: clamp(1.15rem, 1.5vw, 1.42rem);
+    font-weight: 900;
+    line-height: 1.35;
   }
 
   .article-excerpt {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--color-fg-muted);
-    margin: 0;
+    max-width: 44rem;
+    margin: 0.45rem 0 0;
+    color: #53609a;
+    font-size: 0.98rem;
+    font-weight: 650;
+    line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
+  .article-tags,
   .article-meta {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 14px;
-    color: var(--color-fg-muted);
+    flex-wrap: wrap;
   }
 
-  .category-pill {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 9999px;
-    background: var(--color-accent-subtle);
-    color: var(--color-accent);
-    font-size: 14px;
+  .article-tags {
+    gap: 0.62rem;
+    margin-top: 0.72rem;
+  }
+
+  .article-tags span {
+    padding: 0.35rem 0.72rem;
+    border-radius: 999px;
+    background: #efecff;
+    color: #673df2;
+    font-size: 0.82rem;
+    font-weight: 850;
+  }
+
+  .article-tags span:nth-child(2n) {
+    background: #ffe8f2;
+    color: #d94d8d;
+  }
+
+  .article-tags span:nth-child(3n) {
+    background: #e8fbf8;
+    color: #178f85;
+  }
+
+  .article-meta {
+    gap: 1rem;
+    margin-top: 0.85rem;
+    color: #4f5b8f;
+    font-size: 0.9rem;
+    font-weight: 750;
+  }
+
+  .read-button {
+    white-space: nowrap;
+    padding: 0.78rem 1.2rem;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 850;
+    background: linear-gradient(135deg, #6d7af7, #b33ff0);
+    box-shadow: 0 12px 22px rgba(111, 73, 236, 0.24);
+  }
+
+  @media (max-width: 680px) {
+    .article-link {
+      grid-template-columns: 1fr;
+      min-height: 0;
+      padding: 1.05rem;
+    }
+
+    .read-button {
+      justify-self: start;
+    }
   }
 </style>

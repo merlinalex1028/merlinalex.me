@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: planning
-last_updated: "2026-06-08T10:16:00+08:00"
+last_updated: "2026-06-08T19:31:02+08:00"
 last_activity: 2026-06-08
 progress:
   total_phases: 6
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-06-02)
 Phase: 6
 Plan: 3 of 3 complete
 Status: Phase 6 complete
-Last activity: 2026-06-08 - Completed quick task 20260608-home-ui-reference-align: 对齐首页桌面端 header、hero 过渡和等宽玻璃面板
+Last activity: 2026-06-08 - Completed quick task 260608-r32: 分享相关链接移除末尾斜杠
 
 Progress: [██████████] 100%
 
@@ -105,6 +105,11 @@ None yet.
 | 260608-l4l-bangumi | 最近在追卡片图片切回 Bangumi 图源 | 2026-06-08 | uncommitted | [260608-l4l-bangumi](./quick/260608-l4l-bangumi/) |
 | 260608-l6b-fallback-bangumi | 最近在追 fallback 卡片也切回 Bangumi 图源 | 2026-06-08 | uncommitted | [260608-l6b-fallback-bangumi](./quick/260608-l6b-fallback-bangumi/) |
 | 260608-l9f-footer | 修复短内容页面 footer 不贴视口底部 | 2026-06-08 | uncommitted | [260608-l9f-footer](./quick/260608-l9f-footer/) |
+| 260608-mvc | 按参考图重做文章列表页与文章详情页 | 2026-06-08 | uncommitted | [260608-mvc-articles-page-redesign-auto-1400px](./quick/260608-mvc-articles-page-redesign-auto-1400px/) |
+| 260608-ot5 | 优化文章详情标题卡片、Twikoo 留言板和正文标题图标 | 2026-06-08 | uncommitted | [260608-ot5-article-detail-polish-auto-twikoo-13](./quick/260608-ot5-article-detail-polish-auto-twikoo-13/) |
+| 260608-qnt | 修复文章详情留言板位置、标题图标、300px 标题卡和目录圆点 | 2026-06-08 | uncommitted | [260608-qnt-article-detail-visual-fixes-auto-300px-a](./quick/260608-qnt-article-detail-visual-fixes-auto-300px-a/) |
+| 260608-qzv | 修复 Twikoo 刷新默认邮箱和标题卡文字遮挡 | 2026-06-08 | uncommitted | [260608-qzv-article-detail-title-and-twikoo-input-fi](./quick/260608-qzv-article-detail-title-and-twikoo-input-fi/) |
+| 260608-r32 | 分享相关链接移除末尾斜杠 | 2026-06-08 | uncommitted | [260608-r32-share-links-strip-trailing-slash-auto](./quick/260608-r32-share-links-strip-trailing-slash-auto/) |
 | 260606-f6c | 修复 Cloudflare Pages 构建时缺少 .env 导致 Bangumi prebuild 失败 | 2026-06-06 | fd3a8f8 | [260606-f6c-cloudflare-pages-env-bangumi-prebuild](./quick/260606-f6c-cloudflare-pages-env-bangumi-prebuild/) |
 
 ## Deferred Items

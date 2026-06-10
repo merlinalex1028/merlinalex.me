@@ -1,15 +1,26 @@
 ---
+import catCorner from '../../assets/articles/cat-corner.png';
+
 // Twikoo comment section — loads from CDN only when scrolled into view.
 // envId is the Vercel-deployed Twikoo backend URL (public, not a secret).
 const envId = import.meta.env.TWIKOO_ENV_ID;
 ---
 
 <section class="twikoo-section" data-envid={envId}>
-  <h2 class="twikoo-heading">评论</h2>
+  <img class="twikoo-cat" src={catCorner.src} width="70" height="70" alt="" loading="lazy" />
+  <h2 class="twikoo-heading">留言板</h2>
   {envId ? (
-    <div id="tcomment"></div>
+    <div id="twikoo"></div>
   ) : (
-    <p class="twikoo-fallback">评论功能正在配置中</p>
+    <div class="twikoo-compose" aria-hidden="true">
+      <div class="textarea-ghost">写下你的想法...</div>
+      <div class="input-row">
+        <span>昵称</span>
+        <span>邮箱</span>
+        <span>网址</span>
+      </div>
+      <button type="button">发送评论</button>
+    </div>
   )}
 </section>
 
@@ -18,22 +29,90 @@ const envId = import.meta.env.TWIKOO_ENV_ID;
     (function () {
       function loadTwikoo() {
         // Avoid double-init
-        if (document.getElementById('tcomment')?.dataset.twikooInit) return;
+        if (document.getElementById('twikoo')?.dataset.twikooInit) return;
+
+        clearRememberedMail();
 
         var script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.7.11/dist/twikoo.min.js';
         script.onload = function () {
-          var el = document.getElementById('tcomment');
+          var el = document.getElementById('twikoo');
           if (!el || el.dataset.twikooInit) return;
           twikoo.init({
             envId: envId,
-            el: '#tcomment',
+            el: '#twikoo',
             // Sticker pack loaded from static file (Bilibili default emotes)
             OwO: '/stickers.json',
           });
           el.dataset.twikooInit = 'true';
+          window.setTimeout(polishTwikooInputs, 300);
+          window.setTimeout(polishTwikooInputs, 1200);
+          window.setTimeout(polishTwikooInputs, 2400);
         };
         document.head.appendChild(script);
+      }
+
+      function clearRememberedMail() {
+        try {
+          var storage = window.localStorage;
+          for (var index = storage.length - 1; index >= 0; index -= 1) {
+            var key = storage.key(index);
+            if (!key || !/twikoo/i.test(key)) continue;
+            var value = window.localStorage.getItem(key);
+            if (!value || !/@/.test(value)) continue;
+            try {
+              var parsed = JSON.parse(value);
+              if (parsed && typeof parsed === 'object') {
+                ['mail', 'email'].forEach(function (field) {
+                  if (Object.prototype.hasOwnProperty.call(parsed, field)) parsed[field] = '';
+                });
+                window.localStorage.setItem(key, JSON.stringify(parsed));
+              }
+            } catch (error) {
+              window.localStorage.removeItem(key);
+            }
+          }
+        } catch (error) {}
+      }
+
+      function polishTwikooInputs() {
+        var root = document.getElementById('twikoo');
+        if (!root) return;
+
+        var placeholders = {
+          nick: '昵称',
+          mail: '邮箱',
+          link: '网址',
+        };
+
+        Object.keys(placeholders).forEach(function (name) {
+          var input = root.querySelector('input[name="' + name + '"]');
+          if (!input) return;
+
+          input.setAttribute('placeholder', placeholders[name]);
+          input.setAttribute('autocomplete', name === 'mail' ? 'off' : 'on');
+
+          if (name === 'mail') {
+            if (!input.dataset.mailListener) {
+              input.addEventListener('input', function () {
+                if (root.dataset.mailClearing === 'true') return;
+                root.dataset.mailTouched = 'true';
+              });
+              input.dataset.mailListener = 'true';
+            }
+
+            if (root.dataset.mailTouched !== 'true') {
+              root.dataset.mailClearing = 'true';
+              input.value = '';
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+              root.dataset.mailClearing = '';
+            }
+          }
+        });
+
+        var textarea = root.querySelector('textarea');
+        if (textarea) textarea.setAttribute('placeholder', '写下你的想法...');
       }
 
       // client:visible equivalent — IntersectionObserver
@@ -60,7 +139,7 @@ const envId = import.meta.env.TWIKOO_ENV_ID;
       document.addEventListener('astro:after-swap', function () {
         var newSection = document.querySelector('.twikoo-section');
         if (newSection && newSection.dataset.envid) {
-          var el = document.getElementById('tcomment');
+          var el = document.getElementById('twikoo');
           if (el) {
             el.dataset.twikooInit = '';
             el.innerHTML = '';
@@ -74,34 +153,372 @@ const envId = import.meta.env.TWIKOO_ENV_ID;
 
 <style>
   .twikoo-section {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    padding: 1.55rem 1.45rem;
+    border: 1px solid rgba(207, 199, 248, 0.82);
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.58)),
+      var(--color-surface);
+    box-shadow:
+      0 18px 45px rgba(113, 88, 212, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  .twikoo-cat {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.6rem;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
   }
 
   .twikoo-heading {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-fg);
-    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #10194d;
+    margin: 0 0 1.2rem 0;
   }
 
-  .twikoo-fallback {
-    color: var(--color-fg-muted);
-    font-size: 14px;
-    padding: 1.5rem;
-    background: var(--color-surface);
+  .twikoo-compose {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .textarea-ghost {
+    min-height: 120px;
+    padding: 0.9rem;
+    border: 1px solid rgba(199, 192, 242, 0.9);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.56);
+    color: #9aa0c8;
+    font-weight: 700;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .input-row span {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.8rem;
+    border: 1px solid rgba(199, 192, 242, 0.9);
     border-radius: 12px;
-    text-align: center;
+    background: rgba(255, 255, 255, 0.54);
+    color: #9aa0c8;
+    font-size: 0.9rem;
+    font-weight: 750;
+  }
+
+  .twikoo-compose button {
+    justify-self: end;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.78rem 1.2rem;
+    color: #fff;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 850;
+    background: linear-gradient(135deg, #6d7af7, #b33ff0);
+    box-shadow: 0 12px 22px rgba(111, 73, 236, 0.24);
   }
 
   /* Override Twikoo CSS variables to match site theme */
-  :global(#tcomment) {
+  :global(#twikoo) {
     --twikoo-font-color: var(--color-fg);
-    --twikoo-background: var(--color-surface);
-    --twikoo-border: var(--color-border);
-    --twikoo-accent: var(--color-accent);
+    --twikoo-background: transparent;
+    --twikoo-border: rgba(199, 192, 242, 0.9);
+    --twikoo-accent: #7554f6;
+    --twikoo-theme: #7554f6;
+    --twikoo-theme-op: rgba(117, 84, 246, 0.12);
+    margin-top: 0.2rem;
     border-radius: 12px;
-    overflow: hidden;
+    color: #27336d;
+    font-size: 0.9rem;
+  }
+
+  :global(#twikoo *),
+  :global(#twikoo *::before),
+  :global(#twikoo *::after) {
+    box-sizing: border-box;
+  }
+
+  :global(#twikoo a) {
+    color: #6f48f4;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  :global(#twikoo .tk-submit) {
+    margin: 0;
+  }
+
+  :global(#twikoo .tk-row) {
+    display: flex;
+    align-items: center;
+    gap: 0.62rem;
+    margin-top: 0;
+  }
+
+  :global(#twikoo .tk-submit > .tk-row) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 0;
+  }
+
+  :global(#twikoo .tk-submit > .tk-row > .tk-avatar) {
+    display: none !important;
+  }
+
+  :global(#twikoo .tk-col) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  :global(#twikoo .tk-meta-input) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.58rem;
+    margin: 0 0 0.72rem;
+  }
+
+  :global(#twikoo .el-input-group) {
+    display: block !important;
+    width: 100%;
+  }
+
+  :global(#twikoo .el-input-group__prepend) {
+    display: none !important;
+  }
+
+  :global(#twikoo .el-textarea__inner),
+  :global(#twikoo .el-input__inner) {
+    width: 100%;
+    border: 1px solid rgba(199, 192, 242, 0.92) !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.64) !important;
+    color: #27336d !important;
+    font: inherit !important;
+    font-weight: 700;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 10px 22px rgba(100, 87, 190, 0.07) !important;
+  }
+
+  :global(#twikoo .el-textarea__inner) {
+    min-height: 118px !important;
+    padding: 0.9rem 1rem !important;
+    line-height: 1.65 !important;
+    resize: vertical;
+  }
+
+  :global(#twikoo .el-input__inner) {
+    min-height: 42px !important;
+    padding: 0 0.75rem !important;
+    border-radius: 14px !important;
+  }
+
+  :global(#twikoo .el-textarea__inner::placeholder),
+  :global(#twikoo .el-input__inner::placeholder) {
+    color: #9aa0c8 !important;
+  }
+
+  :global(#twikoo .el-textarea__inner:focus),
+  :global(#twikoo .el-input__inner:focus) {
+    border-color: rgba(117, 84, 246, 0.64) !important;
+    box-shadow:
+      0 0 0 4px rgba(117, 84, 246, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  }
+
+  :global(#twikoo .tk-row.actions),
+  :global(#twikoo .tk-submit-action) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-top: 0.78rem;
+  }
+
+  :global(#twikoo .el-button),
+  :global(#twikoo .tk-send) {
+    min-height: 42px;
+    border-radius: 999px !important;
+    border: 1px solid rgba(207, 199, 248, 0.9) !important;
+    background: rgba(255, 255, 255, 0.68) !important;
+    color: #5962a1 !important;
+    font: inherit !important;
+    font-size: 0.84rem !important;
+    font-weight: 850 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  :global(#twikoo .el-button--primary),
+  :global(#twikoo .tk-send) {
+    border-color: transparent !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #6d7af7, #b33ff0) !important;
+    box-shadow: 0 12px 22px rgba(111, 73, 236, 0.22) !important;
+  }
+
+  :global(#twikoo .OwO .OwO-logo),
+  :global(#twikoo .tk-icon) {
+    color: #7554f6 !important;
+  }
+
+  :global(#twikoo .OwO .OwO-logo) {
+    border: 1px solid rgba(207, 199, 248, 0.9);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.62);
+  }
+
+  :global(#twikoo .OwO .OwO-body) {
+    border: 1px solid rgba(207, 199, 248, 0.9);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 18px 34px rgba(91, 77, 178, 0.14);
+  }
+
+  :global(#twikoo .tk-comments-title) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.25rem 0 0.65rem;
+    color: #10194d;
+    font-size: 1rem;
+    font-weight: 900;
+  }
+
+  :global(#twikoo .tk-comments-title::before) {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 4px 10px 4px 10px;
+    background: linear-gradient(135deg, #ffb84c, #ffdb7a);
+    box-shadow: 0 0 0 5px rgba(255, 197, 86, 0.14);
+  }
+
+  :global(#twikoo .tk-comments-container) {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 0.75rem;
+  }
+
+  :global(#twikoo .tk-comment) {
+    margin: 0 !important;
+    padding: 0.95rem !important;
+    border: 1px solid rgba(207, 199, 248, 0.72);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  }
+
+  :global(#twikoo .tk-comment .tk-main) {
+    min-width: 0;
+  }
+
+  :global(#twikoo .tk-comment .tk-row) {
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  :global(#twikoo .tk-avatar) {
+    width: 42px !important;
+    height: 42px !important;
+    margin-right: 0.72rem !important;
+  }
+
+  :global(#twikoo .tk-avatar img) {
+    width: 42px !important;
+    height: 42px !important;
+    border: 2px solid rgba(255, 255, 255, 0.86);
+    border-radius: 999px !important;
+    box-shadow: 0 8px 16px rgba(91, 77, 178, 0.13);
+  }
+
+  :global(#twikoo .tk-nick) {
+    color: #10194d !important;
+    font-size: 0.92rem;
+    font-weight: 900 !important;
+  }
+
+  :global(#twikoo .tk-tag),
+  :global(#twikoo .tk-tag-green),
+  :global(#twikoo .tk-admin) {
+    border-radius: 999px !important;
+    background: #efecff !important;
+    color: #673df2 !important;
+    font-weight: 850 !important;
+  }
+
+  :global(#twikoo .tk-time),
+  :global(#twikoo .tk-extras),
+  :global(#twikoo .tk-meta) {
+    color: #7a83b7 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700;
+  }
+
+  :global(#twikoo .tk-content) {
+    margin-top: 0.42rem !important;
+    color: #3f4b82 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.65 !important;
+    word-break: break-word;
+  }
+
+  :global(#twikoo .tk-action),
+  :global(#twikoo .tk-action-link) {
+    color: #6f48f4 !important;
+    font-size: 0.8rem !important;
+    font-weight: 850 !important;
+  }
+
+  :global(#twikoo .tk-replies) {
+    margin-left: 1rem !important;
+    padding-left: 0.9rem !important;
+    border-left: 2px solid rgba(207, 199, 248, 0.8);
+  }
+
+  :global(#twikoo .tk-footer) {
+    color: #9aa0c8 !important;
+    font-size: 0.72rem !important;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 520px) {
+    .twikoo-section {
+      border-radius: 18px;
+    }
+
+    .input-row {
+      grid-template-columns: 1fr;
+    }
+
+    :global(#twikoo .tk-submit > .tk-row),
+    :global(#twikoo .tk-meta-input) {
+      grid-template-columns: 1fr;
+    }
+
+    :global(#twikoo .tk-row.actions),
+    :global(#twikoo .tk-submit-action) {
+      padding-right: 3.25rem;
+    }
+
+    :global(#twikoo .tk-submit > .tk-row > .tk-avatar) {
+      display: none;
+    }
+
+    :global(#twikoo .tk-comment) {
+      padding: 0.82rem !important;
+    }
   }
 </style>
