@@ -1,58 +1,58 @@
 {
   "https://example.com": {
     "status": "online",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 200,
-    "responseTime": 212,
+    "responseTime": 79,
     "consecutiveFailures": 0
   },
   "https://dev.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
     "responseTime": 13,
-    "consecutiveFailures": 54
+    "consecutiveFailures": 55
   },
   "https://rust.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
-    "responseTime": 11,
-    "consecutiveFailures": 54
+    "responseTime": 14,
+    "consecutiveFailures": 55
   },
   "https://anime.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
-    "responseTime": 15,
-    "consecutiveFailures": 54
+    "responseTime": 12,
+    "consecutiveFailures": 55
   },
   "https://manga.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
-    "responseTime": 12,
-    "consecutiveFailures": 54
+    "responseTime": 11,
+    "consecutiveFailures": 55
   },
   "https://life.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
     "responseTime": 11,
-    "consecutiveFailures": 54
+    "consecutiveFailures": 55
   },
   "https://craft.example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
-    "responseTime": 32,
-    "consecutiveFailures": 54
+    "responseTime": 12,
+    "consecutiveFailures": 55
   },
   "https://offline-example.com": {
     "status": "offline",
-    "lastCheck": "2026-07-29T10:30:58.359Z",
+    "lastCheck": "2026-07-30T10:13:37.936Z",
     "statusCode": 0,
-    "responseTime": 40,
-    "consecutiveFailures": 54
+    "responseTime": 85,
+    "consecutiveFailures": 55
   }
 }
