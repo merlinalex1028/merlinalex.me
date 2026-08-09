@@ -1,58 +1,58 @@
 {
   "https://example.com": {
     "status": "online",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 200,
-    "responseTime": 117,
+    "responseTime": 108,
     "consecutiveFailures": 0
   },
   "https://dev.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 20,
-    "consecutiveFailures": 64
+    "responseTime": 16,
+    "consecutiveFailures": 65
   },
   "https://rust.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 20,
-    "consecutiveFailures": 64
+    "responseTime": 15,
+    "consecutiveFailures": 65
   },
   "https://anime.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 17,
-    "consecutiveFailures": 64
+    "responseTime": 14,
+    "consecutiveFailures": 65
   },
   "https://manga.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 20,
-    "consecutiveFailures": 64
+    "responseTime": 16,
+    "consecutiveFailures": 65
   },
   "https://life.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 18,
-    "consecutiveFailures": 64
+    "responseTime": 20,
+    "consecutiveFailures": 65
   },
   "https://craft.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 18,
-    "consecutiveFailures": 64
+    "responseTime": 24,
+    "consecutiveFailures": 65
   },
   "https://offline-example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-08T08:28:35.568Z",
+    "lastCheck": "2026-08-09T08:30:43.495Z",
     "statusCode": 0,
-    "responseTime": 42,
-    "consecutiveFailures": 64
+    "responseTime": 24,
+    "consecutiveFailures": 65
   }
 }
