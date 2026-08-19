@@ -1,58 +1,58 @@
 {
   "https://example.com": {
     "status": "online",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 200,
-    "responseTime": 86,
+    "responseTime": 113,
     "consecutiveFailures": 0
   },
   "https://dev.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 11,
-    "consecutiveFailures": 74
+    "responseTime": 20,
+    "consecutiveFailures": 75
   },
   "https://rust.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 10,
-    "consecutiveFailures": 74
+    "responseTime": 23,
+    "consecutiveFailures": 75
   },
   "https://anime.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 21,
-    "consecutiveFailures": 74
+    "responseTime": 18,
+    "consecutiveFailures": 75
   },
   "https://manga.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 25,
-    "consecutiveFailures": 74
+    "responseTime": 22,
+    "consecutiveFailures": 75
   },
   "https://life.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 10,
-    "consecutiveFailures": 74
+    "responseTime": 19,
+    "consecutiveFailures": 75
   },
   "https://craft.example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 17,
-    "consecutiveFailures": 74
+    "responseTime": 22,
+    "consecutiveFailures": 75
   },
   "https://offline-example.com": {
     "status": "offline",
-    "lastCheck": "2026-08-18T08:24:06.747Z",
+    "lastCheck": "2026-08-19T08:24:53.878Z",
     "statusCode": 0,
-    "responseTime": 25,
-    "consecutiveFailures": 74
+    "responseTime": 42,
+    "consecutiveFailures": 75
   }
 }
