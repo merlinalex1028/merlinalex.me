@@ -1,58 +1,58 @@
 {
   "https://example.com": {
     "status": "online",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 200,
-    "responseTime": 95,
+    "responseTime": 161,
     "consecutiveFailures": 0
   },
   "https://dev.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 15,
-    "consecutiveFailures": 144
+    "responseTime": 18,
+    "consecutiveFailures": 145
   },
   "https://rust.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 28,
-    "consecutiveFailures": 144
+    "responseTime": 14,
+    "consecutiveFailures": 145
   },
   "https://anime.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 15,
-    "consecutiveFailures": 144
+    "responseTime": 18,
+    "consecutiveFailures": 145
   },
   "https://manga.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 15,
-    "consecutiveFailures": 144
+    "responseTime": 28,
+    "consecutiveFailures": 145
   },
   "https://life.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 21,
-    "consecutiveFailures": 144
+    "responseTime": 14,
+    "consecutiveFailures": 145
   },
   "https://craft.example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
-    "responseTime": 21,
-    "consecutiveFailures": 144
+    "responseTime": 23,
+    "consecutiveFailures": 145
   },
   "https://offline-example.com": {
     "status": "offline",
-    "lastCheck": "2026-10-27T13:46:22.947Z",
+    "lastCheck": "2026-10-28T14:41:49.869Z",
     "statusCode": 0,
     "responseTime": 36,
-    "consecutiveFailures": 144
+    "consecutiveFailures": 145
   }
 }
